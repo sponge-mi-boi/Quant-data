@@ -1,33 +1,14 @@
 ﻿import numpy as np
-import pandas as pd, plotly.graph_objs as g, plotly.io as io
-import vectorbt
+import pandas as pd, plotly.io as io
 from plotly.subplots import make_subplots
-import yfinance as yf, vectorbt as v, warnings
-from Market_Analysis import full_stocks, get_time_period, get_yf
-from statsmodels.tsa.stattools import adfuller, coint
-from vectorbt.root_accessors import Vbt_DFAccessor
-from multiprocessing import Pool, cpu_count
-import optuna, statsmodels.api as m
+import vectorbt as v, warnings
+from Market_Analysis import get_time_period
+from multiprocessing import Pool
 
 warnings.filterwarnings('ignore', module='pd')
 io.renderers.default = 'browser'
 
-def cointegration_filter(cur_stock, show_graphs=False):
-    cur_pair = get_time_period(cur_stock['stock_list'], True, freq=cur_stock['freq'],
-                               num_data_points=cur_stock['num_p'], shift=int(cur_stock['shift_parameter']) + 1)
-    cur_stock = cur_stock['stock_list']
-
-    model = m.OLS((cur_pair[cur_stock[0]]), m.add_constant((cur_pair[cur_stock[1]]))).fit()
-    results = coint(np.log(cur_pair[cur_stock[0]]), np.log(cur_pair[cur_stock[1]]))[1]
-    if show_graphs:
-        return model.resid.rolling(28).mean().vbt.plot(title=tuple(cur_stock[0:2]).__str__()).to_html(
-            include_plotlyjs='cdn', include_mathjax=False, auto_play=False, full_html=False)
-    arr = np.array([False])
-    if results < .05 + .001 + 0:
-        arr = np.array([True])
-    return arr
-
-
+# For the multiprocessing.
 def runner(stock_pair, shift_parameter: int, filter_func, **kwargs) -> pd.DataFrame:
     inputs = kwargs.pop('inputs')
     args = [[None]] * len(stock_pair)
@@ -50,7 +31,7 @@ def runner(stock_pair, shift_parameter: int, filter_func, **kwargs) -> pd.DataFr
 
     return pd.concat([series_results, stock_pair], axis=1, join='outer').dropna()
 
-
+# For organization purposes.
 def runner_multiple(stock_pair_list, shift_parameter_list, filter_func, **kwargs) -> pd.DataFrame:
 
     if len(shift_parameter_list) == 1:
@@ -58,7 +39,6 @@ def runner_multiple(stock_pair_list, shift_parameter_list, filter_func, **kwargs
     return runner_multiple(runner(stock_pair_list, shift_parameter_list[0], filter_func, **kwargs),
                            shift_parameter_list[1:],
                            filter_func, **kwargs)
-
 
 def get_signals(strat_param, stck_data) -> pd.DataFrame:
     stock_one, stock_two = strat_param['stock_list']
@@ -92,6 +72,8 @@ def get_signals(strat_param, stck_data) -> pd.DataFrame:
 
     return entries_exits
 
+# Show graphs if necessary of the portfolio simulation option available with user customization and returns as a HTML file
+#for easy display. The sample customization shown
 def graphs_analysis(strat_param, **kwargs) -> tuple:
     shift_parameter = strat_param['shift_parameter']
     p = kwargs.pop('p')
@@ -197,9 +179,6 @@ def run():
     runner_multiple(pd.DataFrame(index=[tuple(x) for x in pairs[10:12] if 'SPY' not in x]), [500], port_sim, init_money=1000,
                     inputs=None, num_p=400, output_metrics=['Total Return', 'Sharpe', 'Alpha', 'Num of Trades'],
                     freq='d', parameters_=[1.59, 25]).to_parquet(name)
-    
-    # z_threshold = 1.1
-
 
 # #1.1, 4 5
 if __name__ == '__main__':
