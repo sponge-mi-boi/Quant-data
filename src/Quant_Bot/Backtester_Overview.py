@@ -195,11 +195,11 @@ def port_sim(strat_param, show_graphs=False):
 
 def run():
 
-    pairs = pd.read_parquet('Cointegration .parquet')
+    pairs = pd.read_parquet('example_file.parquet')
 
     pairs = pairs.index
-    print(pairs)
-    name = 'Cointegration Results.parquet'
+
+    name = 'Cointegration_Results.parquet'
     runner_multiple(pd.DataFrame(index=[tuple(x) for x in pairs[10:12] if 'SPY' not in x]), [500], port_sim, init_money=1000,
                     inputs=None, num_p=400, output_metrics=['Total Return', 'Sharpe', 'Alpha', 'Num of Trades'],
                     freq='d', parameters_=[1.59, 25]).to_parquet(name)
