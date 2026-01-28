@@ -171,7 +171,7 @@ def port_sim(strat_param, show_graphs=False):
 
 def run():
 
-    pairs = pd.read_parquet('././Cointegration .parquet')
+    pairs = pd.read_parquet('example_file.parquet')
 
     pairs = pairs.index
 
