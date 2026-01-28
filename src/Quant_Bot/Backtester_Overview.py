@@ -3,7 +3,7 @@ import pandas as pd, plotly.graph_objs as g, plotly.io as io
 import vectorbt
 from plotly.subplots import make_subplots
 import yfinance as yf, vectorbt as v, warnings
-from market_analy import full_stocks, get_time_period, get_yf
+from Market_Analysis import full_stocks, get_time_period, get_yf
 from statsmodels.tsa.stattools import adfuller, coint
 from vectorbt.root_accessors import Vbt_DFAccessor
 from multiprocessing import Pool, cpu_count
@@ -48,10 +48,11 @@ def runner(stock_pair, shift_parameter: int, filter_func, **kwargs) -> pd.DataFr
     series_results = pd.DataFrame(index=stock_pair.index, data=filter_results, columns=val)
     series_results = series_results[series_results != 0].dropna(axis=0)
 
-    return pd.concat([series_results, stock_pair], axis=1, join='output_metrics').dropna()
+    return pd.concat([series_results, stock_pair], axis=1, join='outer').dropna()
 
 
 def runner_multiple(stock_pair_list, shift_parameter_list, filter_func, **kwargs) -> pd.DataFrame:
+
     if len(shift_parameter_list) == 1:
         return runner(stock_pair_list, shift_parameter_list[0], filter_func, **kwargs)
     return runner_multiple(runner(stock_pair_list, shift_parameter_list[0], filter_func, **kwargs),
@@ -91,19 +92,20 @@ def get_signals(strat_param, stck_data) -> pd.DataFrame:
 
     return entries_exits
 
-
 def graphs_analysis(strat_param, **kwargs) -> tuple:
-    shift_parameter = strat_param['shift_parameter'] - 500
+    shift_parameter = strat_param['shift_parameter']
     p = kwargs.pop('p')
     benchmark_cum_returns = kwargs.pop('benchmark_cum_returns')
     metrics_values = kwargs.pop('metrics_values')
+
     fig = make_subplots()
     cum_returns = (1 + p.close.pct_change()).cumprod()
     cum_returns.columns = strat_param['stock_list']
     cum_returns.vbt.plot(fig=fig)
     positions = p.positions.records_readable[
         ['Entry Timestamp', 'Exit Timestamp', 'Column', 'Direction', 'Return']].sort_values(by='Entry Timestamp')
-    for x in strat_param[0:2]:
+
+    for x in strat_param['stock_list'][0:2]:
         positions_cur = positions[positions['Column'] == x].dropna()
         fig.add_scatter(x=positions_cur['Entry Timestamp'],
                         y=cum_returns[x].loc[[x for x in positions_cur['Entry Timestamp']]], name=x + ' Entry',
@@ -138,18 +140,13 @@ def graphs_analysis(strat_param, **kwargs) -> tuple:
 
     html_list = [x.to_html(include_plotlyjs='cdn', include_mathjax=False, auto_play=False, full_html=False) for x in
                  [fig, fig_new]]
+
     return html_list[0], metrics_values.to_frame().to_html(), html_list[1], p.positions.records_readable.sort_values(
         by='Entry Timestamp', ascending=True).drop(columns=['Position Id']).to_html(index=False), pd.concat(
         [0, p.returns().describe()], axis=1).to_html(), metrics_values['Sharpe Ratio'],
 
-
 def port_sim(strat_param, show_graphs=False):
-    args = strat_param['parameters_']
-    output_metrics = strat_param['output_metrics']
-    freq = strat_param['freq']
 
-    rolling = args[1]
-    z_threshold = args[0]
     init_money = strat_param['init_money']
 
     stck_data = get_time_period(strat_param['stock_list'] + ['SPY'], custom_data=True,
@@ -164,22 +161,22 @@ def port_sim(strat_param, show_graphs=False):
                 sold_ideal * ((sold_ideal < entries_exits.abs()) + 0) + (
                     entries_exits.abs() * (entries_exits.abs() <= sold_ideal) + 0))
 
-    quantities_practical = quantities_practical
     benchmark_ret = stck_data['SPY'].pct_change()
     benchmark_cum_returns = (1 + benchmark_ret).cumprod()
     p = v.Portfolio.from_orders(close=data_close, log=True, size=quantities_practical, size_type='TargetAmount',
-                                init_cash=init_money, freq=freq, cash_sharing=True)
+                                init_cash=init_money, freq=strat_param['freq'], cash_sharing=True)
     metrics = [x for x in p.stats().index if 'Trade' not in x]
     metrics.remove('Benchmark Return [%]'), metrics.remove("Win Rate [%]")
     metrics_values = pd.concat(
         [p.stats()[metrics].to_frame(), p.returns_stats(benchmark_rets=benchmark_ret).iloc[-7:].to_frame()]).squeeze()
 
-    cond = metrics_values['Total Return [%]'] > 0 and metrics_values['Sharpe Ratio'] > 1.7 and metrics_values[
-        'Alpha'] > 1
+    cond =  metrics_values['Total Return [%]'] > 0 and  metrics_values['Sharpe Ratio'] > 1.7 and metrics_values['Alpha'] > 1
+
+
     if cond:
 
         if not show_graphs:
-            return [metrics_values[x] for x in metrics_values.keys() if any([y in x for y in output_metrics])] + [
+            return [metrics_values[x] for x in metrics_values.keys() if any([y in x for y in strat_param['output_metrics']])] + [
                 len(p.positions.records_readable)]
         return list(graphs_analysis(strat_param, p=p, benchmark_cum_returns=benchmark_cum_returns,
                                     metrics_values=metrics_values))
@@ -188,14 +185,11 @@ def port_sim(strat_param, show_graphs=False):
         if show_graphs:
             return None
         else:
-            return np.zeros(len(output_metrics))
-
-
-
+            return np.zeros(len(strat_param['output_metrics']))
 
 def run():
 
-    pairs = pd.read_parquet('example_file.parquet')
+    pairs = pd.read_parquet('././Cointegration .parquet')
 
     pairs = pairs.index
 
@@ -203,7 +197,7 @@ def run():
     runner_multiple(pd.DataFrame(index=[tuple(x) for x in pairs[10:12] if 'SPY' not in x]), [500], port_sim, init_money=1000,
                     inputs=None, num_p=400, output_metrics=['Total Return', 'Sharpe', 'Alpha', 'Num of Trades'],
                     freq='d', parameters_=[1.59, 25]).to_parquet(name)
-    print(pd.read_parquet(name))
+    
     # z_threshold = 1.1
 
 
