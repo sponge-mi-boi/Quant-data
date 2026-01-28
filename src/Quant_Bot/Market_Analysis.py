@@ -19,13 +19,14 @@ pd.set_option('display.width', 0)
 np.set_printoptions(threshold=np.inf)
 
 
-API_KEY = 'PKW2PB4BO7XY5NDWFSD5'
-SECRET_KEY = '3IIrBVS7KsyTz0l6t9OTgYN7QzduIhokq8s3Gbcw'
+API_KEY = ''
+SECRET_KEY = ''
 BASE_URL = 'https://paper-api.alpaca.markets'
 
 client = StockHistoricalDataClient(api_key=API_KEY,secret_key=SECRET_KEY)
 
 # List of stock pairs needed to get the data
+## This should be either customized in terms of which stocks to get the data of
 full_stocks = os.listdir('Extras/Stocks')
 
 #shift
@@ -79,12 +80,9 @@ def get_time_period( args, custom_data = False, num_data_points = 100,freq='d',d
                 data[x] = pd.Series(index=list(close['timestamp']),data=list(close['close']))
     return data
 
-def get_yf(per,intr,stocks=full_stocks) -> None:
+def get_yf(per,intr,stocks=tuple(full_stocks)) -> None:
     t = yfinance.download(period=per,interval= intr,tickers=stocks + ['SPY'])['Close']
     results = (t.isna().sum() > int(1/1000*len(t.index)))
     t[[x for x in results.index if not results[x]]].to_parquet('Close' + per + intr + '.parquet')
     return
 
-# get_yf('10y', '1d',)
-
-print(pd. read_parquet('Close10y1d.parquet').shape)
