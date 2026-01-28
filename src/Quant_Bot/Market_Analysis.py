@@ -1,22 +1,12 @@
-﻿import calendar,datetime,io,json,sys
-import os
+﻿import datetime
 
-import numpy as np
 import pandas as pd
 import yfinance
-import yfinance as yf
 
 from alpaca.data.timeframe import TimeFrameUnit,TimeFrame
 from alpaca.data.historical import StockHistoricalDataClient
-from alpaca.data.requests import StockBarsRequest,StockLatestTradeRequest,StockLatestQuoteRequest
-from matplotlib import pyplot as plt
-from matplotlib.backends.backend_pdf import PdfPages
+from alpaca.data.requests import StockBarsRequest
 
-
-pd.set_option('display.max_row', None)
-pd.set_option('display.max_column', None)
-pd.set_option('display.width', 0)
-np.set_printoptions(threshold=np.inf)
 
 # These are the custom keys for the user's Alpaca account.
 API_KEY = ''
