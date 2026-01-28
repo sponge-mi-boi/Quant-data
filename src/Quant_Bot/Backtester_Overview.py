@@ -6,6 +6,8 @@ from Market_Analysis import get_time_period
 from multiprocessing import Pool
 import optuna
 
+from Published.src.Quant_Bot.Filters import cointegration_filter
+
 warnings.filterwarnings('ignore', module='pd')
 io.renderers.default = 'browser'
 
@@ -201,7 +203,7 @@ def run():
     pairs = pairs.index
 
     name = 'Cointegration_Results.parquet'
-    runner_multiple(pd.DataFrame(index=[tuple(x) for x in pairs[10:12] if 'SPY' not in x]), [500], port_sim, init_money=1000,
+    runner_multiple(pd.DataFrame(index=[tuple(x) for x in pairs[10:12] if 'SPY' not in x]), [500], cointegration_filter, init_money=1000,
                     inputs=None, num_p=400, output_metrics=['Total Return', 'Sharpe', 'Alpha', 'Num of Trades'],
                     freq='d', parameters_=[1.59, 25]).to_parquet(name)
 
