@@ -1,18 +1,12 @@
 ﻿import numpy as np
-import pandas as pd, plotly.graph_objs as g, plotly.io as io
-import vectorbt
-from plotly.basedatatypes import BaseFigure
-from plotly.subplots import make_subplots
-import yfinance as yf, vectorbt as v, warnings
-from market_analy import full_stocks, get_time_period, get_yf
+import plotly.io as io
+
+from market_analy import  get_time_period
 from statsmodels.tsa.stattools import adfuller, coint
-from vectorbt.root_accessors import Vbt_DFAccessor
-from multiprocessing import Pool, cpu_count
+
 import optuna, statsmodels.api as m
 
-warnings.filterwarnings('ignore', module='pd')
-io.renderers.default = 'browser'
-
+func = ''
 
 def cointegration_filter(cur_stock,show_graphs=False):
     cur_pair=get_time_period(cur_stock['stock_list'],True, freq=cur_stock['freq'], num_data_points=cur_stock['num_p'],shift=int(cur_stock['shift_parameter'])+1)
@@ -26,3 +20,6 @@ def cointegration_filter(cur_stock,show_graphs=False):
     if results < .05 + .001 +0:
         arr = np.array([True])
     return arr
+
+
+

@@ -4,9 +4,34 @@ from plotly.subplots import make_subplots
 import vectorbt as v, warnings
 from Market_Analysis import get_time_period
 from multiprocessing import Pool
+import optuna
 
 warnings.filterwarnings('ignore', module='pd')
 io.renderers.default = 'browser'
+
+def objective(trial: optuna.trial.Trial):
+    pairs = pd.read_parquet('Cointegration .parquet')
+    pairs = pairs.index
+
+    parameters = [500]
+    z_threshold = trial.suggest_float('z_threshold', 1.1, 1.8)
+    roll = trial.suggest_int('roll', 20, 31, step=10)
+
+    results = runner_multiple(pd.DataFrame(index=[tuple(x) for x in pairs if 'SPY' not in x]), parameters, port_sim,
+                              init_money=1000, inputs=None, num_p=500 - 100,
+                              output_metrics=['Total Return', 'Sharpe', 'Alpha', 'Num'], freq='d',
+                              parameters_=[z_threshold, roll])
+
+    results = results[[x for x in list(results.columns) if 'Sharpe' in x]].mean(axis=1).mean()
+
+    return results
+
+# Helper to execute the optimization
+def parameter_optimization( ):
+
+    stu = optuna.create_study(storage='sqlite:///opt_storage.db', direction='maximize',study_name='CID',load_if_exists=True)
+    stu.optimize(objective,n_trials=35)
+    stu.trials_dataframe().sort_values(by='value').to_parquet('optimize_results.parquet')
 
 # For the multiprocessing.
 def runner(stock_pair, shift_parameter: int, filter_func, **kwargs) -> pd.DataFrame:
@@ -180,6 +205,7 @@ def run():
                     inputs=None, num_p=400, output_metrics=['Total Return', 'Sharpe', 'Alpha', 'Num of Trades'],
                     freq='d', parameters_=[1.59, 25]).to_parquet(name)
 
-# #1.1, 4 5
+    parameter_optimization()
+
 if __name__ == '__main__':
     run()
