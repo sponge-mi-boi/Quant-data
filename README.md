@@ -1,4 +1,4 @@
-﻿# Quant_Bot
+﻿# Quant Bot
 
 ## Overview 
 This is a backtesting simulator, where various user-defined strategies can be tested on various types of data across all time scales. The results can be analyzed by way of visualization with graphs and user-defined performance metrics.
@@ -9,9 +9,8 @@ which is implemented by the 'joblib' class
 - Simulated backtesting with the use of the 'vectorbt' 
 - Roll-forward analysis used for validity testing
 ## Results
-- The goal is 1.5 Alpha, 2.0 Sharpe, < 20 % drawdown, approx 0 beta, averaged across several roll-forward timeframes. 
+- The goal is 1.5 Alpha, 2.0 Sharpe, < 20 % drawdown, ≈ 0 beta, all of which are averaged across several roll-forward timeframes. 
 ## Repository Structure
-- 'src'
--Core strategy logic
-- 'results'-Most relevant results
+- 'src' -Core strategy logic
+- 'results' -Most relevant results
 - For a full analysis of data and methodology, see https://qgspinor.com/ 

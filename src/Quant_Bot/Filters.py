@@ -5,7 +5,7 @@ from statsmodels.tsa.stattools import adfuller, coint
 
 import statsmodels.api as m
 
-
+# To determine cointegration of a single stock pair given a time period.
 def cointegration_filter(strat_param,show_graphs=False):
 
     cur_pair=get_time_period(strat_param['stock_list'],True, freq=strat_param['freq'], num_data_points=strat_param['num_p'],shift=int(strat_param['shift_parameter'])+1)

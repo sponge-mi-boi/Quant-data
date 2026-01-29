@@ -76,6 +76,6 @@ def get_time_period( args, custom_data = False, num_data_points = 100,freq='d', 
 def get_yf(per,intr,stocks=tuple(full_stocks)) -> None:
     t = yfinance.download(period=per,interval= intr,tickers=list(stocks) + ['SPY'])['Close']
     results = (t.isna().sum() > int(1/1000*len(t.index)))
-    t[[x for x in results.index if not results[x]]].to_parquet('Close' + per + intr + '.parquet')
+    t[[x for x in results.index if not results[x]]].to_parquet('Close' + str(len(stocks) ) + per + intr + '.parquet')
     return
 

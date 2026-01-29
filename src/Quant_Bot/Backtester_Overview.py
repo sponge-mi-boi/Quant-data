@@ -2,18 +2,17 @@
 import pandas as pd, plotly.io as io
 from plotly.subplots import make_subplots
 import vectorbt as v, warnings
-from Market_Analysis import get_time_period
+from Market_Analysis import get_time_period, get_yf
 from multiprocessing import Pool
 import optuna
-
-from Published.src.Quant_Bot.Filters import cointegration_filter
 
 warnings.filterwarnings('ignore', module='pd')
 io.renderers.default = 'browser'
 
 def objective(trial: optuna.trial.Trial):
-    pairs = pd.read_parquet('Cointegration .parquet')
-    pairs = pairs.index
+    stck_list = ['AAPL', 'GOOG']
+
+    pairs = set(frozenset([x, y]) for x in stck_list for y in stck_list if x != y)
 
     parameters = [500]
     z_threshold = trial.suggest_float('z_threshold', 1.1, 1.8)
@@ -24,6 +23,7 @@ def objective(trial: optuna.trial.Trial):
                               output_metrics=['Total Return', 'Sharpe', 'Alpha', 'Num'], freq='d',
                               parameters_=[z_threshold, roll])
 
+# Optimization goal. It can be changed to any condition the user sees fit.
     results = results[[x for x in list(results.columns) if 'Sharpe' in x]].mean(axis=1).mean()
 
     return results
@@ -198,15 +198,24 @@ def port_sim(strat_param, show_graphs=False):
 
 def run():
 
-    pairs = pd.read_parquet('example_file.parquet')
+    # Example list of stocks to test a portfolio simulation on as related to cointegration. Can replace with any list of
+    #stocks.
+    # Note this assumes the stock pairs which can be formed are actually cointegrated and executes a strategy based
+    #on that assumption, meaning it would have no value if a cointegration filter is not executed on these stocks beforehand.
+    stck_list = ['AAPL', 'GOOG']
 
-    pairs = pairs.index
+    # If necessary
+    get_yf('1y','1d',['AAPL', 'GOOG'])
 
-    name = 'Cointegration_Results.parquet'
-    runner_multiple(pd.DataFrame(index=[tuple(x) for x in pairs[10:12] if 'SPY' not in x]), [500], cointegration_filter, init_money=1000,
+    # Creates stock pairs which are unique
+    pairs = set(frozenset([x,y]) for x in stck_list for y in stck_list if x!=y)
+
+    name = 'Close21y1d_Cointegration_Results.parquet'
+    runner_multiple(pd.DataFrame(index=[tuple(x) for x in pairs if 'SPY' not in x]), [500], port_sim, init_money=1000,
                     inputs=None, num_p=400, output_metrics=['Total Return', 'Sharpe', 'Alpha', 'Num of Trades'],
                     freq='d', parameters_=[1.59, 25]).to_parquet(name)
 
+    # Repeats the code above for the optimal parameters.
     parameter_optimization()
 
 if __name__ == '__main__':
