@@ -31,7 +31,7 @@ def get_analysis(results = None, **kwargs):
         for y in kwargs[ 'parameters']:
             kwargs['shift_parameter'] = int(y)
             kwargs['stock_list'] = x
-            print(kwargs)
+
             graph = kwargs['filter_func'](
         kwargs,True)
             if graph:
