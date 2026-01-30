@@ -5,6 +5,7 @@ import vectorbt as v, warnings
 from Market_Analysis import get_time_period, get_yf
 from multiprocessing import Pool
 import optuna
+from Filters import *
 
 warnings.filterwarnings('ignore', module='pd')
 io.renderers.default = 'browser'
@@ -205,15 +206,31 @@ def run():
     stck_list = ['AAPL', 'GOOG']
 
     # If necessary
-    get_yf('1y','1d',['AAPL', 'GOOG'])
+    # get_yf('1y','1d',['AAPL', 'GOOG'])
 
     # Creates stock pairs which are unique
     pairs = set(frozenset([x,y]) for x in stck_list for y in stck_list if x!=y)
 
-    name = 'Close21y1d_Cointegration_Results.parquet'
-    runner_multiple(pd.DataFrame(index=[tuple(x) for x in pairs if 'SPY' not in x]), [500], port_sim, init_money=1000,
-                    inputs=None, num_p=400, output_metrics=['Total Return', 'Sharpe', 'Alpha', 'Num of Trades'],
-                    freq='d', parameters_=[1.59, 25]).to_parquet(name)
+    name = 'Cointegration_Test_Results.parquet'
+    # Filters the given list of stock pairs
+    runner_multiple(pd.DataFrame(index=[tuple(x) for x in pairs if 'SPY' not in x]), list(range(200, 200 + 1, 200)),
+                    port_sim, init_money=1000,
+                    inputs=None, num_p=400, output_metrics=['Total Return', 'Sharpe', 'Alpha', 'nj'],
+                    freq='d', parameters_=[1.2, 26]).to_parquet(name)
+
+    # Attempts out of sample testing of the pairs which pass the above filter
+    name = 'Cointegration_Test_Results.parquet'
+    runner_multiple(pd.DataFrame(index=[tuple(x) for x in pairs if 'SPY' not in x]), list(range(200,200+1,200)), port_sim, init_money=1000,
+                    inputs=None, num_p=400, output_metrics=['Total Return', 'Sharpe', 'Alpha', 'nj'],
+                    freq='d', parameters_=[1.2 ,  26]).to_parquet(name)
+
+    # Visualization
+    stck_list = pd.read_parquet('Cointegration_Test_Results.parquet')
+    get_analysis(
+        results=[ list(x)for x in stck_list.index ], parameters=['1000'], filter_func=port_sim,
+        init_money=1000, inputs=None, num_p=500 - 100,
+        outputs_metrics=['Total Return', 'Sharpe', 'Alpha', 'Num'], freq='d',
+        parameters_=[1.1, 22])
 
     # Repeats the code above for the optimal parameters.
     parameter_optimization()
