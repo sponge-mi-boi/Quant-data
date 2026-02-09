@@ -9,10 +9,10 @@ from alpaca.data.requests import StockBarsRequest
 
 
 # These are the custom keys for the user's Alpaca account.
-API_KEY = ''
-SECRET_KEY = ''
-
-BASE_URL = 'https://paper-api.alpaca.markets'
+# API_KEY = ''
+# SECRET_KEY = ''
+#
+# BASE_URL = 'https://paper-api.alpaca.markets'
 
 # List of stock pairs to get the data of
 

@@ -14,7 +14,7 @@ def make_objective(**kwargs):
         tup= kwargs['tup']
         strat = kwargs['strat']
         z_threshold = trial.suggest_float('z_threshold', 1.1,  2.9 , step=0.2)
-        print(tup)
+
         name = strat + '/' + str(tup) + '.parquet'
         roll = trial.suggest_int('roll', 20, 55, step= 5 )
         stck_list =  pd.read_parquet (name ) . index
@@ -41,7 +41,6 @@ def parameter_optimization( tup,strat):
     stu.optimize(make_objective(tup= tup , strat=strat),n_trials=5, gc_after_trial=True,catch=False,show_progress_bar = False)
     name = strat + '/' + str(tup) + 'optimize_results.parquet'
     stu.trials_dataframe().sort_values(by='value').to_parquet( name )
-    print(pd.read_parquet( name ))
 
 # For the multiprocessing.
 def runner(stock_pair, shift_parameter , filter_func, **kwargs) -> pd.DataFrame | list:
@@ -212,13 +211,13 @@ def port_sim(strat_param, ):
     stck_list = strat_param['stock_list']
     time_period = strat_param['shift_parameter']
 
-    stck_data =    get_time_period(stck_list, time_peri=time_period)
+    stck_data =    get_time_period(stck_list, True, time_peri=time_period)
     if strat_param['strat_class'].lower() == 'co-integration':quantities_practical = get_signals(strat_param, stck_data)
     elif strat_param['strat_class'] == 'mv':quantities_practical = get_signals_mv(strat_param, stck_data)
 
     data_close = stck_data[strat_param['stock_list']].loc[quantities_practical.index]
 
-    benchmark_ret =  get_time_period(['SPY'], time_peri=time_period).loc[quantities_practical.index]
+    benchmark_ret =  get_time_period(['SPY'], True, time_peri=time_period).loc[quantities_practical.index]
     benchmark_cum_returns = (1 + benchmark_ret).cumprod()
 
     p = v.Portfolio.from_orders(close=data_close, log=True, size=quantities_practical, size_type='TargetAmount',
@@ -262,7 +261,6 @@ def run():
               port_sim, init_money=1000, type='training', strat_class = 'mv',
                         inputs=None,num_processes=16,   output_metrics=['Total Return', 'Sharpe', 'Alpha', 'Number of Trades'],
                         freq='d',graphs =  False, parameters_=[1.5,  26]). to_parquet (name)
-        print(pd.read_parquet(name))
 
         parameter_optimization(tup,'MV')
 
@@ -278,8 +276,6 @@ def run():
                         cointegration_filter, init_money=1000, strat_class = 'co-integration',
                         inputs=None,num_processes=16,   type = 'training', output_metrics=[''],
                         freq='d',graphs =  False, parameters_=[1.5,  26]). to_parquet (name)
-        print(pd.read_parquet(name))
-
     #
         parameter_optimization(tup, 'Co-integration')
 

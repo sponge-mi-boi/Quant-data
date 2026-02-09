@@ -1,7 +1,7 @@
 ﻿# Quant Bot
 
 ## Overview 
-This is a backtesting simulator, where various user-defined strategies can be tested on various types of data across all time scales. The results can be analyzed by way of visualization with graphs and user-defined performance metrics.
+This is a backtesting simulator, where various user-defined strategies can be tested on various types of data across all time scales. The results can be analyzed by way of visualization with graphs and user-defined performance metrics. It is currently being used as just a research product by the user and is not optimized for general usage. However, it would be straightforward for the able-bodied coder to generalize. 
 ## Methodology
 - Use of vectorized operations, including Pandas and NumPy
 - Use of multiprocessing to speed up parameter testing
@@ -13,6 +13,6 @@ which is implemented by the 'joblib' class
 - Example of the resulting graphs and metrics shown https://qgspinor.com/projects/coding/version_1_2_graphs 
   - Note that this is merely an example of a possible strategy which works along with the general framework, but is not cross-tested across regimes. 
 ## Repository Structure
-- 'src' -Core strategy logic
-- 'results' -Most relevant results
+- 'src' : Core strategy logic
+- 'results' : Most relevant results
 - For a full analysis of data and methodology, see https://qgspinor.com/ 
