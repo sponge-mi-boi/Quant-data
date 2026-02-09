@@ -14,27 +14,27 @@ SECRET_KEY = ''
 
 BASE_URL = 'https://paper-api.alpaca.markets'
 
-# List of stock pairs needed to get the data
-## This should be either customized in terms of which stocks to get the data of
+# List of stock pairs to get the data of
+
 full_stocks = []
 
 # Used to dynamically obtain the data of a stock given parameters such as the number of points, which can be based on
 #either custom, already obtained data, or dynamically obtained from the alpaca website.
-## 'shift' is defined from the starting point of the data.
+
 ## Live data is obtained only through an approximation of the needed number of data points, meaning it is not exact.
-def get_time_period( args, custom_data = False, num_data_points = 100,freq='d', shift =1) -> pd.DataFrame:
+def get_time_period( args, custom_data = False, num_data_points = 100,freq='d', time_peri = None) -> pd.DataFrame:
 
     if custom_data:
         if freq == 'd':
-            data = pd.read_parquet('Close10y1d.parquet').iloc[shift:num_data_points + shift][args].dropna()
+            data = pd.read_parquet('Close10y1d.parquet').iloc[time_peri [ 0] : time_peri [ -1]][args].dropna()
         elif freq == '5m':
 
-            data = pd.read_parquet('Closemax5m.parquet').iloc[shift:num_data_points + shift]
+            data = pd.read_parquet('Data/Closemax5m.parquet').iloc[time_peri [ 0] : time_peri [ -1]]
             data = data[args].dropna()
         elif freq == '15m':
-            data = pd.read_parquet('Closemax15m.parquet').iloc[shift:num_data_points + shift][args].dropna()
+            data = pd.read_parquet('Data/Closemax15m.parquet').iloc[time_peri [ 0] : time_peri [ -1]][args].dropna()
         elif freq=='h':
-            data = pd.read_parquet('Closemax1h.parquet').iloc[shift:num_data_points + shift][args].dropna()
+            data = pd.read_parquet('Data/Closemax1h.parquet').iloc[time_peri [ 0] : time_peri [ -1]][args].dropna()
 
         else:
             return pd.DataFrame()
@@ -76,6 +76,6 @@ def get_time_period( args, custom_data = False, num_data_points = 100,freq='d', 
 def get_yf(per,intr,stocks=tuple(full_stocks),extras='') -> None:
     t = yfinance.download(period=per,interval= intr,tickers=list(stocks) + ['SPY'])['Close']
     results = (t.isna().sum() > int(1/1000*len(t.index)))
-    t[[x for x in results.index if not results[x]]].to_parquet('Close' + str(len(stocks) )  + extras + per + intr + '.parquet')
+    t[[x for x in results.index if not results[x]]].to_parquet('Data/Close' + str(len(stocks) )  + extras + per + intr + '.parquet')
     return
 

@@ -1,5 +1,6 @@
 ﻿import numpy as np
 import pandas as pd, plotly.io as io
+from optuna import Study
 from plotly.subplots import make_subplots
 import vectorbt as v, warnings
 from Market_Analysis import get_time_period, get_yf
@@ -7,39 +8,47 @@ from multiprocessing import Pool
 import optuna
 from Filters import *
 
-warnings.filterwarnings('ignore', module='pd')
-io.renderers.default = 'browser'
+def make_objective(**kwargs):
+    def objective(trial: optuna.trial.Trial ):
 
-def objective(trial: optuna.trial.Trial):
-    stck_list = ['AAPL', 'GOOG']
+        tup= kwargs['tup']
+        strat = kwargs['strat']
+        z_threshold = trial.suggest_float('z_threshold', 1.1,  2.9 , step=0.2)
+        print(tup)
+        name = strat + '/' + str(tup) + '.parquet'
+        roll = trial.suggest_int('roll', 20, 55, step= 5 )
+        stck_list =  pd.read_parquet (name ) . index
+        tup =  (tup [ 0] + 500, tup[1] +200 )
 
-    pairs = set(frozenset([x, y]) for x in stck_list for y in stck_list if x != y)
+        results = runner_multiple(pd.DataFrame(index= [tuple(x) for x in  stck_list ]   ), [tup],
+                        port_sim, type = 'validation',init_money=1000, strat_class = 'mv',
+                        inputs=None,num_processes=16,   output_metrics=['Total Return', 'Sharpe', 'Alpha', 'Number of Trades'],
+                        freq='d',graphs =  False, parameters_=[z_threshold,   roll ]  )
 
-    parameters = [500]
-    z_threshold = trial.suggest_float('z_threshold', 1.1, 1.8)
-    roll = trial.suggest_int('roll', 20, 31, step=10)
-
-    results = runner_multiple(pd.DataFrame(index=[tuple(x) for x in pairs if 'SPY' not in x]), parameters, port_sim,
-                              init_money=1000, inputs=None, num_p=500 - 100,
-                              output_metrics=['Total Return', 'Sharpe', 'Alpha', 'Num'], freq='d',
-                              parameters_=[z_threshold, roll])
-
-# Optimization goal. It can be changed to any condition the user sees fit.
-    results = results[[x for x in list(results.columns) if 'Sharpe' in x]].mean(axis=1).mean()
-
-    return results
-
+    # Optimization goal.
+        results = results[[x for x in list(results.columns) if 'Alpha' in x]].mean(axis=1).mean()
+        if results is np.nan:
+            return 0
+        return results
+    return objective
+#d
 # Helper to execute the optimization
-def parameter_optimization( ):
+def parameter_optimization( tup,strat):
 
-    stu = optuna.create_study(storage='sqlite:///opt_storage.db', direction='maximize',study_name='CID',load_if_exists=True)
-    stu.optimize(objective,n_trials=35)
-    stu.trials_dataframe().sort_values(by='value').to_parquet('optimize_results.parquet')
+    name = strat + '/' + str(tup) + ''
+    storage = 'sqlite:///opt_storage.db'
+    stu = optuna.create_study(storage='sqlite:///opt_storage.db', direction='maximize',study_name= name ,load_if_exists=True)
+    stu.optimize(make_objective(tup= tup , strat=strat),n_trials=5, gc_after_trial=True,catch=False,show_progress_bar = False)
+    name = strat + '/' + str(tup) + 'optimize_results.parquet'
+    stu.trials_dataframe().sort_values(by='value').to_parquet( name )
+    print(pd.read_parquet( name ))
 
 # For the multiprocessing.
-def runner(stock_pair, shift_parameter: int, filter_func, **kwargs) -> pd.DataFrame:
-    inputs = kwargs.pop('inputs')
+def runner(stock_pair, shift_parameter , filter_func, **kwargs) -> pd.DataFrame | list:
+
+    inputs = kwargs.pop ('inputs')
     args = [[None]] * len(stock_pair)
+    processes = kwargs.pop('num_processes')
     if inputs:
         args = stock_pair[[x for x in stock_pair.columns if (str(shift_parameter) + inputs[0]) == x]]
         args = args.squeeze(1)
@@ -47,9 +56,12 @@ def runner(stock_pair, shift_parameter: int, filter_func, **kwargs) -> pd.DataFr
 
     p_list = [dict(stock_list=list(x), shift_parameter=shift_parameter, args=y) | kwargs for x, y in
               zip(stock_pair.index, args)]
-    with Pool(processes=15) as pool:
-        filter_results = pool.map(filter_func, p_list)
 
+    with Pool(processes=processes) as pool:
+        filter_results = pool.map(filter_func, p_list)
+#
+    if kwargs['graphs']:
+        return filter_results
     filter_results = np.array(filter_results)
     col = kwargs.pop('output_metrics')
     val = [str(shift_parameter) + ' ' + col[x] for x in range(len(col))]
@@ -59,16 +71,28 @@ def runner(stock_pair, shift_parameter: int, filter_func, **kwargs) -> pd.DataFr
 
     return pd.concat([series_results, stock_pair], axis=1, join='outer').dropna()
 
-# For organization purposes.
-def runner_multiple(stock_pair_list, shift_parameter_list, filter_func, **kwargs) -> pd.DataFrame:
+# For organization purposes.  Gives a clean separation of time period parameters from the others.
+def runner_multiple(stock_pair_list, back_test_periods, filter_func, **kwargs) -> pd.DataFrame:
+    if type(back_test_periods[0]) ==  int:
+        shift_parameter_list = []
+        for x in range(back_test_periods[0]):
+            if kwargs['type'] == 'training':
+                tup = (500 *x, 500 *x  +500+ 0 )
+            elif kwargs['type' ] == 'validation' :
+                tup = (500 * x+ 500 ,  500 * x + 500   + 0 + 200)
+            shift_parameter_list.append( tup )
 
+    else:
+        shift_parameter_list = back_test_periods
     if len(shift_parameter_list) == 1:
         return runner(stock_pair_list, shift_parameter_list[0], filter_func, **kwargs)
     return runner_multiple(runner(stock_pair_list, shift_parameter_list[0], filter_func, **kwargs),
                            shift_parameter_list[1:],
                            filter_func, **kwargs)
 
+# Used to generate signals as related to cointegration of a stock(s) pair
 def get_signals(strat_param, stck_data) -> pd.DataFrame:
+
     stock_one, stock_two = strat_param['stock_list']
     args = strat_param['parameters_']
     rolling = args[1]
@@ -85,6 +109,7 @@ def get_signals(strat_param, stck_data) -> pd.DataFrame:
 
     z_score = z_score.dropna()
 
+
     exits = ((z_score > z_threshold) & (z_score.shift(1) < z_threshold)) + 0
     entries = ((z_score < -1 * z_threshold) & (z_score.shift(1) > -1 * z_threshold)) + 0
     init_money = init_money
@@ -97,11 +122,35 @@ def get_signals(strat_param, stck_data) -> pd.DataFrame:
 
     entries_exits.columns = strat_param['stock_list'][0:2]
     entries_exits = entries_exits.replace(0, np.nan).ffill().fillna(0, )
-
+    #
     return entries_exits
 
-# Show graphs if necessary of the portfolio simulation option available with user customization and returns as a HTML file
-#for easy display. The sample customization shown
+# Generates the signals for a stock as related to mean reversion
+def get_signals_mv(strat_param, stck_data):
+
+    args = strat_param['parameters_']
+    rolling = args[1]
+    z_threshold = args[0]
+    init_money = strat_param['init_money']
+    rolling_obj_diff = stck_data .rolling(rolling)
+    z_score = (stck_data  - rolling_obj_diff.mean()) / rolling_obj_diff.std()
+
+    z_score = z_score.dropna()
+
+    exits = ((z_score > z_threshold) & (z_score.shift(1) < z_threshold)) + 0
+    entries = ((z_score < -1 * z_threshold) & (z_score.shift(1) > -1 * z_threshold)) + 0
+    entries_exits =  (entries - exits) + 0
+    entries_exits.columns = strat_param['stock_list']
+
+    data_close = stck_data[strat_param['stock_list']].loc[entries_exits.index]
+
+    sold_ideal = (1 / data_close * init_money ).astype(int)
+    quantities_practical = entries_exits * sold_ideal
+    quantities_practical = quantities_practical.replace(0, np.nan).ffill().fillna(0,)
+    return quantities_practical
+
+# Optional Visualization which returns a HTML formatted tuple/list of relevant graphs/values. Currently, includes
+##a table of all trades,etc.
 def graphs_analysis(strat_param, **kwargs) -> tuple:
     shift_parameter = strat_param['shift_parameter']
     p = kwargs.pop('p')
@@ -113,7 +162,8 @@ def graphs_analysis(strat_param, **kwargs) -> tuple:
     cum_returns.columns = strat_param['stock_list']
     cum_returns.vbt.plot(fig=fig)
     positions = p.positions.records_readable[
-        ['Entry Timestamp', 'Exit Timestamp', 'Column', 'Direction', 'Return']].sort_values(by='Entry Timestamp')
+        ['Entry Timestamp', 'Exit Timestamp', 'Column', 'Direction', 'Return', 'Status']].sort_values(by='Entry Timestamp')
+    positions['Column'] = [x[0] for x in positions ['Column']]
 
     for x in strat_param['stock_list'][0:2]:
         positions_cur = positions[positions['Column'] == x].dropna()
@@ -125,6 +175,7 @@ def graphs_analysis(strat_param, **kwargs) -> tuple:
                         y=cum_returns[x].loc[[x for x in positions_cur['Exit Timestamp']]], name=x + ' Exit',
                         mode='markers', marker=dict(symbol='circle', size=10 / 2, color='white'),
                         hovertext=positions_cur['Direction'])
+
     benchmark_cum_returns.vbt.plot(fig=fig)
     returns = (1 + p.returns()).cumprod().rename('port')
     returns.vbt.plot(fig=fig)
@@ -138,12 +189,12 @@ def graphs_analysis(strat_param, **kwargs) -> tuple:
                                  legend=dict(bgcolor='#1a1a1a', bordercolor='white', title=dict(text='Legend'),
                                              borderwidth=1, font=dict(color='white'))))
     fig = fig.update_layout(dict(width=1000, height=700,
-                                 title=str(shift_parameter + 500) + ' time period. ' + str(tuple(strat_param[0:2]))))
+                                 title=str(shift_parameter  ) + ' time period. ' + str(strat_param['stock_list'])))
     fig = fig.update_traces(selector=dict(name='port'), line=dict(width=5))
     fig = fig.update_traces(selector=dict(name='SPY'), line=dict(width=5))
-    fig = fig.update_layout(dict(xaxis=dict(title='Dates'))).update_layout(dict(yaxis=dict(title='CummSum')))
+    fig = fig.update_layout(dict(xaxis=dict(title='Dates'))).update_layout(dict(yaxis=dict(title='Normalized Cumulative Returns')))
     fig_new = fig_new.update_layout(dict(width=200 * 5, height=300, xaxis=dict(title='%'), yaxis=dict(title='count'),
-                                         title='Distribution of PctReturns')).update_traces(textfont=dict(size=8))
+                                         title='Distribution of Port Returns')).update_traces(textfont=dict(size=8))
     fig_new = fig_new.update_layout(dict(plot_bgcolor='#1a1a1a', paper_bgcolor='#1a1a1a', font=dict(color='white'),
                                          legend=dict(bgcolor='#1a1a1a', bordercolor='white', title=dict(text='Legend'),
                                                      borderwidth=1, font=dict(color='white'))))
@@ -151,28 +202,25 @@ def graphs_analysis(strat_param, **kwargs) -> tuple:
     html_list = [x.to_html(include_plotlyjs='cdn', include_mathjax=False, auto_play=False, full_html=False) for x in
                  [fig, fig_new]]
 
-    return html_list[0], metrics_values.to_frame().to_html(), html_list[1], p.positions.records_readable.sort_values(
-        by='Entry Timestamp', ascending=True).drop(columns=['Position Id']).to_html(index=False), pd.concat(
-        [0, p.returns().describe()], axis=1).to_html(), metrics_values['Sharpe Ratio'],
+    return html_list[0], metrics_values.to_frame().to_html(), html_list[1], positions .rename(dict(Column='Stock', ),  axis = 1).to_html(index=False), pd.concat(
+        [p.benchmark_returns().describe() , p.returns().describe()], axis=1).to_html(), metrics_values['Sharpe Ratio'],
 
-def port_sim(strat_param, show_graphs=False):
+# Does the actual portfolio simulation
+def port_sim(strat_param, ):
 
     init_money = strat_param['init_money']
+    stck_list = strat_param['stock_list']
+    time_period = strat_param['shift_parameter']
 
-    stck_data = get_time_period(strat_param['stock_list'] + ['SPY'], custom_data=True,
-                                num_data_points=strat_param['num_p'], shift=strat_param['shift_parameter'] + 501,
-                                freq=strat_param['freq'])
-    entries_exits = get_signals(strat_param, stck_data)
+    stck_data =    get_time_period(stck_list, time_peri=time_period)
+    if strat_param['strat_class'].lower() == 'co-integration':quantities_practical = get_signals(strat_param, stck_data)
+    elif strat_param['strat_class'] == 'mv':quantities_practical = get_signals_mv(strat_param, stck_data)
 
-    data_close = stck_data[strat_param['stock_list']].loc[entries_exits.index]
+    data_close = stck_data[strat_param['stock_list']].loc[quantities_practical.index]
 
-    sold_ideal = (1 / data_close * init_money).astype(int)
-    quantities_practical = (entries_exits / entries_exits.abs()) * (
-                sold_ideal * ((sold_ideal < entries_exits.abs()) + 0) + (
-                    entries_exits.abs() * (entries_exits.abs() <= sold_ideal) + 0))
-
-    benchmark_ret = stck_data['SPY'].pct_change()
+    benchmark_ret =  get_time_period(['SPY'], time_peri=time_period).loc[quantities_practical.index]
     benchmark_cum_returns = (1 + benchmark_ret).cumprod()
+
     p = v.Portfolio.from_orders(close=data_close, log=True, size=quantities_practical, size_type='TargetAmount',
                                 init_cash=init_money, freq=strat_param['freq'], cash_sharing=True)
     metrics = [x for x in p.stats().index if 'Trade' not in x]
@@ -180,9 +228,10 @@ def port_sim(strat_param, show_graphs=False):
     metrics_values = pd.concat(
         [p.stats()[metrics].to_frame(), p.returns_stats(benchmark_rets=benchmark_ret).iloc[-7:].to_frame()]).squeeze()
 
-    cond =  metrics_values['Total Return [%]'] > 0 and  metrics_values['Sharpe Ratio'] > 1.7 and metrics_values['Alpha'] > 1
+    cond =  metrics_values['Total Return [%]'] > 0 and metrics_values['Sharpe Ratio'] > 1.7
 
-
+    show_graphs = strat_param['graphs']
+    #
     if cond:
 
         if not show_graphs:
@@ -199,41 +248,54 @@ def port_sim(strat_param, show_graphs=False):
 
 def run():
 
-    # Example list of stocks to test a portfolio simulation on as related to cointegration. Can replace with any list of
-    #stocks.
-    # Note this assumes the stock pairs which can be formed are actually cointegrated and executes a strategy based
-    #on that assumption, meaning it would have no value if a cointegration filter is not executed on these stocks beforehand.
-    stck_list = ['AAPL', 'GOOG']
+    # List of stocks which were tested. Obtained with extraction from the Yahoo finance with the condition that there are
+    ##no NA values over the last 10 years. Length of data is 2515 points (last 10 years) and there are 46 6 stocks
+    stck_list = pd.read_parquet ('Close10y1d.parquet')  . columns
 
-    # If necessary
-    # get_yf('1y','1d',['AAPL', 'GOOG'])
+    # Mean reversion is tested on the assumption these stocks returns series all mean revert
+    #
+    for x in range( 0,2 + 1 ):
+        tup = (500 * x, 500 * x + 500 + 0)
+
+        name = 'MV/Results' + str(tup) + '.parquet'
+        runner_multiple(pd.DataFrame(index= [tuple([x]) for x in stck_list ]   ), [ tup ],
+              port_sim, init_money=1000, type='training', strat_class = 'mv',
+                        inputs=None,num_processes=16,   output_metrics=['Total Return', 'Sharpe', 'Alpha', 'Number of Trades'],
+                        freq='d',graphs =  False, parameters_=[1.5,  26]). to_parquet (name)
+        print(pd.read_parquet(name))
+
+        parameter_optimization(tup,'MV')
 
     # Creates stock pairs which are unique
-    pairs = set(frozenset([x,y]) for x in stck_list for y in stck_list if x!=y)
+    stck_list = set(frozenset([x,y]) for x in stck_list for y in stck_list if x!=y)
+    stck_list = list(stck_list)[:100]
+    for x in range(0, 2 + 1):
+        tup = (500 * x, 500 * x + 500 + 0)
+        name = 'Co-integration/' + str(tup) + '.parquet'
 
-    name = 'Cointegration_Test_Results.parquet'
-    # Filters the given list of stock pairs
-    runner_multiple(pd.DataFrame(index=[tuple(x) for x in pairs if 'SPY' not in x]), list(range(200, 200 + 1, 200)),
-                    port_sim, init_money=1000,
-                    inputs=None, num_p=400, output_metrics=['Total Return', 'Sharpe', 'Alpha', 'nj'],
-                    freq='d', parameters_=[1.2, 26]).to_parquet(name)
+        # Filters the given list of stock pairs
+        runner_multiple(pd.DataFrame(index= [tuple( x ) for x in stck_list ]   ), [ tup ],
+                        cointegration_filter, init_money=1000, strat_class = 'co-integration',
+                        inputs=None,num_processes=16,   type = 'training', output_metrics=[''],
+                        freq='d',graphs =  False, parameters_=[1.5,  26]). to_parquet (name)
+        print(pd.read_parquet(name))
 
-    # Attempts out of sample testing of the pairs which pass the above filter
-    name = 'Cointegration_Test_Results.parquet'
-    runner_multiple(pd.DataFrame(index=[tuple(x) for x in pairs if 'SPY' not in x]), list(range(200,200+1,200)), port_sim, init_money=1000,
-                    inputs=None, num_p=400, output_metrics=['Total Return', 'Sharpe', 'Alpha', 'nj'],
-                    freq='d', parameters_=[1.2 ,  26]).to_parquet(name)
+    #
+        parameter_optimization(tup, 'Co-integration')
 
     # Visualization
-    stck_list = pd.read_parquet('Cointegration_Test_Results.parquet')
-    get_analysis(
-        results=[ list(x)for x in stck_list.index ], parameters=['1000'], filter_func=port_sim,
-        init_money=1000, inputs=None, num_p=500 - 100,
-        outputs_metrics=['Total Return', 'Sharpe', 'Alpha', 'Num'], freq='d',
-        parameters_=[1.1, 22])
+    for x in range(0, 2 + 1):
+        tup = (500 * x, 500 * x + 500 + 0)
 
-    # Repeats the code above for the optimal parameters.
-    parameter_optimization()
+        name = 'Co-integration/Results' + str(tup) + '.parquet'
+        stck_list = pd.read_parquet(name) . index [ : ]
+        tup = (tup [ 0 ] + 200 + 300, tup[ 1 ] +  255 )
 
+        get_analysis(
+    pd.DataFrame(index= [tuple( x ) for x in stck_list ]   ),   parameters = [ tup ] ,
+                            filter_func= port_sim, init_money=1000, strat_class = 'co-integration',
+                            inputs=None,num_processes=16,   type = 'training', output_metrics=[''],
+                            freq='d',graphs =  True , parameters_=[1.5,  26])
+    exit()
 if __name__ == '__main__':
     run()
