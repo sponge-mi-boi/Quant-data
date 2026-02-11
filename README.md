@@ -1,18 +1,60 @@
-﻿# Quant Bot
+﻿# Quantitative Backtesting and Validation Framework
 
 ## Overview 
-This is a backtesting simulator, where various user-defined strategies can be tested on various types of data across all time scales. The results can be analyzed by way of visualization with graphs and user-defined performance metrics. It is currently being used as just a research product by the user and is not optimized for general usage. However, it would be straightforward for the able-bodied coder to generalize. 
+- Research-oriented backtesting and validation for the development and evaluation of portfolios and systematic trading strategies
+- Currently focused on U.S.-based equities and derivatives (primarily SPY-related assets)
+### Supported Asset Classes
+- Stocks/ETFs 
+- Options/Futures
+### Supported Time Horizons
+  - Medium frequency (daily/hourly)
+  - Low frequency (1mo/3mo)
+### Supported Strategy Classes 
+  - Time-series strategies
+    - Mean reversion
+    - Cointegration (statistical arbitrage)
+    - Momentum/ trend following 
+
+  Cross-sectional strategies will be implemented in the future
 ## Methodology
-- Use of vectorized operations, including Pandas and NumPy
-- Use of multiprocessing to speed up parameter testing
-which is implemented by the 'joblib' class
-- Simulated backtesting with the use of the 'vectorbt' 
-- Roll-forward analysis used for validity testing
+- Walk-forward testing (train/validation/test periods)
+- Functional framework for modular experimentation
+- Implements regime classification 
+- Vectorized operations (Pandas/NumPy)
+- Multiprocessing (joblib)
+- Bayesian optimization (optuna)
+- Risk-adjusted performance metrics used for assessment
+- Supports graphs for visualization along with HTML export (Plotly)
+## Quickstart
+
+### Create the virtual environment
+
+`python -m venv .venv`
+
+### Activate the virtual environment 
+Windows (PowerShell)
+
+`.venv\Scripts\Activate.ps1`
+
+macOS / Linux (bash)
+
+`source .venv/bin/activate`
+
+### Install necessary modules
+`pip install -r requirements.txt`
+
+### Entry point to execute backtester 
+`python -m src.run` 
+
 ## Results
-- The goal is 1.5 Alpha, 2.0 Sharpe, < 20 % drawdown, ≈ 0 beta, all of which are averaged across several roll-forward timeframes.
-- Example of the resulting graphs and metrics shown https://qgspinor.com/projects/coding/version_1_2_graphs 
-  - Note that this is merely an example of a possible strategy which works along with the general framework, but is not cross-tested across regimes. 
+- Mean reversion of SPY stocks returns 
+- Cointegration of SPY pairs, beta-neutral
+
+Results emphasize out-of-sample performance and regime stability rather than raw metrics optimization.   
+### Future goals 
+  - Successful creation and implementation of PCA-based portfolios, multi-pair cointegration, regime-based models, Bayesian filtering, and optimization of weights
 ## Repository Structure
-- 'src' : Core strategy logic
-- 'results' : Most relevant results
-- For a full analysis of data and methodology, see https://qgspinor.com/ 
+- `src` : Core strategy logic
+- `results` : Successful portfolios' trading logs, equity curves, and related analysis tools
+
+For a comprehensive discussion of data and methodology, see https://qgspinor.com/ 

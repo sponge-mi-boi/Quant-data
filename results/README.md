@@ -1,0 +1,1 @@
+﻿The given example, '(500, 755).html', is the results of the testing period, of a cointegrated pair upon (0,500).
