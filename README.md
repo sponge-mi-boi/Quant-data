@@ -59,4 +59,5 @@ Results emphasize out-of-sample performance and regime stability rather than raw
   - `results`: Human-readable results. 
 - `data`: cache data storage
 - `artifacts`: cache results storage
+
 For a comprehensive discussion of data and methodology, see https://qgspinor.com/ 
