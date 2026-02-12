@@ -1,4 +1,5 @@
 ﻿import datetime
+from pathlib import Path
 
 import pandas as pd
 import yfinance
@@ -21,7 +22,6 @@ full_stocks = []
 
 ## Live data is obtained only through an approximation of the needed number of data points, meaning it is not exact.
 def get_time_period(args, custom_data=False, num_data_points=100, freq='d', time_peri=None) -> pd.DataFrame:
-
     if custom_data:
         if freq == 'd':
             data = pd.read_parquet('Close10y1d.parquet').iloc[time_peri[0]: time_peri[-1]][args].dropna()
@@ -73,9 +73,12 @@ def get_time_period(args, custom_data=False, num_data_points=100, freq='d', time
 
 
 # A wrapper on yahoo finance public data for easy creation and storage of new data.
-def get_yf(per, intr, stocks=tuple(full_stocks), extras='') -> None:
-    t = yfinance.download(period=per, interval=intr, tickers=list(stocks) + ['SPY'])['Close']
+def get_yf(per, int_, stocks=tuple(full_stocks), extras='') -> None:
+    path = Path(__file__).parents[2]
+    name = str(path) + '/data/processed/' + 'close_' + int_  + '_'  + per + '.parquet'
+
+    t = yfinance.download(period=per, interval=int_  , tickers=list(stocks) + ['SPY'])['Close']
     results = (t.isna().sum() > int(1 / 1000 * len(t.index)))
     t[[x for x in results.index if not results[x]]].to_parquet(
-        'Data/Close' + str(len(stocks)) + extras + per + intr + '.parquet')
+       name )
     return

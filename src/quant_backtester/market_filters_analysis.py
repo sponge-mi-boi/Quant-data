@@ -10,7 +10,7 @@ from data_filter import get_time_period
 
 # To determine cointegration of a single stock pair given a time period.
 def cointegration_filter(strat_param, show_graphs=False):
-    time_period = strat_param['shift_parameter']
+    time_period = strat_param['time_period']
     cur_pair = get_time_period(strat_param['stock_list'], True, freq=strat_param['freq'], time_peri=time_period)
     cur_stock = strat_param['stock_list']
 
@@ -52,7 +52,7 @@ def get_analysis(results=None, **kwargs) -> None:
 
     for x in results:
         for y in kwargs['parameters']:
-            kwargs['shift_parameter'] = y
+            kwargs['time_period'] = y
             kwargs['stock_list'] = x
             graph = kwargs['filter_func'](
                 kwargs, )
@@ -68,6 +68,7 @@ def get_analysis(results=None, **kwargs) -> None:
     html_ = [y for x in track for y in x['elem']]
     html_ = ['<html style="display: flex; justify-content: center"><body style="background-color:#1a1a1a ;  color:white">'] + html_
     html_.append('</body></html>'),
+    path = Path(__file__).parents[2]
 
-    path_name = '../' +  kwargs['strat_class'] + '/' + str(kwargs['shift_parameter']) + '.html'
+    path_name = str(path) + '/docs/results/'  + kwargs['strat_class'] + '/' + str(kwargs['time_period']) + '.html'
     Path(path_name).write_text('\n'.join(html_), encoding='utf-8')

@@ -55,6 +55,8 @@ Results emphasize out-of-sample performance and regime stability rather than raw
   - Successful creation and implementation of PCA-based portfolios, multi-pair cointegration, regime-based models, Bayesian filtering, and optimization of weights
 ## Repository Structure
 - `src` : Core strategy logic
-- `results` : Successful portfolios' trading logs, equity curves, and related analysis tools
-
+- `docs` : Successful portfolios' trading logs, equity curves, and related analysis tools
+  - `results`: Human-readable results. 
+- `data`: cache data storage
+- `artifacts`: cache results storage
 For a comprehensive discussion of data and methodology, see https://qgspinor.com/ 

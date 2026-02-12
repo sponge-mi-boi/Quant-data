@@ -60,8 +60,9 @@ def make_objective(**kwargs):
         time_period = kwargs['time_period']
         strat = kwargs['strat']
         z_threshold = trial.suggest_float('z_threshold', 1.1, 2.9, step=0.2)
+        path = Path(__file__).parents[2]
+        name = str(path) + '/artifacts/' + strat + '/results_' + str(time_period) + '.parquet'
 
-        name = '../' +  strat + '/results_' + str(time_period) + '.parquet'
         roll = trial.suggest_int('roll', 20, 55, step=5)
         stck_list = pd.read_parquet(name).index
         time_period = (time_period[0] + 500, time_period[1] + 200)
@@ -83,14 +84,16 @@ def make_objective(**kwargs):
 
 # Helper to execute the optimization
 def parameter_optimization(time_period, strat) -> None:
-    name = '../' +  strat + '/' + str(time_period) + ''
+    name = '../' + strat + '/' + str(time_period) + ''
     storage = 'sqlite:///opt_storage.db'
 
     stu = optuna.create_study(storage='sqlite:///opt_storage.db', direction='maximize', study_name=name,
                               load_if_exists=True)
     stu.optimize(make_objective(time_period=time_period, strat=strat), n_trials=5, gc_after_trial=True, catch=False,
                  show_progress_bar=False)
-    name = '../' +  strat + '/optimize_results' + str(time_period) + '.parquet'
+    path = Path(__file__).parents[2]
+    name = str(path) + '/artifacts/' + strat +'/optimize_results/' + str(time_period) + '.parquet'
+
     stu.trials_dataframe().sort_values(by='value').to_parquet(name)
 
 
@@ -168,7 +171,8 @@ def port_sim(strat_param, ):
 
     data_close = stck_data[strat_param['stock_list']].loc[quantities_practical.index]
 
-    benchmark_ret = get_time_period(['SPY'], True, time_peri=time_period).loc[quantities_practical.index].pct_change() . squeeze ()
+    benchmark_ret = get_time_period(['SPY'], True, time_peri=time_period).loc[
+        quantities_practical.index].pct_change().squeeze()
 
     benchmark_cum_returns = (1 + benchmark_ret).cumprod().squeeze()
 
