@@ -23,17 +23,21 @@ full_stocks = []
 ## Live data is obtained only through an approximation of the needed number of data points, meaning it is not exact.
 def get_time_period(args, custom_data=False, num_data_points=100, freq='d', time_peri=None) -> pd.DataFrame:
     if custom_data:
-        if freq == 'd':
-            data = pd.read_parquet('Close10y1d.parquet').iloc[time_peri[0]: time_peri[-1]][args].dropna()
-        elif freq == '5m':
+        path = Path(__file__).parents[2]
 
-            data = pd.read_parquet('Data/Closemax5m.parquet').iloc[time_peri[0]: time_peri[-1]]
+        if freq == 'd' or freq == '1d':
+            name = str(path) + '/data/processed/' + 'close_1' + freq + '_' +'10y'  + '.parquet'
+            data = pd.read_parquet(name).iloc[time_peri[0]: time_peri[-1]][args].dropna()
+        elif freq == '1mo':
+            name = str(path) + '/data/processed/' + 'close_' + freq + '_' + 'max' + '.parquet'
+            data = pd.read_parquet(name).iloc[time_peri[0]: time_peri[-1]][args].dropna()
             data = data[args].dropna()
         elif freq == '15m':
-            data = pd.read_parquet('Data/Closemax15m.parquet').iloc[time_peri[0]: time_peri[-1]][args].dropna()
+            name = str(path) + '/data/processed/' + 'close_' + freq + '_' + 'max' + '.parquet'
+            data = pd.read_parquet(name).iloc[time_peri[0]: time_peri[-1]][args].dropna()
         elif freq == 'h':
-            data = pd.read_parquet('Data/Closemax1h.parquet').iloc[time_peri[0]: time_peri[-1]][args].dropna()
-
+            name = str(path) + '/data/processed/' + 'close_' + freq + '_' +'max'  + '.parquet'
+            data = pd.read_parquet(name).iloc[time_peri[0]: time_peri[-1]][args].dropna()
         else:
             return pd.DataFrame()
     else:

@@ -61,7 +61,7 @@ def make_objective(**kwargs):
         strat = kwargs['strat']
         z_threshold = trial.suggest_float('z_threshold', 1.1, 2.9, step=0.2)
         path = Path(__file__).parents[2]
-        name = str(path) + '/artifacts/' + strat + '/results_' + str(time_period) + '.parquet'
+        name = str(path) + '/artifacts/' + strat + '/results_training_' + str(time_period) + '.parquet'
 
         roll = trial.suggest_int('roll', 20, 55, step=5)
         stck_list = pd.read_parquet(name).index
@@ -84,10 +84,10 @@ def make_objective(**kwargs):
 
 # Helper to execute the optimization
 def parameter_optimization(time_period, strat) -> None:
-    name = '../' + strat + '/' + str(time_period) + ''
+    name =   strat + '/' + str(time_period) + ''
     storage = 'sqlite:///opt_storage.db'
 
-    stu = optuna.create_study(storage='sqlite:///opt_storage.db', direction='maximize', study_name=name,
+    stu = optuna.create_study(storage=storage    , direction='maximize', study_name=name,
                               load_if_exists=True)
     stu.optimize(make_objective(time_period=time_period, strat=strat), n_trials=5, gc_after_trial=True, catch=False,
                  show_progress_bar=False)
@@ -95,7 +95,7 @@ def parameter_optimization(time_period, strat) -> None:
     name = str(path) + '/artifacts/' + strat +'/optimize_results/' + str(time_period) + '.parquet'
 
     stu.trials_dataframe().sort_values(by='value').to_parquet(name)
-
+    print(pd.read_parquet(name).sort_values(by='value'))
 
 # Optional Visualization which returns an HTML formatted tuple  of relevant graphs/values. Used with port_sim
 def graphs_analysis(strat_param, **kwargs) -> tuple:
