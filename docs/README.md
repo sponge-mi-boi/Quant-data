@@ -4,4 +4,4 @@
   - HTML files contain full descriptions of trades, represented as dataframes, and related graphs. 
   - Links are given below, organized by strategy. 
     - Cointegration
-      - https://sponge-mi-boi.github.io/Quant-data/results/cointegration/(500%2C%20755).html
+      - [Graph](https://sponge-mi-boi.github.io/Quant-data/results/cointegration/(500%2C%20755).html)
