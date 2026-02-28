@@ -14,8 +14,10 @@
     - Mean reversion
     - Cointegration (statistical arbitrage)
     - Momentum/ trend following 
+  - Cross-sectional strategies
+    - Mean reversion
+    - Momentum/ trend following 
 
-  Cross-sectional strategies will be implemented in the future
 ## Methodology
 - Walk-forward testing (train/validation/test periods)
 - Functional framework for modular experimentation
@@ -41,7 +43,7 @@ macOS / Linux (bash)
 `source .venv/bin/activate`
 
 ### Install necessary modules
-`pip install -r requirements.txt`
+`python -m pip install -e `
 
 ### Entry point to execute backtester 
 `python -m src.run` 
@@ -52,11 +54,13 @@ macOS / Linux (bash)
 
 Results emphasize out-of-sample performance and regime stability rather than raw metrics optimization.   
 ### Future goals 
-  - Successful creation and implementation of PCA-based portfolios, multi-pair cointegration, regime-based models, Bayesian filtering, and optimization of weights
+  - Successful quantifying of Boolean based filtering/ relative rankings of factors  
+  - Significantly more robust regime classification 
 ## Repository Structure
 - `src` : Core strategy logic
 - `docs` : Successful portfolios' trading logs, equity curves, and related analysis tools
   - `results`: Human-readable results. 
+- `examples`: Example(s) of a successful backtesting process. 
 - `data`: cache data storage
 - `artifacts`: cache results storage
 

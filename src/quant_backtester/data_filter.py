@@ -21,22 +21,23 @@ full_stocks = []
 # either custom, already obtained data, or dynamically obtained from the alpaca website.
 
 ## Live data is obtained only through an approximation of the needed number of data points, meaning it is not exact.
-def get_time_period(args, custom_data=False, num_data_points=100, freq='d', time_peri=None) -> pd.DataFrame:
+def get_time_period(args, custom_data=False, num_data_points=100, type_='Close', freq='1d',
+                    time_peri=None) -> pd.DataFrame:
     if custom_data:
         path = Path(__file__).parents[2]
 
         if freq == 'd' or freq == '1d':
-            name = str(path) + '/data/processed/' + 'close_1' + freq + '_' +'10y'  + '.parquet'
+            name = str(path) + '/data/processed/' + type_.lower() + '_1' + 'd' + '_' + '10y' + '.parquet'
             data = pd.read_parquet(name).iloc[time_peri[0]: time_peri[-1]][args].dropna()
         elif freq == '1mo':
-            name = str(path) + '/data/processed/' + 'close_' + freq + '_' + 'max' + '.parquet'
+            name = str(path) + '/data/processed/' + type_.lower() + '_' + freq + '_' + 'max' + '.parquet'
             data = pd.read_parquet(name).iloc[time_peri[0]: time_peri[-1]][args].dropna()
             data = data[args].dropna()
         elif freq == '15m':
-            name = str(path) + '/data/processed/' + 'close_' + freq + '_' + 'max' + '.parquet'
+            name = str(path) + '/data/processed/' + type_.lower() + '_' + freq + '_' + 'max' + '.parquet'
             data = pd.read_parquet(name).iloc[time_peri[0]: time_peri[-1]][args].dropna()
         elif freq == 'h':
-            name = str(path) + '/data/processed/' + 'close_' + freq + '_' +'max'  + '.parquet'
+            name = str(path) + '/data/processed/' + type_.lower() + freq + '_' + 'max' + '.parquet'
             data = pd.read_parquet(name).iloc[time_peri[0]: time_peri[-1]][args].dropna()
         else:
             return pd.DataFrame()
@@ -76,13 +77,17 @@ def get_time_period(args, custom_data=False, num_data_points=100, freq='d', time
     return data
 
 
-# A wrapper on yahoo finance public data for easy creation and storage of new data.
-def get_yf(per, int_, stocks=tuple(full_stocks), extras='') -> None:
+def get_yf(per, int_, stocks=tuple(full_stocks), type_='Close') -> None:
+    """
+    A wrapper on yahoo finance public data for easy creation and storage of new data.
+    """
     path = Path(__file__).parents[2]
-    name = str(path) + '/data/processed/' + 'close_' + int_  + '_'  + per + '.parquet'
+    name = str(path) + '/data/processed/' + type_.lower() + '_' + int_ + '_' + per + '.parquet'
 
-    t = yfinance.download(period=per, interval=int_  , tickers=list(stocks) + ['SPY'])['Close']
+    t = yfinance.download(period=per, interval=int_, tickers=list(stocks) + ['SPY'])[type_]
+
+    # Universe selection filter of having less than 1/1000 * (size of the data set) NA values
     results = (t.isna().sum() > int(1 / 1000 * len(t.index)))
     t[[x for x in results.index if not results[x]]].to_parquet(
-       name )
+        name)
     return

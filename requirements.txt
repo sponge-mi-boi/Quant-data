@@ -1,9 +1,0 @@
-﻿numpy
-pandas
-optuna
-plotly
-vectorbt
-multiprocessing
-yfinance
-alpaca
-statsmodels
