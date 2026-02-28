@@ -57,7 +57,7 @@ def run():
     ##    get_yf('10y','1d',stck_list)
 
     # Regime detector is not robust currently, meaning it may be better to define what strategy to apply manually for testing purposes.
-    strat_classes = 'cointegration',
+    strat_classes = 'cross_asset_mv',
     for strat_class in strat_classes:
         Path.mkdir(Path(str(path) + '/artifacts/' + strat_class), parents=True, exist_ok=True)
         for x in range(0, 4):
@@ -70,11 +70,11 @@ def run():
 
             # Filter period to reduce the size of this universe
             filter_period = (time_period[0], time_period[0] + 250)
-            strat_class=  regime_estimator(dict(stock_list=stck_list, time_period=filter_period, freq='d'))
+            # strat_class=  regime_estimator(dict(stock_list=stck_list, time_period=filter_period, freq='d'))
 
             # stck_list = market_cap_filter(dict(stock_list=stck_list, time_period=filter_period, freq='d'), 'medium')
             stck_list = corr_filter(dict(stock_list=stck_list, time_period=filter_period, freq='d'), .9)
-
+            print(len(stck_list))
             # Co-integration set up of stock pairs
 
             # stck_list = set(frozenset([x, y]) for x in stck_list for y in stck_list if x != y and 'SPY' not in [x,y])
@@ -90,13 +90,13 @@ def run():
             z_threshold, roll = 1.5, 14
             name = str(path) + '/artifacts/' + strat_class + '/results_training_' + '(' + str(z_threshold) + ',' + str(
                 roll) + ')_' + str(testing_period) + '.parquet'
-            runner_multiple(pd.DataFrame(index=[tuple([x]) for x in list(tuple(stck_list))]  ), [testing_period],
-                            _port_sim, init_money=1000, strat_class=strat_class,
-                            inputs=None, num_processes=16,
-                            output_metrics=dict(Total_Return= 0 , Sharpe= 1.777     , Alpha=False, Number_of_Trades=False),
-                            freq='d',weights_filter = dict(beta=True, rebalance=False, dollar = True,   ) ,     graphs=False, parameters_=dict(z_threshold=z_threshold, roll=roll)).to_parquet(
-                name)
-            print(pd.read_parquet(name).sort_values(by=str(testing_period) + ' Alpha'))
+            # runner_multiple(pd.DataFrame(index=[tuple([x]) for x in list(tuple(stck_list))]  ), [testing_period],
+            #                 _port_sim, init_money=1000, strat_class=strat_class,
+            #                 inputs=None, num_processes=16,
+            #                 output_metrics=dict(Total_Return= 0 , Sharpe= 1.777     , Alpha=False, Number_of_Trades=False),
+            #                 freq='d',weights_filter = dict(   ) ,     graphs=False, parameters_=dict(z_threshold=z_threshold, roll=roll)).to_parquet(
+            #     name)
+            # print(pd.read_parquet(name).sort_values(by=str(testing_period) + ' Alpha'))
 
             # continue
 
