@@ -7,42 +7,18 @@ from alpaca.data.historical import StockHistoricalDataClient
 from alpaca.data.requests import StockBarsRequest
 from alpaca.data.timeframe import TimeFrameUnit, TimeFrame
 
-# These are the custom keys for the user's Alpaca account.
-API_KEY = ''
-SECRET_KEY = ''
-#
-# BASE_URL = 'https://paper-api.alpaca.markets'
 
-# List of stock pairs to get the data of
-full_stocks = []
+class User:
+    # These are the custom keys for the user's Alpaca account.
+    API_KEY = ''
+    SECRET_KEY = ''
 
+    def __init__(self, api_key, secret_key) -> None:
+        self.API_KEY = api_key
+        self.SECRET_KEY = secret_key
 
-# Used to dynamically obtain the data of a stock given parameters such as the number of points, which can be based on
-# either custom, already obtained data, or dynamically obtained from the alpaca website.
-
-## Live data is obtained only through an approximation of the needed number of data points, meaning it is not exact.
-def get_time_period(args, custom_data=False, num_data_points=100, type_='Close', freq='1d',
-                    time_peri=None) -> pd.DataFrame:
-    if custom_data:
-        path = Path(__file__).parents[2]
-
+    def get_time_period(self, args, freq='1d', num_data_points=100) -> pd.DataFrame:
         if freq == 'd' or freq == '1d':
-            name = str(path) + '/data/processed/' + type_.lower() + '_1' + 'd' + '_' + '10y' + '.parquet'
-            data = pd.read_parquet(name).iloc[time_peri[0]: time_peri[-1]][args].dropna()
-        elif freq == '1mo':
-            name = str(path) + '/data/processed/' + type_.lower() + '_' + freq + '_' + 'max' + '.parquet'
-            data = pd.read_parquet(name).iloc[time_peri[0]: time_peri[-1]][args].dropna()
-            data = data[args].dropna()
-        elif freq == '15m':
-            name = str(path) + '/data/processed/' + type_.lower() + '_' + freq + '_' + 'max' + '.parquet'
-            data = pd.read_parquet(name).iloc[time_peri[0]: time_peri[-1]][args].dropna()
-        elif freq == 'h':
-            name = str(path) + '/data/processed/' + type_.lower() + freq + '_' + 'max' + '.parquet'
-            data = pd.read_parquet(name).iloc[time_peri[0]: time_peri[-1]][args].dropna()
-        else:
-            return pd.DataFrame()
-    else:
-        if freq == 'd':
             tm_start = datetime.datetime.now() - datetime.timedelta(days=num_data_points) * 5
             timeframe = TimeFrame.Day
         elif freq == 'h':
@@ -61,33 +37,75 @@ def get_time_period(args, custom_data=False, num_data_points=100, type_='Close',
             tm_start = datetime.datetime.now() - datetime.timedelta(minutes=15 * (2 + 1 - 1) * num_data_points) * 1000
         else:
             return pd.DataFrame()
-        data_client = StockHistoricalDataClient(API_KEY, SECRET_KEY)
+        data_client = StockHistoricalDataClient(self.API_KEY, self.SECRET_KEY)
 
         stock_bars = data_client.get_stock_bars(
             request_params=StockBarsRequest(timeframe=timeframe, symbol_or_symbols=args, start=tm_start)).df[
-            'close'].reset_index()
-        data = pd.DataFrame()
-        for x in args:
-            close = stock_bars[stock_bars['symbol'] == x]
-            if data.empty:
-                data[x] = list(close['close'])
-                data.index = list(close['timestamp'])
-            else:
-                data[x] = pd.Series(index=list(close['timestamp']), data=list(close['close']))
+            'close'].unstack(level='symbol')
+
+        return stock_bars
+
+
+# BASE_URL = 'https://paper-api.alpaca.markets'
+
+
+def get_time_period(args, type_='Close', freq='1d',
+                    time_peri=None) -> pd.DataFrame:
+    path = Path(__file__).parents[2]
+
+    if freq == 'd' or freq == '1d':
+        name = str(path) + '/data/processed/' + type_.lower() + '_1' + 'd' + '_' + '10y' + '.parquet'
+        data = pd.read_parquet(name).iloc[time_peri[0]: time_peri[-1]][args].dropna()
+    elif freq == '1mo':
+        name = str(path) + '/data/processed/' + type_.lower() + '_' + freq + '_' + 'max' + '.parquet'
+        data = pd.read_parquet(name).iloc[time_peri[0]: time_peri[-1]][args].dropna()
+        data = data[args].dropna()
+    elif freq == '15m':
+        name = str(path) + '/data/processed/' + type_.lower() + '_' + freq + '_' + 'max' + '.parquet'
+        data = pd.read_parquet(name).iloc[time_peri[0]: time_peri[-1]][args].dropna()
+    elif freq == 'h':
+        name = str(path) + '/data/processed/' + type_.lower() + freq + '_' + 'max' + '.parquet'
+        data = pd.read_parquet(name).iloc[time_peri[0]: time_peri[-1]][args].dropna()
+    else:
+        return pd.DataFrame()
+
     return data
 
 
-def get_yf(per, int_, stocks=tuple(full_stocks), type_='Close') -> None:
+def get_yf(per, int_, stocks=tuple(), type_='Close') -> None:
     """
     A wrapper on yahoo finance public data for easy creation and storage of new data.
+    Note:
+        - Applied a selection filter of having less than 1/1000 * (size of the data set) NA values
     """
     path = Path(__file__).parents[2]
     name = str(path) + '/data/processed/' + type_.lower() + '_' + int_ + '_' + per + '.parquet'
 
-    t = yfinance.download(period=per, interval=int_, tickers=list(stocks) + ['SPY'])[type_]
+    if type_ in ['Close','volume','high','low']:
+        data = yfinance.download(period=per, interval=int_, tickers=list(stocks) + ['SPY'])[type_]
 
-    # Universe selection filter of having less than 1/1000 * (size of the data set) NA values
+    t = data
     results = (t.isna().sum() > int(1 / 1000 * len(t.index)))
+
     t[[x for x in results.index if not results[x]]].to_parquet(
         name)
-    return
+
+
+    breakpoint()
+
+
+
+def get_stock_universe(type_='Close', asset_exchange_or_type='SP') -> list:
+    path = Path(__file__).parents[2]
+
+    name = str(path) + '/data/processed/' + type_.lower() + '_1' + 'd' + '_' + '10y' + '.parquet'
+
+    return list(pd.read_parquet(name).columns)
+
+def get_info(type_):
+    path = Path(__file__).parents[2]
+
+    aspects = pd.concat ([pd.read_parquet(str(path) + '/data/processed/assets_info_more_detail_05_14_26.parquet'),pd.read_parquet(str(path) + '/data/processed/assets_info_05_14_26.parquet')],axis=1).drop('SPY')
+
+
+    return aspects[type_]

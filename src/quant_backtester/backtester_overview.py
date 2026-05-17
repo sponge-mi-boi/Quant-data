@@ -1,73 +1,86 @@
-﻿from multiprocessing import Pool
+﻿import itertools
+from multiprocessing import Pool
 
 import optuna
+
 import vectorbt as v
+
 from plotly.subplots import make_subplots
 
-from .strategies import _get_signals, _get_signals_mv, _get_signals_mv_cross_asset, \
-    _weights_alloc, _get_signals_momentum_tr
 from .strategies import *
+from .strategies import _get_signals, _get_signals_mv, _get_signals_mv_cross_asset, \
+    _weights_alloc, _get_signals_momentum_tr, _get_signals_momentum_cross_asset
 
 
-def runner_multiple(stock_pair_list, back_test_periods, filter_func, **kwargs) -> pd.DataFrame:
+def runner_multiple(stock_pair_list, time_period_list: list , filter_func, **kwargs)   :
     """
-    For organization purposes. Gives a clean separation of time period parameters from the others. Simulates trading of
-    various possible portfolios defined by a list of lists of possible assets.
-        :param stock_pair_list: list
+    Separates execution by time period if multiple time periods are given as parameters.
+        In the provided example, acts merely as an entry point before parallelization.
+    Args:
+        stock_pair_list: list
             Lists of lists which describe various assets universes which can be given non-zero weights during the execution of this strategy
-        :param back_test_periods: list
+        time_period_list: list
             A list of tuples of starting and ending position indices of testing periods
-        :param filter_func: function
-            The function which is to be executed on all the assets in the portfolio. Usually, it is_port_sim.
-        :param kwargs:
-        :return: pd.DataFrame
-            Resulting metrics of the various portfolios which have been passed. If filtered, only those which pass the
-            given filters are shown.
-    """
-    if not stock_pair_list.index[0]: return pd.DataFrame()
-    if type(back_test_periods[0]) == int:
-        time_period_list = []
-        for x in range(back_test_periods[0]):
-            if kwargs['type'] == 'training':
-                time_period = (500 * x, 500 * x + 500 + 0)
-            elif kwargs['type'] == 'validation':
-                time_period = (500 * x + 500, 500 * x + 500 + 0 + 200)
-            time_period_list.append(time_period)
 
-    else:
-        time_period_list = back_test_periods
+        filter_func:
+            The function which is to be executed on all the assets in the portfolio. Usually, it is_port_sim.
+
+        **kwargs:
+            Strategy parameters
+    Returns: pd.DataFrame
+        Resulting metrics of the various portfolios which have been passed. If filtered, only those which pass the
+        given filters are shown.
+
+    """
+
+    if type(stock_pair_list) == list: df_setup = pd.DataFrame(index=stock_pair_list)
+    else: df_setup = stock_pair_list
+    if df_setup.index.empty  : return pd.DataFrame()
+
     if len(time_period_list) == 1:
-        return _runner(stock_pair_list, time_period_list[0], filter_func, **kwargs)
-    return runner_multiple(_runner(stock_pair_list, time_period_list[0], filter_func, **kwargs),
+        return _runner(df_setup, time_period_list[0], filter_func, **kwargs)
+    df_cur = _runner(df_setup, time_period_list[0], filter_func, **kwargs)
+
+    return runner_multiple( df_cur ,
                            time_period_list[1:],
                            filter_func, **kwargs)
 
 
-def _runner(stock_pair, time_period, filter_func, **kwargs) -> pd.DataFrame | list:
+def _runner(stock_pair: pd.DataFrame, time_period, filter_func, **kwargs) -> pd.DataFrame :
     """
+
     Implements the multiprocessing. Executes the given filter_func on all given portfolios for a single time_period.
-    :param stock_pair: list
-    :param time_period: tuple
-    :param filter_func: function
-    :param kwargs:
-    :return: pd.DataFrame | list
+
+    Args:
+        stock_pair:
+        time_period:
+        filter_func:
+        **kwargs:
+
+    Returns: pd.DataFrame | list
         If a graph is to be created, then an HTML formatted list of strings is returned. Otherwise, the resulting metrics
         of the various portfolios are returned, or an empty DataFrame is returned if the given filters are not passed.
     """
     inputs = kwargs.pop('inputs')
     args = [[None]] * len(stock_pair)
     processes = kwargs.pop('num_processes')
+
+    parallel = kwargs.pop('parallel')
     if inputs:
-        args = stock_pair[[x for x in stock_pair.columns if (str(time_period) + inputs[0]) == x]]
-        args = args.squeeze(1)
-        args.index = [tuple(x) for x in args.index]
+        # args = stock_pair[[x for x in stock_pair.columns if (str(time_period) + inputs[0]) == x]]
+        # args = args.squeeze(1)
+        # args.index = [tuple(x) for x in args.index]
+        return stock_pair
 
     p_list = [dict(stock_list=list(x), time_period=time_period, args=y) | kwargs for x, y in
               zip(stock_pair.index, args)]
 
-    with Pool(processes=processes) as pool:
-        filter_results = pool.map(filter_func, p_list)
-
+    if not parallel :
+        filter_results = []
+        for list_ in p_list: filter_results.append(filter_func(list_))
+    else:
+        with Pool(processes=processes) as pool:
+            filter_results = pool.map(filter_func, p_list)
     if kwargs['graphs']:
         return filter_results
 
@@ -75,101 +88,147 @@ def _runner(stock_pair, time_period, filter_func, **kwargs) -> pd.DataFrame | li
     col = kwargs.pop('output_metrics')
     col = list(col.keys())
 
-    val = [str(time_period) + ' ' + col[x].replace('_', ' ') for x in range(len(col))]
-    if filter_results.size == 0: return pd.DataFrame(index=stock_pair.index, columns=val)
-    series_results = pd.DataFrame(index=stock_pair.index, data=filter_results, columns=val)
-    series_results = series_results[series_results != 0].dropna(axis=0)
+    val = np.array([str(time_period) + ' ' + col[x].replace('_', ' ') for x in range(len(col))])
+    if filter_results.size == 0: return pd.DataFrame(index=stock_pair .index  , columns=val)
 
-    return pd.concat([series_results, stock_pair], axis=1, join='outer').dropna()
-
+    series_results = pd.DataFrame(index=stock_pair . index  , data=filter_results, columns=val)
+    return  pd.concat([series_results[series_results != 0].dropna(axis=0),stock_pair ],axis=1).dropna()
 
 def _make_objective(**kwargs):
     """
-    Optuna helper function.
-    :param kwargs:
-    :return:
+    Helper function.
+
+    Args:
+        **kwargs:
+
+    Returns:
+
     """
+    kwargs_ = kwargs .copy()
+    time_period = kwargs_.pop('time_period')
+
+    stck_list = kwargs_.pop('stck_list')
+    strat_classes = kwargs_.pop('strat_class')
+
     def objective(trial: optuna.trial.Trial):
-        time_period = kwargs['time_period']
-        strat = kwargs['strat']
-        z_threshold = trial.suggest_float('z_threshold', 1.1, 2.5, step=0.2 - .1)
-        path = Path(__file__).parents[2]
-        name = str(path) + '/artifacts/' + strat + '/results_training_' + str(time_period) + '.parquet'
 
-        roll = trial.suggest_int('roll', 20, 55, step=5)
-        stck_list = pd.read_parquet(name).index
-        time_period = (time_period[0] + 500, time_period[1] + 200)
+        strat_cur = dict.fromkeys(strat_classes.keys())
+        for x,y in strat_classes.items():
+            strat = dict.fromkeys(y.keys())
+            for k,z in y.items():
+                if k == 'roll':
+                    strat[k] = trial.suggest_int(k,z[0],z[1],step=z[2])
+                elif k == 'z_threshold':
+                    if type(z[0]) == tuple:
+                        cur_thresh = []
+                        for g in z:
+                            cur_thresh.append(trial.suggest_float(k,g[0],g[1],step=g[2]))
+                        strat[k] = tuple(cur_thresh)
+                    else:
+                        strat[k] = trial.suggest_float(k,z[0],z[1],step=z[2])
+            strat_cur[x] = strat
+        kwargs_['strat_class'] = strat_cur
+        kwargs_['filter_func'] = _port_sim
+        results = runner_multiple(pd.DataFrame(index=np.array([tuple(x) for x in stck_list])), [time_period],
+                                  **kwargs_)
 
-        results = runner_multiple(pd.DataFrame(index=[tuple(x) for x in stck_list]), [time_period],
-                                 _port_sim, init_money=1000, strat_class=strat,
-                                  inputs=None, num_processes=16,
-                                  output_metrics=dict(Total_Return=0, Sharpe=1.7, Alpha=1 - .9, Number_of_Trades=2 / 3),
-                                  freq='d', graphs=False, parameters_=dict(z_threshold=z_threshold, roll=roll))
-        # Optimization goal.
-
-        results = results[[x for x in list(results.columns) if 'Number of Trades' in x]].mean(axis=1).mean()
+        results = results[[x for x in list(results.columns) if 'Alpha' in x]].mean(axis=1).mean()
         if results is np.nan:
             return 0
         return results
 
+
     return objective
 
 
-def parameter_optimization(strat_param, type_='Bayesian') -> None:
+def parameter_optimization(**kwargs,) :
     """
     Optimizes the parameters of the given strategy over the given assets and time period. Only the condition of maximizing
-    Alpha of the resulting portfolio is given as the goal. Future versions will include more varied optimization goals possibilities.
-    :param strat_param: dict
-    :param type_: str, default is 'Bayesian'
-        The type of optimization method to use in the optimization. Only, Bayesian and grid are currently supported.
-    :return: None
+    Alpha of the resulting portfolio is given as the goal. Future versions will include more varied goals.
+
+    Args:
+
+    Returns:
+
     """
-    strat = strat_param['strat_class']
-    time_period = strat_param['time_period']
-    stck_list = strat_param['stock_list']
-    path = Path(__file__).parents[2]
-    name = str(path) + '/artifacts/' + strat + '/optimize_results/' + str(time_period) + '_' + '.parquet'
+    type_ = kwargs.pop('type')
 
-    roll_list = np.linspace(11, int(len(time_period) / 2), 10)
-    z_th_list = np.linspace(1.5, 2.0, 5)
-    best_alpha = 0
     if type_ == 'grid':
-        for z_threshold in z_th_list:
-            for roll in roll_list:
-                roll = int(roll)
-                runner_multiple(pd.DataFrame(index=[tuple([x]) for x in stck_list]), [time_period],
-                               _port_sim, init_money=1000, strat_class=strat,
-                                inputs=None, num_processes=16,
-                                output_metrics=dict(Total_Return=0, Sharpe=1.7, Alpha=False, Number_of_Trades=False),
-                                freq='d', graphs=False,
-                                parameters_=dict(z_threshold=z_threshold, roll=roll)).to_parquet(name)
-                cur_alpha = pd.read_parquet(name).sort_values(by=str(time_period) + ' Alpha').sum()
-                if cur_alpha > best_alpha:
-                    best_alpha= cur_alpha
-                    print(pd.read_parquet(name).sort_values(by=str(time_period) + ' Alpha')   )
 
+        time_period = kwargs .pop('time_period')
+
+        strat_classes = kwargs .pop('strat_class')
+        param = []
+        for x, y in strat_classes.items():
+            params = []
+            keys = []
+            roll_list = []
+            z_list = []
+            for k, z in y.items():
+                keys.append(k)
+                if k == 'z_threshold':
+                    z_thresh_list = [x/10 for x in range( int(10*z[0] ), int(10*z[1] ),int(10*z[2]))]
+                    z_list = z_thresh_list
+                elif k == 'roll':
+                    roll_list = list(range( z[0], z[1], z[2]   ))
+            if not roll_list:
+                for k in z_list:
+                    st = dict.fromkeys([x])
+                    strat = dict.fromkeys(y.keys())
+                    strat[keys[0]] = k
+                    st[x] = strat
+                    params.append(st)
+                param.append(params)
+                continue
+            for k in z_list:
+                for z in roll_list:
+                    st = dict.fromkeys([x])
+                    strat = dict.fromkeys(y.keys())
+                    strat[keys[0]] = k
+                    strat[keys[1]] = z
+                    st[x] = strat
+                    params.append(st)
+            param.append(params)
+        strat_p = list(itertools.product(*param))
+
+
+        best_alpha = 0
+        best_st = dict()
+        for x in strat_p:
+            kwargs = kwargs.copy()
+            kwargs_ = kwargs | dict(strat_class=x)
+            results = runner_multiple(pd.DataFrame(index=np.array([tuple(x) for x in kwargs['stck_list']])), [time_period],
+                                  **kwargs_)
+            cur_alpha = results[[x for x in list(results.columns) if 'Alpha' in x]].mean(axis=1).mean()
+
+            if cur_alpha and cur_alpha > best_alpha:
+                best_alpha = cur_alpha
+                best_st = x
+        return best_st,best_alpha
     else:
-        name = strat + '/' + str(time_period) + ''
-        storage = 'sqlite:///opt_storage.db'
 
-        stu = optuna.create_study(storage=storage, direction='maximize', study_name=name,
+        storage = 'Published/data/' + 'sqlite:///opt_storage.db'
+
+        stu = optuna.create_study(storage=storage, direction='maximize', study_name='',
                                   load_if_exists=True)
-        stu.optimize(_make_objective(time_period=time_period, strat=strat), n_trials=5, gc_after_trial=True, catch=False,
+        stu.optimize(_make_objective(**kwargs), n_trials=1, gc_after_trial=True,
+
                      show_progress_bar=False)
-        path = Path(__file__).parents[2]
-        name = str(path) + '/artifacts/' + strat + '/optimize_results/' + str(time_period) + '.parquet'
 
-        stu.trials_dataframe().sort_values(by='value').to_parquet(name)
-        print(pd.read_parquet(name).sort_values(by='value'))
-
-
+        stu.trials_dataframe().sort_values(by='value')
+    return stu.best_params,stu.best_value
 
 def graphs_analysis(strat_param, **kwargs) -> tuple:
+
     """
-    Optional Visualization which returns an HTML formatted tuple  of relevant graphs/values. Used with_port_sim
-    :param strat_param: dict
-    :param kwargs:
-    :return: tuple
+    Optional Visualization which returns an HTML formatted tuple of relevant graphs/values. Used with_port_sim
+
+    Args:
+        strat_param:
+        **kwargs:
+
+    Returns:
+
     """
     time_period = strat_param['time_period']
     p = kwargs.pop('p')
@@ -183,7 +242,6 @@ def graphs_analysis(strat_param, **kwargs) -> tuple:
     positions = p.positions.records_readable[
         ['Entry Timestamp', 'Exit Timestamp', 'Column', 'Direction', 'Return', 'Status']].sort_values(
         by='Entry Timestamp')
-    positions['Column'] = [x[0] for x in positions['Column']]
 
     for x in strat_param['stock_list']:
         positions_cur = positions[positions['Column'] == x].dropna()
@@ -228,43 +286,90 @@ def graphs_analysis(strat_param, **kwargs) -> tuple:
         index=False),
 
 
-def _port_sim(strat_param, ):
+def _port_sim(strat_param, ) -> np.ndarray | list | None:
     """
-    Portfolio simulation. Executed with the help of vectorbt.
-    :param strat_param: dict
-    :return: list | np.array
+    Portfolio simulation for a single portfolio.
+
+    Note:
+        Uses vectorbt.
+    Args:
+        strat_param:
+
+
+    Returns: list | np.array
         Returns a list if graphs are to created, otherwise returns the results of the strategy, if they pass the given
         filters, as a np.array. If they do not pass, an array of zeros is returned.
+
     """
+
     init_money = strat_param['init_money']
     stck_list = strat_param['stock_list']
-    unique_stks = list (set(stck_list) )
+    unique_stks = list(dict.fromkeys(stck_list))
+
     time_period = strat_param['time_period']
+    stck_data = get_time_period(unique_stks, time_peri=time_period)
+    raw_entries_exits_list = dict()
 
-    stck_data = get_time_period(unique_stks, True, time_peri=time_period)
-    if strat_param['strat_class'].lower() == 'cointegration':
-        raw_entries_exits = _get_signals(strat_param, stck_data)
+    for strat in strat_param['strat_class'].keys():
+        cur_param = strat_param.copy()
+        cur_param['strat_class'] = strat
+        cur_param['parameters_'] = strat_param['strat_class'][strat]
+        if strat.lower() == 'cointegration':
+            ent = (_get_signals(cur_param, stck_data))  [unique_stks]
+            strat_param['weights_filter']['cointegration']['data'] = ent.copy()
+            ent = ent/ent.abs()
 
-    elif strat_param['strat_class'].lower() == 'mv':
-        raw_entries_exits = _get_signals_mv(strat_param, stck_data)
+            raw_entries_exits_list[strat] = ent
 
-    elif strat_param['strat_class'].lower() == 'cross_asset_mv':
-        raw_entries_exits = _get_signals_mv_cross_asset(strat_param, )
+        elif strat.lower() == 'mv':
 
-    elif strat_param['strat_class'] == 'momentum_trending':
-        raw_entries_exits = _get_signals_momentum_tr(strat_param, stck_data)
+            raw_entries_exits_list[strat] = (_get_signals_mv(cur_param, stck_data))[unique_stks]
 
-    entries_exits = _weights_alloc(strat_param, raw_entries_exits, strat_param['weights_filter'])
+        elif strat.lower() == 'cross_asset_mv':
+
+            raw_entries_exits_list[strat] = (_get_signals_mv_cross_asset(cur_param, ))[unique_stks]
+
+        elif strat.lower() == 'momentum_trending':
+            raw_entries_exits_list[strat] = (_get_signals_momentum_tr(cur_param, stck_data))[unique_stks]
+        elif strat.lower() == 'cross_asset_momentum_trending':
+            raw_entries_exits_list[strat] = _get_signals_momentum_cross_asset(cur_param)[unique_stks]
+
+    if 'regime_estimator' in strat_param['weights_filter'].keys():
+        regime_estimator_ = strat_param['weights_filter']['regime_estimator']
+    else:
+        regime_estimator_ = False
+    dta = list(raw_entries_exits_list.values())[0]
+
+    if regime_estimator_:
+
+        market_states = regime_estimator(strat_param)
+
+        raw_entries_exits = 0
+
+        for x, y in raw_entries_exits_list.items():
+
+            raw_entries_exits +=y.multiply(market_states[x], axis=0)
+
+
+        raw_entries_exits = raw_entries_exits.dropna()
+
+    else:
+        raw_entries_exits = dta
+
+    filter_list = strat_param['weights_filter'].copy()
+
+    entries_exits = _weights_alloc(strat_param, raw_entries_exits, filter_list)
 
     data_close = stck_data[unique_stks].loc[entries_exits.index]
     quantities_practical = (entries_exits * init_money).div(data_close, fill_value=0).astype(int)
-    benchmark_ret = get_time_period(['SPY'], True, time_peri=time_period).loc[
+    benchmark_ret = get_time_period(['SPY'], time_peri=time_period).loc[
         quantities_practical.index].pct_change().squeeze()
 
     benchmark_cum_returns = (1 + benchmark_ret).cumprod().squeeze()
 
-    p = v.Portfolio.from_orders(close=data_close, log=True, size=quantities_practical, size_type='TargetAmount',
+    p = v.Portfolio.from_orders(close=data_close, size=quantities_practical, size_type='TargetAmount',
                                 init_cash=init_money, freq=strat_param['freq'], cash_sharing=True)
+
     metrics = [x for x in p.stats().index if 'Trade' not in x]
 
     metrics_values = pd.concat(
@@ -272,11 +377,16 @@ def _port_sim(strat_param, ):
 
     output_metrics = strat_param['output_metrics']
     outputs_cond = pd.Series()
+
     for x, y in output_metrics.items():
 
         m = x.replace('_', ' ')
-        if 'number of trades' == m.lower(): outputs_cond[m] = len(p.positions.records_readable) > y, len(
-            p.positions.records_readable)
+        if 'number of trades' == m.lower():
+            if not y:
+                outputs_cond[m] = True, np.float64(len(p.positions.records_readable))
+            else:
+                outputs_cond[m] = len(p.positions.records_readable) > y, np.float64(len(
+                p.positions.records_readable) )
         for a in metrics_values.keys():
             if m.lower() in a.lower():
                 if not y:
@@ -284,7 +394,9 @@ def _port_sim(strat_param, ):
                 else:
                     outputs_cond[m] = metrics_values[a] > y, metrics_values[a]
     cond = all([x[0] for x in outputs_cond])
+
     show_graphs = strat_param['graphs']
+
 
     if cond:
 

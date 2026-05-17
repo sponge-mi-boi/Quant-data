@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = 'quant_backtester'
 version = '0.1.0'
 description = 'Quant Research Backtesting Framework'
-authors = [{name = 'Varun Kannan'}]
+authors = [{ name = 'Varun Kannan' }]
 readme = 'README.md'
 requires-python = '>=3.9'
 dependencies = [
@@ -21,7 +21,7 @@ dependencies = [
 ]
 
 [tool.setuptools]
-package-dir = {'' = 'src' }
+package-dir = { '' = 'src' }
 
 [tool.setuptools.packages.find]
 where = ['src']
