@@ -1,0 +1,3150 @@
+﻿[
+    {
+        "filters": {
+            "none": {}
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.99,
+                "roll": 30
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/0.parquet",
+        "type": "training",
+        "time_period": [
+            0,
+            500
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "none": {}
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/1.parquet",
+        "time_period": [
+            500,
+            760
+        ],
+        "reference_id": 0,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "none": {}
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.99,
+                "roll": 30
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/2.parquet",
+        "type": "training",
+        "time_period": [
+            500,
+            1000
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "none": {}
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/3.parquet",
+        "time_period": [
+            1000,
+            1260
+        ],
+        "reference_id": 2,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "none": {}
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            }
+        },
+        "time_period": [
+            1260,
+            1410
+        ],
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/4.parquet",
+        "type": "testing",
+        "reference_id": 2,
+        "reference_id_": 3,
+        "metrics": {
+            "(1260, 1410) Total Return": -10.19195499420166,
+            "(1260, 1410) Sharpe": -1.836376833967138,
+            "(1260, 1410) Alpha": -0.1113631789907249,
+            "(1260, 1410) Number of Trades": 2.0
+        }
+    },
+    {
+        "filters": {
+            "none": {}
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.99,
+                "roll": 30
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/5.parquet",
+        "type": "training",
+        "time_period": [
+            1000,
+            1500
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "none": {}
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/6.parquet",
+        "time_period": [
+            1500,
+            1760
+        ],
+        "reference_id": 5,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "none": {}
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.99,
+                "roll": 30
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/7.parquet",
+        "type": "training",
+        "time_period": [
+            1500,
+            2000
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "none": {}
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/8.parquet",
+        "time_period": [
+            2000,
+            2260
+        ],
+        "reference_id": 7,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "none": {}
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.5,
+                "roll": 30
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/9.parquet",
+        "type": "training",
+        "time_period": [
+            0,
+            500
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "none": {}
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.5,
+                "roll": 30
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/10.parquet",
+        "time_period": [
+            500,
+            760
+        ],
+        "reference_id": 9,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "none": {}
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.55,
+                "roll": 30
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/11.parquet",
+        "type": "training",
+        "time_period": [
+            0,
+            500
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "none": {}
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.5,
+                "roll": 30
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/12.parquet",
+        "time_period": [
+            500,
+            760
+        ],
+        "reference_id": 11,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "none": {}
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.55,
+                "roll": 30
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/13.parquet",
+        "type": "training",
+        "time_period": [
+            500,
+            1000
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "none": {}
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.5,
+                "roll": 30
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/14.parquet",
+        "time_period": [
+            1000,
+            1260
+        ],
+        "reference_id": 13,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "none": {}
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.5,
+                "roll": 30
+            }
+        },
+        "time_period": [
+            1260,
+            1410
+        ],
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/15.parquet",
+        "type": "testing",
+        "reference_id": 13,
+        "reference_id_": 14,
+        "metrics": {
+            "(1260, 1410) Total Return": 4.502706909179687,
+            "(1260, 1410) Sharpe": 1.177532027587838,
+            "(1260, 1410) Alpha": 0.2946235886114066,
+            "(1260, 1410) Number of Trades": 5.0
+        }
+    },
+    {
+        "filters": {
+            "none": {}
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.55,
+                "roll": 30
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/16.parquet",
+        "type": "training",
+        "time_period": [
+            1000,
+            1500
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "none": {}
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.5,
+                "roll": 30
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/17.parquet",
+        "time_period": [
+            1500,
+            1760
+        ],
+        "reference_id": 16,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "none": {}
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.5,
+                "roll": 30
+            }
+        },
+        "time_period": [
+            1760,
+            1910
+        ],
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/18.parquet",
+        "type": "testing",
+        "reference_id": 16,
+        "reference_id_": 17,
+        "metrics": {
+            "(1760, 1910) Total Return": -3.7852783203124996,
+            "(1760, 1910) Sharpe": -0.514947915154932,
+            "(1760, 1910) Alpha": 0.027070661395221407,
+            "(1760, 1910) Number of Trades": 4.0
+        }
+    },
+    {
+        "filters": {
+            "none": {}
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.55,
+                "roll": 30
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/19.parquet",
+        "type": "training",
+        "time_period": [
+            1500,
+            2000
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "none": {}
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.5,
+                "roll": 30
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/20.parquet",
+        "time_period": [
+            2000,
+            2260
+        ],
+        "reference_id": 19,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "none": {}
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.5,
+                "roll": 30
+            }
+        },
+        "time_period": [
+            2260,
+            2410
+        ],
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/21.parquet",
+        "type": "testing",
+        "reference_id": 19,
+        "reference_id_": 20,
+        "metrics": {
+            "(2260, 2410) Total Return": -12.298838806152345,
+            "(2260, 2410) Sharpe": -2.0163000888384435,
+            "(2260, 2410) Alpha": -0.0715856224584337,
+            "(2260, 2410) Number of Trades": 7.0
+        }
+    },
+    {
+        "filters": {
+            "none": {}
+        },
+        "strategies": {
+            "cross_asset_mv": {
+                "z_threshold": 2
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/22.parquet",
+        "type": "training",
+        "time_period": [
+            0,
+            500
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "none": {}
+        },
+        "strategies": {
+            "cross_asset_mv": {
+                "z_threshold": 2
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/23.parquet",
+        "time_period": [
+            500,
+            760
+        ],
+        "reference_id": 22,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "none": {}
+        },
+        "strategies": {
+            "cross_asset_mv": {
+                "z_threshold": 2
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/24.parquet",
+        "type": "training",
+        "time_period": [
+            500,
+            1000
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "none": {}
+        },
+        "strategies": {
+            "cross_asset_mv": {
+                "z_threshold": 2
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/25.parquet",
+        "time_period": [
+            1000,
+            1260
+        ],
+        "reference_id": 24,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "none": {}
+        },
+        "strategies": {
+            "cross_asset_mv": {
+                "z_threshold": 2
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/26.parquet",
+        "type": "training",
+        "time_period": [
+            1000,
+            1500
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "none": {}
+        },
+        "strategies": {
+            "cross_asset_mv": {
+                "z_threshold": 2
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/27.parquet",
+        "time_period": [
+            1500,
+            1760
+        ],
+        "reference_id": 26,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "none": {}
+        },
+        "strategies": {
+            "cross_asset_mv": {
+                "z_threshold": 1.999
+            }
+        },
+        "time_period": [
+            1760,
+            1910
+        ],
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/28.parquet",
+        "type": "testing",
+        "reference_id": 26,
+        "reference_id_": 27,
+        "metrics": {
+            "(1760, 1910) Total Return": 4.882733154296875,
+            "(1760, 1910) Sharpe": 1.0951312018079327,
+            "(1760, 1910) Alpha": 0.08037093616632518,
+            "(1760, 1910) Number of Trades": 21.0
+        }
+    },
+    {
+        "filters": {
+            "none": {}
+        },
+        "strategies": {
+            "cross_asset_mv": {
+                "z_threshold": 2
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/29.parquet",
+        "type": "training",
+        "time_period": [
+            1500,
+            2000
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "none": {}
+        },
+        "strategies": {
+            "cross_asset_mv": {
+                "z_threshold": 2
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/30.parquet",
+        "time_period": [
+            2000,
+            2260
+        ],
+        "reference_id": 29,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "none": {}
+        },
+        "strategies": {
+            "cross_asset_mv": {
+                "z_threshold": 1.999
+            }
+        },
+        "time_period": [
+            2260,
+            2410
+        ],
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/31.parquet",
+        "type": "testing",
+        "reference_id": 29,
+        "reference_id_": 30,
+        "metrics": {
+            "(2260, 2410) Total Return": -0.004115962982177734,
+            "(2260, 2410) Sharpe": 0.10589107909036446,
+            "(2260, 2410) Alpha": -0.009503338196654387,
+            "(2260, 2410) Number of Trades": 18.0
+        }
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 1.999,
+                "roll": 35
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/32.parquet",
+        "type": "training",
+        "time_period": [
+            0,
+            500
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 1.999,
+                "roll": 30
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/33.parquet",
+        "time_period": [
+            500,
+            760
+        ],
+        "reference_id": 32,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 1.999,
+                "roll": 35
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/34.parquet",
+        "type": "training",
+        "time_period": [
+            500,
+            1000
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 1.999,
+                "roll": 30
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/35.parquet",
+        "time_period": [
+            1000,
+            1260
+        ],
+        "reference_id": 34,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            }
+        },
+        "strategies": {
+            "mv": {
+                "z_threshold": 1.99,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 1.999
+            },
+            "momentum_trending": {
+                "z_threshold": 1.5,
+                "roll": 30
+            }
+        },
+        "time_period": [
+            1260,
+            1410
+        ],
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/36.parquet",
+        "type": "testing",
+        "reference_id": 34,
+        "reference_id_": 35,
+        "metrics": {
+            "(1260, 1410) Total Return": -6.8580070495605465,
+            "(1260, 1410) Sharpe": -5.384699966034773,
+            "(1260, 1410) Alpha": -0.1798062809038219,
+            "(1260, 1410) Number of Trades": 22.0
+        }
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 1.999,
+                "roll": 35
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/37.parquet",
+        "type": "training",
+        "time_period": [
+            1000,
+            1500
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 1.999,
+                "roll": 30
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/38.parquet",
+        "time_period": [
+            1500,
+            1760
+        ],
+        "reference_id": 37,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            }
+        },
+        "strategies": {
+            "mv": {
+                "z_threshold": 1.99,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 1.999
+            },
+            "momentum_trending": {
+                "z_threshold": 1.5,
+                "roll": 30
+            }
+        },
+        "time_period": [
+            1760,
+            1910
+        ],
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/39.parquet",
+        "type": "testing",
+        "reference_id": 37,
+        "reference_id_": 38,
+        "metrics": {
+            "(1760, 1910) Total Return": -1.45042724609375,
+            "(1760, 1910) Sharpe": -2.4403089122952193,
+            "(1760, 1910) Alpha": -0.04249062313842766,
+            "(1760, 1910) Number of Trades": 28.0
+        }
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 1.999,
+                "roll": 35
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/40.parquet",
+        "type": "training",
+        "time_period": [
+            1500,
+            2000
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 1.999,
+                "roll": 30
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/41.parquet",
+        "time_period": [
+            2000,
+            2260
+        ],
+        "reference_id": 40,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "pc": {
+                "n": 1,
+                "roll": 30
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 1.999,
+                "roll": 35
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/42.parquet",
+        "type": "training",
+        "time_period": [
+            0,
+            500
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "pc": {
+                "n": 1,
+                "roll": 30
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 1.999,
+                "roll": 30
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/43.parquet",
+        "time_period": [
+            500,
+            760
+        ],
+        "reference_id": 42,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "pc": {
+                "n": 1,
+                "roll": 30
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "mv": {
+                "z_threshold": 1.99,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 1.999
+            },
+            "momentum_trending": {
+                "z_threshold": 1.5,
+                "roll": 30
+            }
+        },
+        "time_period": [
+            760,
+            910
+        ],
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/44.parquet",
+        "type": "testing",
+        "reference_id": 42,
+        "reference_id_": 43,
+        "metrics": {
+            "(760, 910) Total Return": 13.061635208129882,
+            "(760, 910) Sharpe": 1.8358177331594427,
+            "(760, 910) Alpha": 0.5449240720418389,
+            "(760, 910) Number of Trades": 165.0
+        }
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "pc": {
+                "n": 1,
+                "roll": 30
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 1.999,
+                "roll": 35
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/45.parquet",
+        "type": "training",
+        "time_period": [
+            500,
+            1000
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "pc": {
+                "n": 1,
+                "roll": 30
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 1.999,
+                "roll": 30
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/46.parquet",
+        "time_period": [
+            1000,
+            1260
+        ],
+        "reference_id": 45,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "pc": {
+                "n": 1,
+                "roll": 30
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "mv": {
+                "z_threshold": 1.99,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 1.999
+            },
+            "momentum_trending": {
+                "z_threshold": 1.5,
+                "roll": 30
+            }
+        },
+        "time_period": [
+            1260,
+            1410
+        ],
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/47.parquet",
+        "type": "testing",
+        "reference_id": 45,
+        "reference_id_": 46,
+        "metrics": {
+            "(1260, 1410) Total Return": -6.8580070495605465,
+            "(1260, 1410) Sharpe": -5.384699966034773,
+            "(1260, 1410) Alpha": -0.1798062809038219,
+            "(1260, 1410) Number of Trades": 22.0
+        }
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "pc": {
+                "n": 1,
+                "roll": 30
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 1.999,
+                "roll": 35
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/48.parquet",
+        "type": "training",
+        "time_period": [
+            1000,
+            1500
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "pc": {
+                "n": 1,
+                "roll": 30
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 1.999,
+                "roll": 30
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/49.parquet",
+        "time_period": [
+            1500,
+            1760
+        ],
+        "reference_id": 48,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "pc": {
+                "n": 1,
+                "roll": 30
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "mv": {
+                "z_threshold": 1.99,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 1.999
+            },
+            "momentum_trending": {
+                "z_threshold": 1.5,
+                "roll": 30
+            }
+        },
+        "time_period": [
+            1760,
+            1910
+        ],
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/50.parquet",
+        "type": "testing",
+        "reference_id": 48,
+        "reference_id_": 49,
+        "metrics": {
+            "(1760, 1910) Total Return": 13.394666290283203,
+            "(1760, 1910) Sharpe": 2.5645256768258196,
+            "(1760, 1910) Alpha": 0.5007940520033529,
+            "(1760, 1910) Number of Trades": 208.0
+        }
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "pc": {
+                "n": 1,
+                "roll": 30
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 1.999,
+                "roll": 35
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/51.parquet",
+        "type": "training",
+        "time_period": [
+            1500,
+            2000
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "pc": {
+                "n": 1,
+                "roll": 30
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 1.999,
+                "roll": 30
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/52.parquet",
+        "time_period": [
+            2000,
+            2260
+        ],
+        "reference_id": 51,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "pc": {
+                "n": 1,
+                "roll": 30
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "mv": {
+                "z_threshold": 1.99,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 1.999
+            },
+            "momentum_trending": {
+                "z_threshold": 1.5,
+                "roll": 30
+            }
+        },
+        "time_period": [
+            2260,
+            2410
+        ],
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/53.parquet",
+        "type": "testing",
+        "reference_id": 51,
+        "reference_id_": 52,
+        "metrics": {
+            "(2260, 2410) Total Return": -4.363572339590266,
+            "(2260, 2410) Sharpe": -0.45391169623516325,
+            "(2260, 2410) Alpha": -0.2367962139486116,
+            "(2260, 2410) Number of Trades": 159.0
+        }
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "pc": {
+                "n": 1,
+                "roll": 30
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 2.2,
+                "roll": 35
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/54.parquet",
+        "type": "training",
+        "time_period": [
+            0,
+            500
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "pc": {
+                "n": 1,
+                "roll": 30
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 2.4,
+                "roll": 30
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/55.parquet",
+        "time_period": [
+            500,
+            760
+        ],
+        "reference_id": 54,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "pc": {
+                "n": 1,
+                "roll": 30
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "mv": {
+                "z_threshold": 2.44,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 1.999
+            },
+            "momentum_trending": {
+                "z_threshold": 2,
+                "roll": 30
+            }
+        },
+        "time_period": [
+            760,
+            910
+        ],
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/56.parquet",
+        "type": "testing",
+        "reference_id": 54,
+        "reference_id_": 55,
+        "metrics": {
+            "(760, 910) Total Return": -7.127919197082519,
+            "(760, 910) Sharpe": -1.363908328850881,
+            "(760, 910) Alpha": -0.17276379375000928,
+            "(760, 910) Number of Trades": 170.0
+        }
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "pc": {
+                "n": 1,
+                "roll": 30
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 2.2,
+                "roll": 35
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/57.parquet",
+        "type": "training",
+        "time_period": [
+            500,
+            1000
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "pc": {
+                "n": 1,
+                "roll": 30
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 2.4,
+                "roll": 30
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/58.parquet",
+        "time_period": [
+            1000,
+            1260
+        ],
+        "reference_id": 57,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "pc": {
+                "n": 1,
+                "roll": 30
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 2.2,
+                "roll": 35
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/59.parquet",
+        "type": "training",
+        "time_period": [
+            1000,
+            1500
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "pc": {
+                "n": 1,
+                "roll": 30
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 2.4,
+                "roll": 30
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/60.parquet",
+        "time_period": [
+            1500,
+            1760
+        ],
+        "reference_id": 59,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "pc": {
+                "n": 1,
+                "roll": 30
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "mv": {
+                "z_threshold": 2.44,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 1.999
+            },
+            "momentum_trending": {
+                "z_threshold": 2,
+                "roll": 30
+            }
+        },
+        "time_period": [
+            1760,
+            1910
+        ],
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/61.parquet",
+        "type": "testing",
+        "reference_id": 59,
+        "reference_id_": 60,
+        "metrics": {
+            "(1760, 1910) Total Return": -10.276792907714844,
+            "(1760, 1910) Sharpe": -1.5836934291069618,
+            "(1760, 1910) Alpha": -0.23595369141312672,
+            "(1760, 1910) Number of Trades": 140.0
+        }
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "pc": {
+                "n": 1,
+                "roll": 30
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 2.2,
+                "roll": 35
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/62.parquet",
+        "type": "training",
+        "time_period": [
+            1500,
+            2000
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "pc": {
+                "n": 1,
+                "roll": 30
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 2.4,
+                "roll": 30
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/63.parquet",
+        "time_period": [
+            2000,
+            2260
+        ],
+        "reference_id": 62,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "pc": {
+                "n": 1,
+                "roll": 30
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "mv": {
+                "z_threshold": 2.44,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 1.999
+            },
+            "momentum_trending": {
+                "z_threshold": 2,
+                "roll": 30
+            }
+        },
+        "time_period": [
+            2260,
+            2410
+        ],
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/64.parquet",
+        "type": "testing",
+        "reference_id": 62,
+        "reference_id_": 63,
+        "metrics": {
+            "(2260, 2410) Total Return": 6.675312042236328,
+            "(2260, 2410) Sharpe": 1.476279622680991,
+            "(2260, 2410) Alpha": 0.24814511121007832,
+            "(2260, 2410) Number of Trades": 117.0
+        }
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 1.999,
+                "roll": 35
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/65.parquet",
+        "type": "training",
+        "time_period": [
+            0,
+            500
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 1.999,
+                "roll": 30
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/66.parquet",
+        "time_period": [
+            500,
+            760
+        ],
+        "reference_id": 65,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "mv": {
+                "z_threshold": 1.99,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 1.999
+            },
+            "momentum_trending": {
+                "z_threshold": 1.99,
+                "roll": 30
+            }
+        },
+        "time_period": [
+            760,
+            910
+        ],
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/67.parquet",
+        "type": "testing",
+        "reference_id": 65,
+        "reference_id_": 66,
+        "metrics": {
+            "(760, 910) Total Return": -6.6775746264297595,
+            "(760, 910) Sharpe": -1.0400926867249285,
+            "(760, 910) Alpha": -0.170756470920863,
+            "(760, 910) Number of Trades": 88.0
+        }
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 1.999,
+                "roll": 35
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/68.parquet",
+        "type": "training",
+        "time_period": [
+            500,
+            1000
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 1.999,
+                "roll": 30
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/69.parquet",
+        "time_period": [
+            1000,
+            1260
+        ],
+        "reference_id": 68,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "mv": {
+                "z_threshold": 1.99,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 1.999
+            },
+            "momentum_trending": {
+                "z_threshold": 1.99,
+                "roll": 30
+            }
+        },
+        "time_period": [
+            1260,
+            1410
+        ],
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/70.parquet",
+        "type": "testing",
+        "reference_id": 68,
+        "reference_id_": 69,
+        "metrics": {
+            "(1260, 1410) Total Return": 4.136270163836457,
+            "(1260, 1410) Sharpe": 0.7600542330767665,
+            "(1260, 1410) Alpha": 0.23124204501580192,
+            "(1260, 1410) Number of Trades": 75.0
+        }
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 1.999,
+                "roll": 35
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/71.parquet",
+        "type": "training",
+        "time_period": [
+            1000,
+            1500
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 1.999,
+                "roll": 30
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/72.parquet",
+        "time_period": [
+            1500,
+            1760
+        ],
+        "reference_id": 71,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "mv": {
+                "z_threshold": 1.99,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 1.999
+            },
+            "momentum_trending": {
+                "z_threshold": 1.99,
+                "roll": 30
+            }
+        },
+        "time_period": [
+            1760,
+            1910
+        ],
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/73.parquet",
+        "type": "testing",
+        "reference_id": 71,
+        "reference_id_": 72,
+        "metrics": {
+            "(1760, 1910) Total Return": 3.6524846670999866,
+            "(1760, 1910) Sharpe": 0.8244567146474501,
+            "(1760, 1910) Alpha": 0.08506930025038129,
+            "(1760, 1910) Number of Trades": 110.0
+        }
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 1.999,
+                "roll": 35
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/74.parquet",
+        "type": "training",
+        "time_period": [
+            1500,
+            2000
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 1.999,
+                "roll": 30
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/75.parquet",
+        "time_period": [
+            2000,
+            2260
+        ],
+        "reference_id": 74,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "mv": {
+                "z_threshold": 1.99,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 1.999
+            },
+            "momentum_trending": {
+                "z_threshold": 1.99,
+                "roll": 30
+            }
+        },
+        "time_period": [
+            2260,
+            2410
+        ],
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/76.parquet",
+        "type": "testing",
+        "reference_id": 74,
+        "reference_id_": 75,
+        "metrics": {
+            "(2260, 2410) Total Return": 5.42668685913086,
+            "(2260, 2410) Sharpe": 1.3457552488634699,
+            "(2260, 2410) Alpha": 0.23632386367917668,
+            "(2260, 2410) Number of Trades": 69.0
+        }
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 1.999,
+                "roll": 55
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/77.parquet",
+        "type": "training",
+        "time_period": [
+            0,
+            500
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/78.parquet",
+        "time_period": [
+            500,
+            760
+        ],
+        "reference_id": 77,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "mv": {
+                "z_threshold": 1.99,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 1.999
+            },
+            "momentum_trending": {
+                "z_threshold": 1.99,
+                "roll": 55
+            }
+        },
+        "time_period": [
+            760,
+            910
+        ],
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/79.parquet",
+        "type": "testing",
+        "reference_id": 77,
+        "reference_id_": 78,
+        "metrics": {
+            "(760, 910) Total Return": -5.502411530644696,
+            "(760, 910) Sharpe": -1.5743907093778964,
+            "(760, 910) Alpha": -0.19571454204779737,
+            "(760, 910) Number of Trades": 103.0
+        }
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 1.999,
+                "roll": 55
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/80.parquet",
+        "type": "training",
+        "time_period": [
+            500,
+            1000
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/81.parquet",
+        "time_period": [
+            1000,
+            1260
+        ],
+        "reference_id": 80,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 1.999,
+                "roll": 55
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/82.parquet",
+        "type": "training",
+        "time_period": [
+            1000,
+            1500
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/83.parquet",
+        "time_period": [
+            1500,
+            1760
+        ],
+        "reference_id": 82,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "mv": {
+                "z_threshold": 1.99,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 1.999
+            },
+            "momentum_trending": {
+                "z_threshold": 1.99,
+                "roll": 55
+            }
+        },
+        "time_period": [
+            1760,
+            1910
+        ],
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/84.parquet",
+        "type": "testing",
+        "reference_id": 82,
+        "reference_id_": 83,
+        "metrics": {
+            "(1760, 1910) Total Return": 1.725441632010154,
+            "(1760, 1910) Sharpe": 0.5856645323858432,
+            "(1760, 1910) Alpha": 0.09010907062573459,
+            "(1760, 1910) Number of Trades": 61.0
+        }
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 1.999,
+                "roll": 55
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/85.parquet",
+        "type": "training",
+        "time_period": [
+            1500,
+            2000
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/86.parquet",
+        "time_period": [
+            2000,
+            2260
+        ],
+        "reference_id": 85,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "mv": {
+                "z_threshold": 1.99,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 1.999
+            },
+            "momentum_trending": {
+                "z_threshold": 1.99,
+                "roll": 55
+            }
+        },
+        "time_period": [
+            2260,
+            2410
+        ],
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/87.parquet",
+        "type": "testing",
+        "reference_id": 85,
+        "reference_id_": 86,
+        "metrics": {
+            "(2260, 2410) Total Return": 9.641442117153678,
+            "(2260, 2410) Sharpe": 1.7929073725557638,
+            "(2260, 2410) Alpha": 0.40846362315701823,
+            "(2260, 2410) Number of Trades": 73.0
+        }
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 1.999,
+                "roll": 55
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/88.parquet",
+        "type": "training",
+        "time_period": [
+            0,
+            500
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/89.parquet",
+        "time_period": [
+            500,
+            760
+        ],
+        "reference_id": 88,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "cross_asset_mv": {
+                "z_threshold": 1.999
+            },
+            "momentum_trending": {
+                "z_threshold": 1.99,
+                "roll": 30
+            }
+        },
+        "time_period": [
+            760,
+            910
+        ],
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/90.parquet",
+        "type": "testing",
+        "reference_id": 88,
+        "reference_id_": 89,
+        "metrics": {
+            "(760, 910) Total Return": -15.066464996337892,
+            "(760, 910) Sharpe": -3.4103785206588473,
+            "(760, 910) Alpha": -0.3689165508853748,
+            "(760, 910) Number of Trades": 113.0
+        }
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 1.999,
+                "roll": 55
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/91.parquet",
+        "type": "training",
+        "time_period": [
+            500,
+            1000
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/92.parquet",
+        "time_period": [
+            1000,
+            1260
+        ],
+        "reference_id": 91,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 1.999,
+                "roll": 55
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/93.parquet",
+        "type": "training",
+        "time_period": [
+            1000,
+            1500
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/94.parquet",
+        "time_period": [
+            1500,
+            1760
+        ],
+        "reference_id": 93,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "cross_asset_mv": {
+                "z_threshold": 1.999
+            },
+            "momentum_trending": {
+                "z_threshold": 1.99,
+                "roll": 30
+            }
+        },
+        "time_period": [
+            1760,
+            1910
+        ],
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/95.parquet",
+        "type": "testing",
+        "reference_id": 93,
+        "reference_id_": 94,
+        "metrics": {
+            "(1760, 1910) Total Return": 1.1293624877929687,
+            "(1760, 1910) Sharpe": 0.2991306906189833,
+            "(1760, 1910) Alpha": 0.06507038672676058,
+            "(1760, 1910) Number of Trades": 100.0
+        }
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            },
+            "mv": {
+                "z_threshold": 1.999,
+                "roll": 55
+            }
+        },
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/96.parquet",
+        "type": "training",
+        "time_period": [
+            1500,
+            2000
+        ],
+        "reference_id": -1,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "momentum_trending": {
+                "z_threshold": 1.999,
+                "roll": 30
+            },
+            "cross_asset_mv": {
+                "z_threshold": 2
+            }
+        },
+        "type": "validation",
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/97.parquet",
+        "time_period": [
+            2000,
+            2260
+        ],
+        "reference_id": 96,
+        "reference_id_": -1
+    },
+    {
+        "filters": {
+            "regime_estimator": {
+                "roll": 20,
+                "z_score": 2,
+                "half_life": 20
+            },
+            "beta": {
+                "roll": 30
+            },
+            "dollar": {
+                "param": null
+            }
+        },
+        "strategies": {
+            "cross_asset_mv": {
+                "z_threshold": 1.999
+            },
+            "momentum_trending": {
+                "z_threshold": 1.99,
+                "roll": 30
+            }
+        },
+        "time_period": [
+            2260,
+            2410
+        ],
+        "name": "C:\\Users\\varun\\Projects\\PycharmProjects\\PythonProject1_basicbacktester\\Published/artifacts/files/98.parquet",
+        "type": "testing",
+        "reference_id": 96,
+        "reference_id_": 97,
+        "metrics": {
+            "(2260, 2410) Total Return": -18.32592191566344,
+            "(2260, 2410) Sharpe": -2.1984265949282085,
+            "(2260, 2410) Alpha": -0.3077124433637586,
+            "(2260, 2410) Number of Trades": 81.0
+        }
+    }
+]

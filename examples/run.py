@@ -655,6 +655,7 @@ def run(periods=4, portfolio=None, period_lengths=(500, 260, 150), roll=500):
     path = str(path)
     cursor = _database_create(path    )
 
+
     for period_count in range(0, periods):
 
         u = pd.read_parquet(path + '/data/processed/close_1d_10y.parquet').columns
