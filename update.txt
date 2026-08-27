@@ -1,1 +1,2 @@
 ﻿Version 0.3.4
+Regime filter implemented, learning methods implemented
