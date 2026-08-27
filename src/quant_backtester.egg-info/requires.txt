@@ -10,6 +10,7 @@ matplotlib<4,>=3.9
 yfinance<1,>=0.2.54
 alpaca-py<1,>=0.35
 requests<3,>=2.32
+optuna<5,>=4
 joblib<2,>=1.4
 numba<1,>=0.60
 
