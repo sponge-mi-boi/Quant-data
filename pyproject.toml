@@ -1,0 +1,148 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "quant-backtester"
+version = "0.2.0"
+description = "Bias-aware quantitative backtesting with walk-forward validation, regime allocation, neutrality, and realistic trading costs."
+readme = "README.md"
+requires-python = ">=3.11,<3.14"
+license = { text = "Proprietary" }
+authors = [
+    { name = "Varun" }
+]
+
+dependencies = [
+    "numpy>=2.0,<3",
+    "pandas>=2.2,<3",
+    "scipy>=1.14,<2",
+    "scikit-learn>=1.5,<2",
+    "statsmodels>=0.14,<1",
+    "pyarrow>=17,<22",
+    "duckdb>=1.1,<2",
+    "plotly>=5.24,<7",
+    "matplotlib>=3.9,<4",
+    "yfinance>=0.2.54,<1",
+    "alpaca-py>=0.35,<1",
+    "requests>=2.32,<3",
+    "joblib>=1.4,<2",
+    "numba>=0.60,<1",
+]
+
+[project.optional-dependencies]
+transformer = [
+    "torch>=2.5,<3",
+]
+
+notebook = [
+    "jupyterlab>=4.2,<5",
+    "ipykernel>=6.29,<7",
+]
+
+test = [
+    "pytest>=8.3,<9",
+    "pytest-cov>=6,<8",
+]
+
+dev = [
+    "ruff>=0.9,<1",
+    "mypy>=1.14,<2",
+    "build>=1.2,<2",
+]
+
+all = [
+    "quant-backtester[transformer,notebook,test,dev]",
+]
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["quant_backtester*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = [
+    "-ra",
+    "--strict-config",
+    "--strict-markers",
+]
+filterwarnings = [
+    "error",
+    "ignore::DeprecationWarning:yfinance.*",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["quant_backtester"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+fail_under = 80
+exclude_lines = [
+    "pragma: no cover",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E",
+    "F",
+    "I",
+    "B",
+    "UP",
+    "SIM",
+]
+ignore = ["E501"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["quant_backtester"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_unused_configs = true
+warn_return_any = true
+warn_unused_ignores = true
+no_implicit_optional = true
+check_untyped_defs = true
+
+[tool.quant_backtester.execution]
+execution_delay_bars = 1
+fee_per_order = 0.0005
+slippage_per_order = 0.0005
+annualization_bars = 252
+
+[tool.quant_backtester.validation]
+outer_runs = 5
+strategy_training_bars = 280
+strategy_validation_bars = 120
+regime_validation_bars = 120
+held_out_bars = 260
+purge_bars = 5
+
+[tool.quant_backtester.market_cap]
+micro_upper = 300000000
+small_upper = 2000000000
+mid_upper = 10000000000
+large_upper = 200000000000
+benchmark = "SPY"
+
+[tool.quant_backtester.neutrality]
+rolling_lookback_bars = 60
+supported = [
+    "none",
+    "beta",
+    "pc",
+]
+
