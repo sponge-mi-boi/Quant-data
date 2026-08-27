@@ -4,7 +4,7 @@ Version: 0.3.4
 Summary: Bias-aware quantitative backtesting with walk-forward validation, regime allocation, neutrality, and realistic trading costs.
 Author: Varun
 License: Proprietary
-Requires-Python: <3.14,>=3.11
+Requires-Python: <3.15,>=3.11
 Description-Content-Type: text/markdown
 Requires-Dist: numpy<3,>=2.0
 Requires-Dist: pandas<3,>=2.2
