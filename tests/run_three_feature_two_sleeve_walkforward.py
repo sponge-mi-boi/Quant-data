@@ -9,8 +9,8 @@ ROOT = Path(r"path\to\root")
 PROJECT = ROOT / 'work' / 'PythonProject1_basicbacktester' / 'Published'
 sys.path[:0] = [str(PROJECT / 'src'), str(ROOT / 'work')]
 
-from src.data_filter import get_time_period
-from src.hmm_regime import (
+from src import get_time_period
+from src import (
     build_variance_correlation_trend_features,
     variance_correlation_trend_allocations)
 import run_ml_allocator_comparison as pipeline

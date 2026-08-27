@@ -11,8 +11,8 @@ import pandas as pd
 
 import run_ml_allocator_comparison as pipeline
 import run_regime_one_cycle as strategy_source
-from src.data_filter import get_time_period
-from src.ml_allocator import realized_strategy_returns
+from src import get_time_period
+from src import realized_strategy_returns
 
 
 CACHE_VERSION = 4

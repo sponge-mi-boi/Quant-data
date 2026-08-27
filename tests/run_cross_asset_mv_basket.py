@@ -13,7 +13,7 @@ OUTPUT = Path(r"path\to\output")
 
 sys.path.insert(0, str(PROJECT / "src"))
 
-from src.backtester_overview import _port_sim, runner_multiple
+from src import _port_sim, runner_multiple
 
 
 PERIODS = {"training": (0, 500), "validation": (500, 760), "held_out": (760, 1020)}

@@ -13,9 +13,9 @@ PROJECT = Path(r"path\to\project")
 OUTPUT = Path(r"path\to\output")
 sys.path.insert(0, str(PROJECT / "src"))
 
-from src.backtester_overview import _port_sim, runner_multiple
-from src.data_filter import get_time_period
-from src.strategies import (
+from src import _port_sim, runner_multiple
+from src import get_time_period
+from src import (
     _get_signals_momentum_cross_asset,
     _get_signals_mv_cross_asset,
 )

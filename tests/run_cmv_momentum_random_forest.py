@@ -9,13 +9,13 @@ ROOT = Path(r"path\to\root")
 PROJECT = ROOT / 'work' / 'PythonProject1_basicbacktester' / 'Published'
 sys.path[:0] = [str(PROJECT / 'src'), str(ROOT / 'work')]
 
-from src.data_filter import get_time_period
-from src.hmm_regime import build_variance_dispersion_trend_features
-from src.strategies import _get_signals_mv_cross_asset, _get_signals_momentum_tr
-from src.tree_regime import fit_tree_regime, predict_tree_probabilities
-from src.svm_regime import fit_svm_regime, predict_svm_scores
-from src.logistic_regime import fit_logistic_regime, predict_regime_probabilities
-from src.elastic_logistic_regime import (
+from src import get_time_period
+from src import build_variance_dispersion_trend_features
+from src import _get_signals_mv_cross_asset, _get_signals_momentum_tr
+from src import fit_tree_regime, predict_tree_probabilities
+from src import fit_svm_regime, predict_svm_scores
+from src import fit_logistic_regime, predict_regime_probabilities
+from src import (
     fit_elastic_logistic_regime, predict_elastic_probabilities)
 from run_cmv_full_three_stage_five_cycles import CYCLES, FEE, SLIPPAGE, performance
 

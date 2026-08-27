@@ -9,8 +9,8 @@ ROOT = Path(r"path\to\root")
 PROJECT = ROOT / "work" / "PythonProject1_basicbacktester" / "Published"
 sys.path[:0] = [str(PROJECT / "src"), str(ROOT / "work")]
 
-from src.market_filters_analysis import _beta_filter_weights, _pc_filter_weights
-from src.strategies import (
+from src import _beta_filter_weights, _pc_filter_weights
+from src import (
     _get_signals_momentum_cross_asset, _get_signals_mv_cross_asset, _weights_alloc)
 from run_regime_one_cycle import SLEEVES
 

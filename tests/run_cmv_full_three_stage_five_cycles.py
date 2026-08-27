@@ -13,8 +13,8 @@ ROOT = Path(r"path\to\root")
 PROJECT = ROOT / 'work' / 'PythonProject1_basicbacktester' / 'Published'
 sys.path[:0] = [str(PROJECT / 'src'), str(ROOT / 'work')]
 
-from src.data_filter import get_time_period
-from src.strategies import (
+from src import get_time_period
+from src import (
     _get_signals_momentum_tr, _get_signals_momentum_cross_asset,
     _get_signals_mv_cross_asset,
     _project_onto_constraint_nullspace)

@@ -11,12 +11,12 @@ ROOT = Path(r"path\to\root")
 PROJECT = ROOT / 'work' / 'PythonProject1_basicbacktester' / 'Published'
 sys.path[:0] = [str(PROJECT / 'src'), str(ROOT / 'work')]
 
-from src.data_filter import get_time_period
-from src.hmm_regime import (
+from src import get_time_period
+from src import (
     build_variance_correlation_trend_features,
     build_variance_dispersion_trend_features,
 )
-from src.svm_regime import fit_svm_regime, predict_svm_scores
+from src import fit_svm_regime, predict_svm_scores
 from run_logistic_regime_one_cycle import HORIZON, winner_labels
 import run_ml_allocator_comparison as pipeline
 import run_regime_one_cycle as strategy_source

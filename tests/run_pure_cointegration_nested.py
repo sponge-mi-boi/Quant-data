@@ -10,7 +10,7 @@ os.environ.setdefault('NUMBA_DISABLE_JIT','1')
 ROOT  = Path(r"path\to\root")
 PROJECT=ROOT/'work'/'PythonProject1_basicbacktester'/'Published'
 sys.path[:0]=[str(PROJECT/'src'),str(ROOT/'work')]
-from src.strategies import _get_signals
+from src import _get_signals
 from run_cmv_full_three_stage_five_cycles import FEE,SLIPPAGE,performance
 from run_cointegration_all_pairs import benjamini_hochberg
 

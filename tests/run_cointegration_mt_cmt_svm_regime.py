@@ -8,9 +8,9 @@ os.environ.setdefault('NUMBA_DISABLE_JIT','1')
 ROOT  = Path(r"path\to\root")
 PROJECT=ROOT/'work'/'PythonProject1_basicbacktester'/'Published'
 sys.path[:0]=[str(PROJECT/'src'),str(ROOT/'work')]
-from src.strategies import (_get_signals, _get_signals_mv_cross_asset,
-                            _get_signals_momentum_tr, _get_signals_momentum_cross_asset)
-from src.svm_regime import fit_svm_regime,predict_svm_scores
+from src import (_get_signals, _get_signals_mv_cross_asset,
+                 _get_signals_momentum_tr, _get_signals_momentum_cross_asset)
+from src import fit_svm_regime,predict_svm_scores
 from run_cmv_full_three_stage_five_cycles import CYCLES,FEE,SLIPPAGE,performance
 from run_cross_momentum_timeseries_momentum_rule_regime import normalize,net_returns,passed
 from run_cmv_mt_cmt_rule_regime import build_correlation_liquidity_dispersion_features

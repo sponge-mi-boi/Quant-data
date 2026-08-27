@@ -11,7 +11,7 @@ PROJECT = Path(r"path\to\project")
 OUTPUT = Path(r"path\to\output")
 sys.path.insert(0, str(PROJECT / "src"))
 
-from src.backtester_overview import _port_sim, runner_multiple
+from src import _port_sim, runner_multiple
 
 
 PERIODS = {

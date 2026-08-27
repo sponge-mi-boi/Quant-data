@@ -28,14 +28,12 @@ In general, there are 5 classes of filters.
 
 from pathlib import Path
 
-import duckdb
 import numpy as np
 import pandas as pd
-import plotly
 import statsmodels.api as m
 from statsmodels.tsa.stattools import coint
 
-from src.data_filter import get_time_period, get_info
+from src.quant_backtester.data_filter import get_time_period, get_info
 
 np.set_printoptions(threshold=None)
 

@@ -9,8 +9,8 @@ ROOT = Path(r"path\to\root")
 PROJECT = ROOT / 'work' / 'PythonProject1_basicbacktester' / 'Published'
 sys.path[:0] = [str(PROJECT / 'src'), str(ROOT / 'work')]
 
-from src.data_filter import get_time_period
-from src.strategies import _get_signals_mv_cross_asset
+from src import get_time_period
+from src import _get_signals_mv_cross_asset
 
 TRAINING = (0, 500)
 FEE = .0005
