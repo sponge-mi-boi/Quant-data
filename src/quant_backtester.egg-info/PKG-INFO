@@ -1,0 +1,127 @@
+Metadata-Version: 2.4
+Name: quant-backtester
+Version: 0.3.4
+Summary: Bias-aware quantitative backtesting with walk-forward validation, regime allocation, neutrality, and realistic trading costs.
+Author: Varun
+License: Proprietary
+Requires-Python: <3.14,>=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: numpy<3,>=2.0
+Requires-Dist: pandas<3,>=2.2
+Requires-Dist: scipy<2,>=1.14
+Requires-Dist: scikit-learn<2,>=1.5
+Requires-Dist: statsmodels<1,>=0.14
+Requires-Dist: pyarrow<22,>=17
+Requires-Dist: duckdb<2,>=1.1
+Requires-Dist: plotly<7,>=5.24
+Requires-Dist: matplotlib<4,>=3.9
+Requires-Dist: yfinance<1,>=0.2.54
+Requires-Dist: alpaca-py<1,>=0.35
+Requires-Dist: requests<3,>=2.32
+Requires-Dist: joblib<2,>=1.4
+Requires-Dist: numba<1,>=0.60
+Provides-Extra: transformer
+Requires-Dist: torch<3,>=2.5; extra == "transformer"
+Provides-Extra: notebook
+Requires-Dist: jupyterlab<5,>=4.2; extra == "notebook"
+Requires-Dist: ipykernel<7,>=6.29; extra == "notebook"
+Provides-Extra: test
+Requires-Dist: pytest<9,>=8.3; extra == "test"
+Requires-Dist: pytest-cov<8,>=6; extra == "test"
+Provides-Extra: dev
+Requires-Dist: ruff<1,>=0.9; extra == "dev"
+Requires-Dist: mypy<2,>=1.14; extra == "dev"
+Requires-Dist: build<2,>=1.2; extra == "dev"
+Provides-Extra: all
+Requires-Dist: quant-backtester[dev,notebook,test,transformer]; extra == "all"
+
+﻿# Quantitative Backtesting and Validation Framework
+
+## Overview
+
+- Research-oriented backtesting and validation for the development and evaluation of portfolios and systematic trading
+  strategies
+- Currently focused on U.S.-based equities and derivatives (primarily SPY-related assets)
+
+### Supported Asset Classes
+
+- Stocks/ETFs
+
+### Supported Time Horizons
+
+- Medium frequency (daily/hourly)
+- Low frequency (1mo/3mo)
+
+### Supported Strategy Classes
+
+- Time-series strategies
+    - Mean reversion
+    - Cointegration (statistical arbitrage)
+    - Momentum/ trend following
+- Cross-sectional strategies
+    - Mean reversion
+    - Momentum/ trend following
+
+## Methodology
+
+- Walk-forward testing (train/validation/test periods)
+- Functional framework for modular experimentation
+- Implements regime classification
+- Utilizes common portfolio constraints 
+- Vectorized operations (Pandas/NumPy)
+- Multiprocessing (joblib)
+- Bayesian optimization (optuna)
+- Risk-adjusted performance metrics used for assessment
+- Supports graphs for visualization along with HTML export (Plotly)
+- Uses packages (scikit-learn, PyTorch) to allow applying learning methods to all parts of the testing pipeline 
+- Execution costs, slippage, turnover costs included. 
+
+## Quickstart
+
+### Create the virtual environment
+
+`python -m venv .venv`
+
+### Activate the virtual environment
+
+Windows (PowerShell)
+
+`.venv\Scripts\Activate.ps1`
+
+macOS / Linux (bash)
+
+`source .venv/bin/activate`
+
+### Install necessary modules
+
+`python -m pip install -e `
+
+### Entry point to execute backtester
+
+`python -m src.run`
+
+## Results
+
+- Regime based strategy implementation of mean reversion, momentum trending, cross asset mean reversion, cross asset momentum trending
+- Multi asset cointegration
+- Learning based regime models
+- Learning based parameter optimization 
+
+Results emphasize out-of-sample performance and regime stability rather than raw metrics optimization.
+
+### Future goals
+
+- Implementation of a broader range of factor models
+- More explicit Bayesian filtering with a detailed implementation of the Kalman filter and path dependent models
+- Greater focus on volatility including the implementation of volatility targeting and classification of asset volatility 
+
+## Repository Structure
+
+- `src` : Core strategy logic
+- `docs` : Successful portfolios' trading logs, equity curves, and related analysis tools
+    - `results`: Human-readable results.
+- `tests`: Example of package usage and tests of strategies. 
+- `data`: cache data storage
+- `artifacts`: cache results storage
+
+For a comprehensive discussion of strategy logic and methodology, see https://qgspinor.com/projects/alp_gen 

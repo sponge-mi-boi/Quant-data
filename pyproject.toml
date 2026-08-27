@@ -7,7 +7,7 @@ name = "quant-backtester"
 version = "0.3.4"
 description = "Bias-aware quantitative backtesting with walk-forward validation, regime allocation, neutrality, and realistic trading costs."
 readme = "README.md"
-requires-python = ">=3.11,<3.14"
+requires-python = ">=3.11,<3.15"
 license = { text = "Proprietary" }
 authors = [
     { name = "Varun" }
