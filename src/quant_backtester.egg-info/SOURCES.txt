@@ -17,4 +17,3 @@ src/quant_backtester.egg-info/SOURCES.txt
 src/quant_backtester.egg-info/dependency_links.txt
 src/quant_backtester.egg-info/requires.txt
 src/quant_backtester.egg-info/top_level.txt
-tests/test.py
