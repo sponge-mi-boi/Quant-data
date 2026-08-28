@@ -7,13 +7,13 @@ import numpy as np
 import pandas as pd
 
 
-WORK = Path(r"path\to\work")
-PROJECT = WORK / "PythonProject1_basicbacktester" / "Published"
-OUTPUT = Path(r"path\to\output")
+WORK = Path (__file__).resolve().parent.parent
+PROJECT = WORK
+OUTPUT = WORK / 'artifacts'
 
-sys.path.insert(0, str(PROJECT / "src"))
+sys.path.insert(0, str(PROJECT / "src/quant_backtester"))
 
-from src import _port_sim, runner_multiple
+from src.quant_backtester import _port_sim, runner_multiple
 
 
 PERIODS = {"training": (0, 500), "validation": (500, 760), "held_out": (760, 1020)}
@@ -68,7 +68,7 @@ def eligible(df, period, min_trades):
 
 def main():
     OUTPUT.mkdir(parents=True, exist_ok=True)
-    prices = pd.read_parquet(PROJECT / "data" / "processed" / "close_1d_10y.parquet")
+    prices = pd.read_parquet(PROJECT / "data/close_1d_10y.parquet")
     universe = [str(column) for column in prices.columns]
 
     training = simulate([(asset,) for asset in universe], PERIODS["training"], 1_000)

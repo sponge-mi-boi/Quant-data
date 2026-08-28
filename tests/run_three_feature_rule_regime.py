@@ -4,12 +4,12 @@ from pathlib import Path
 
 import numpy as np
 
-ROOT = Path(r"path\to\root")
-PROJECT = ROOT / 'work' / 'PythonProject1_basicbacktester' / 'Published'
-sys.path[:0] = [str(PROJECT / 'src'), str(ROOT / 'work')]
+ROOT = Path (__file__).resolve().parent.parent 
+PROJECT = ROOT 
+sys.path[:0] = [str(PROJECT / 'src'/'quant_backtester'), str(ROOT / 'tests')]
 
-from src import get_time_period
-from src import (
+from src.quant_backtester import get_time_period
+from src.quant_backtester.hmm_regime import (
     build_variance_correlation_trend_features,
     variance_correlation_trend_allocations)
 import run_ml_allocator_comparison as pipeline
@@ -47,7 +47,7 @@ def main():
                           and run['sharpe'] > 0 for run in runs),
         'scientific_status': 'Diagnostic: these historical intervals were viewed in earlier research.',
     }
-    path = ROOT / 'outputs' / 'checkpoint_three_feature_rule_regime_summary.json'
+    path = ROOT / 'artifacts' / 'checkpoint_three_feature_rule_regime_summary.json'
     path.write_text(json.dumps(output, indent=2, allow_nan=False), encoding='utf-8')
     print(json.dumps(output, indent=2, allow_nan=False))
 

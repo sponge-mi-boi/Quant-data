@@ -3,14 +3,14 @@ import sys
 from itertools import product
 from pathlib import Path
 
-ROOT  = Path(r"path\to\root")
-PROJECT = ROOT / 'work' / 'PythonProject1_basicbacktester' / 'Published'
-sys.path[:0] = [str(PROJECT / 'src'), str(ROOT / 'work')]
+ROOT = Path (__file__).resolve().parent.parent 
+PROJECT = ROOT 
+sys.path[:0] = [str(PROJECT / 'src'/'quant_backtester'), str(ROOT / 'tests')]
 
-from src import get_time_period
-from src import build_hmm_features
-from src import fit_logistic_regime, predict_regime_probabilities
-from src import fit_svm_regime, predict_svm_scores
+from src.quant_backtester import get_time_period
+from src.quant_backtester.hmm_regime import build_hmm_features
+from src.quant_backtester.logistic_regime import fit_logistic_regime, predict_regime_probabilities
+from src.quant_backtester.svm_regime import fit_svm_regime, predict_svm_scores
 from run_logistic_regime_one_cycle import HORIZON, winner_labels
 import run_ml_allocator_comparison as pipeline
 import run_reduced_regime_classifier_comparison as comparison
@@ -103,7 +103,7 @@ def main():
         'results': results,
         'scientific_status': 'All four models were selected and frozen before the common rows 2060:2320 test interval was evaluated once per model.',
     }
-    path = ROOT / 'outputs' / 'checkpoint_neutral_regime_universe_comparison.json'
+    path = ROOT / 'artifacts' / 'checkpoint_neutral_regime_universe_comparison.json'
     path.write_text(json.dumps(output, indent=2, allow_nan=False), encoding='utf-8')
     print(json.dumps(output, indent=2, allow_nan=False))
 

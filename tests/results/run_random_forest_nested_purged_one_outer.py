@@ -6,9 +6,9 @@ import numpy as np
 import pandas as pd
 
 os.environ.setdefault('NUMBA_DISABLE_JIT','1')
-ROOT  = Path(r"path\to\root")
-PROJECT=ROOT/'work'/'PythonProject1_basicbacktester'/'Published'
-sys.path[:0]=[str(PROJECT/'src'),str(ROOT/'work')]
+ROOT = Path (__file__).resolve().parent.parent.parent
+PROJECT=ROOT 
+sys.path[:0]=[str(PROJECT/'src/quant_backtester'),str(ROOT/'artifacts')]
 MODEL_KIND=os.environ.get('NESTED_MODEL_KIND','random_forest')
 OUTER_RUN=int(os.environ.get('NESTED_OUTER_RUN','1'))
 FEATURE_SET=os.environ.get('NESTED_FEATURE_SET','correlation_liquidity_dispersion')
@@ -32,24 +32,24 @@ if STRATEGY_SET not in {'three','time_series_momentum'}:
 if NEUTRALITY_MODE!='none':
     os.environ['NEUTRALITY_MODE']=NEUTRALITY_MODE
 
-from src import get_time_period
-from src import (_get_signals_mv_cross_asset,
+from src.quant_backtester import get_time_period
+from src.quant_backtester.strategies import (_get_signals_mv_cross_asset,
                  _get_signals_momentum_tr, _get_signals_momentum_cross_asset)
-from run_cmv_full_three_stage_five_cycles import FEE,SLIPPAGE,performance
-from run_cross_momentum_timeseries_momentum_rule_regime import normalize,net_returns,passed
-from run_cmv_mt_cmt_rule_regime import build_correlation_liquidity_dispersion_features
-from run_cmv_mt_cmt_bayesian_hmm_regime import select_strategy_on_validation
-from run_cmv_mt_cmt_logistic_regime import (SLEEVES,HORIZON,fit_forest_regime,
+from tests.run_cmv_full_three_stage_five_cycles import FEE,SLIPPAGE,performance
+from tests.run_cross_momentum_timeseries_momentum_rule_regime import normalize,net_returns,passed
+from tests.run_cmv_mt_cmt_rule_regime import build_correlation_liquidity_dispersion_features
+from tests.run_cmv_mt_cmt_bayesian_hmm_regime import select_strategy_on_validation
+from tests.run_cmv_mt_cmt_logistic_regime import (SLEEVES,HORIZON,fit_forest_regime,
     predict_forest_regime,allocations,combine,bayesian_optimize,decode_forest,decode_tree,
     decode_elastic,decode_svm,decode_nn,fit_nn_regime,predict_nn_regime)
-from src import (fit_decision_tree_regime,
+from src.quant_backtester.decision_tree_regime import (fit_decision_tree_regime,
                  predict_decision_tree_probabilities)
-from src import (fit_elastic_logistic_regime,
+from src.quant_backtester .elastic_logistic_regime import (fit_elastic_logistic_regime,
                  predict_elastic_probabilities)
-from src import fit_svm_regime,predict_svm_scores
+from src.quant_backtester.svm_regime import fit_svm_regime,predict_svm_scores
 if MODEL_KIND=='transformer':
-    from transformer_regime import fit_transformer,predict_transformer
-from src import build_hmm_features
+    from tests.transformer_regime import fit_transformer,predict_transformer
+from src.quant_backtester.hmm_regime import build_hmm_features
 from run_three_strategy_adam_disp_corr_liq import neutrality_cache,neutralize,neutrality_residuals
 
 if STRATEGY_SET=='time_series_momentum':
@@ -78,10 +78,10 @@ def main():
     offset=260*(OUTER_RUN-1)
     folds=[{k:(v[0]+offset,v[1]+offset) for k,v in fold.items()} for fold in FOLDS]
     outer_held=(OUTER_HELD[0]+offset,OUTER_HELD[1]+offset)
-    full_universe=pd.read_parquet(PROJECT/'data'/'processed'/'close_1d_10y.parquet').columns.tolist()
+    full_universe=pd.read_parquet(PROJECT/'data'/'close_1d_10y.parquet').columns.tolist()
     universe_snapshot=None
     if UNIVERSE_FILTER in {'historical_large','historical_mega'}:
-        snapshot_path=ROOT/'work'/'historical_market_cap'/'pretraining_market_caps.parquet'
+        snapshot_path=ROOT/'artifacts''pretraining_market_caps.parquet'
         snapshots=pd.read_parquet(snapshot_path)
         bucket_column='is_large' if UNIVERSE_FILTER=='historical_large' else 'is_mega'
         chosen=snapshots[(snapshots['outer_run']==OUTER_RUN)&snapshots[bucket_column]].copy()
@@ -101,7 +101,7 @@ def main():
         universe=full_universe
     prices=get_time_period(universe,time_peri=(0,2060)); returns=prices.pct_change().fillna(0.)
     market=get_time_period(['SPY'],time_peri=(0,2060)).reindex(prices.index)['SPY'].pct_change().fillna(0.)
-    volume=pd.read_parquet(PROJECT/'data'/'processed'/'volume_1d_10y.parquet',columns=universe).reindex(prices.index)
+    volume=pd.read_parquet(PROJECT/'data'/'volume_1d_10y.parquet',columns=universe).reindex(prices.index)
     if FEATURE_SET=='autocorrelation_correlation_volatility':
         features=build_hmm_features(market,returns).loc[:,['ac','corr','var']]
         feature_names=['autocorrelation','correlation','volatility']
@@ -254,6 +254,6 @@ def main():
     universe_slug=('_historical_large' if UNIVERSE_FILTER=='historical_large' else
                    ('_historical_mega' if UNIVERSE_FILTER=='historical_mega' else ''))
     strategy_slug='_time_series_momentum' if STRATEGY_SET=='time_series_momentum' else ''
-    path=ROOT/'outputs'/f'checkpoint_{MODEL_KIND}_{feature_slug}{universe_slug}{strategy_slug}{neutrality_slug}_nested_purged_outer_run_{OUTER_RUN}_summary.json'; path.write_text(json.dumps(output,indent=2,allow_nan=False),encoding='utf-8'); print(json.dumps(output,indent=2,allow_nan=False))
+    path=ROOT/'artifacts'/f'checkpoint_{MODEL_KIND}_{feature_slug}{universe_slug}{strategy_slug}{neutrality_slug}_nested_purged_outer_run_{OUTER_RUN}_summary.json'; path.write_text(json.dumps(output,indent=2,allow_nan=False),encoding='utf-8'); print(json.dumps(output,indent=2,allow_nan=False))
 
 if __name__=='__main__': main()

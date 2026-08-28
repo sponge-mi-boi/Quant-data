@@ -425,7 +425,7 @@ def _get_signals_mv_cross_asset(strat_param, ) -> pd.DataFrame:
     stck_list = requested_assets
     if cache_key in _CROSS_ASSET_SIGNAL_CACHE:
         return _CROSS_ASSET_SIGNAL_CACHE[cache_key][requested_assets].copy()
-    stck_data_p = get_time_period(stck_list, freq=strat_param['freq'], time_peri=time_period)
+    stck_data_p = get_time_period('all', freq=strat_param['freq'], time_peri=time_period)
     stck_data = stck_data_p.pct_change()
     stck_data_cr = stck_data.T
 
@@ -433,7 +433,7 @@ def _get_signals_mv_cross_asset(strat_param, ) -> pd.DataFrame:
     mean = stck_data_cr.mean()
     z_score = (stck_data_cr - mean) / std
     z_score = z_score.T
-    z_score = z_score.dropna()
+    z_score = z_score.dropna()[stck_list]
     signals = _mean_reversion_signals_from_z(z_score, z_threshold)
     _CROSS_ASSET_SIGNAL_CACHE[cache_key] = signals
     return signals[requested_assets].copy()
@@ -473,14 +473,14 @@ def _get_signals_momentum_cross_asset(strat_param) -> pd.DataFrame:
         raise ValueError('cross-sectional momentum thresholds must be finite')
     if entry_threshold <= 0 or exit_threshold < 0 or exit_threshold >= entry_threshold:
         raise ValueError('cross-sectional momentum thresholds must satisfy 0 <= exit < entry')
-    stck_data_p = get_time_period(stck_list, freq=strat_param['freq'], time_peri=time_period)
+    stck_data_p = get_time_period('all', freq=strat_param['freq'], time_peri=time_period)
     stck_data = stck_data_p.pct_change()
     stck_data_cr = stck_data.T
 
     std = stck_data_cr.std()
     mean = stck_data_cr.mean()
     z_score = (stck_data_cr - mean) / std
-    z_score = z_score.T
+    z_score = z_score.T[stck_list]
     z_score = z_score.dropna()
 
 

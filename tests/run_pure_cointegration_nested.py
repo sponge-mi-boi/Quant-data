@@ -7,10 +7,10 @@ import numpy as np
 import pandas as pd
 
 os.environ.setdefault('NUMBA_DISABLE_JIT','1')
-ROOT  = Path(r"path\to\root")
-PROJECT=ROOT/'work'/'PythonProject1_basicbacktester'/'Published'
-sys.path[:0]=[str(PROJECT/'src'),str(ROOT/'work')]
-from src import _get_signals
+ROOT = Path (__file__).resolve().parent.parent 
+PROJECT=ROOT 
+sys.path[:0]=[str(PROJECT/'src/quant_backtester'),str(ROOT/'artifacts')]
+from src.quant_backtester.strategies import _get_signals
 from run_cmv_full_three_stage_five_cycles import FEE,SLIPPAGE,performance
 from run_cointegration_all_pairs import benjamini_hochberg
 
@@ -26,10 +26,10 @@ PARAMETERS=[{'roll':roll,'z_threshold':(entry,exit_)}
 SHORTLIST=100
 
 def main():
-    all_prices=pd.read_parquet(PROJECT/'data'/'processed'/'close_1d_10y.parquet').iloc[:2060]
+    all_prices=pd.read_parquet(PROJECT/'data'/'close_1d_10y.parquet').iloc[:2060]
     market=all_prices['SPY'].pct_change().fillna(0.)
     prices=all_prices.drop(columns='SPY'); returns=prices.pct_change().fillna(0.)
-    screen=pd.read_csv(ROOT/'work'/'cointegration_all_pairs_screen.csv')
+    screen=pd.read_csv(ROOT/'artifacts'/'checkpoint_costs_cointegration_test1_all_pair_pvalues.csv')
     screen['q_value']=benjamini_hochberg(screen.p_value.to_numpy())
     pairs=[tuple(row) for row in screen.loc[screen.q_value<=.05,['asset_1','asset_2']].itertuples(index=False,name=None)]
     cache={}
@@ -86,7 +86,7 @@ def main():
             'runs':runs,'averages':{name:float(np.mean([r['held_out'][name] for r in runs])) for name in metric_names},
             'passed_runs':sum(r['held_out_passed'] for r in runs),'total_runs':5,
             'scientific_status':'Diagnostic: these historical held-out intervals were viewed earlier.'}
-    path=ROOT/'outputs'/'checkpoint_pure_cointegration_nested_five_outer_summary.json'
+    path=ROOT/'artifacts'/'checkpoint_pure_cointegration_nested_five_outer_summary.json'
     path.write_text(json.dumps(output,indent=2,allow_nan=False),encoding='utf-8')
     print(json.dumps(output,indent=2,allow_nan=False))
 

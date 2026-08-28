@@ -5,13 +5,13 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-ROOT  = Path(r"path\to\root")
-PROJECT = ROOT / "work" / "PythonProject1_basicbacktester" / "Published"
-sys.path[:0] = [str(PROJECT / "src"), str(ROOT / "work")]
+ROOT = Path (__file__).resolve().parent.parent 
+PROJECT = ROOT
+sys.path[:0] = [str(PROJECT / "src/quant_backtester"), str(ROOT / "artifacts")]
 
-from src import get_time_period
-from src import build_hmm_features
-from src import fit_logistic_regime, predict_regime_probabilities
+from src.quant_backtester import get_time_period
+from src.quant_backtester.hmm_regime import build_hmm_features
+from src.quant_backtester.logistic_regime import fit_logistic_regime, predict_regime_probabilities
 from run_ml_allocator_comparison import (
     FULL_PERIOD, TRAIN, VALIDATION, HELD_OUT, build_sleeves, combine, metrics, passed)
 
@@ -85,7 +85,7 @@ def main():
         'average_held_out_allocations': None if held_allocations is None else held_allocations.mean().to_dict(),
         'scientific_status': 'Diagnostic: this chronological held-out interval was viewed in earlier experiments.',
     }
-    path = ROOT / 'outputs' / 'checkpoint_logistic_regime_one_cycle_summary.json'
+    path = ROOT / 'artifacts' / 'checkpoint_logistic_regime_one_cycle_summary.json'
     path.write_text(json.dumps(output, indent=2, allow_nan=False), encoding='utf-8')
     print(json.dumps(output, indent=2, allow_nan=False))
 

@@ -3,9 +3,9 @@
 import sys
 from pathlib import Path
 
-ROOT = Path(r"path\to\root")
-PROJECT = ROOT / "work" / "PythonProject1_basicbacktester" / "Published"
-sys.path[:0] = [str(PROJECT / "src"), str(ROOT / "work")]
+ROOT = Path (__file__).resolve().parent.parent 
+PROJECT = ROOT
+sys.path[:0] = [str(PROJECT / "src/quant_backtester"), str(ROOT / "artifacts")]
 
 from neutral_sleeve_cache import CACHE_PATH, load_or_build
 

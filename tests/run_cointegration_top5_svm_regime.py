@@ -5,13 +5,13 @@ import numpy as np
 import pandas as pd
 
 os.environ.setdefault('NUMBA_DISABLE_JIT','1')
-ROOT  = Path(r"path\to\root")
+ROOT = Path (__file__).resolve().parent.parent 
 
-PROJECT=ROOT/'work'/'PythonProject1_basicbacktester'/'Published'
-sys.path[:0]=[str(PROJECT/'src'),str(ROOT/'work')]
+PROJECT=ROOT 
+sys.path[:0]=[str(PROJECT/'src/quant_backtester'),str(ROOT/'artifacts')]
 
-from src import _get_signals
-from src import fit_svm_regime,predict_svm_scores
+from src.quant_backtester.strategies import _get_signals
+from src.quant_backtester.svm_regime import fit_svm_regime,predict_svm_scores
 from run_cmv_full_three_stage_five_cycles import CYCLES,FEE,SLIPPAGE,performance
 from run_cmv_mt_cmt_rule_regime import build_correlation_liquidity_dispersion_features
 from run_cmv_mt_cmt_logistic_regime import bayesian_optimize,decode_svm
@@ -33,11 +33,11 @@ def passed(metric):
     return bool(np.isfinite(metric['sharpe']) and metric['sharpe']>0 and metric['total_return']>0)
 
 def main():
-    selection=json.loads((ROOT/'outputs'/'checkpoint_pure_cointegration_top_5_pairs_parameter_optimized_five_cycles_summary.json').read_text())
-    all_prices=pd.read_parquet(PROJECT/'data'/'processed'/'close_1d_10y.parquet').iloc[:2060]
+    selection=json.loads((ROOT/'artifacts'/'checkpoint_pure_cointegration_top_5_pairs_parameter_optimized_five_cycles_summary.json').read_text())
+    all_prices=pd.read_parquet(PROJECT/'data'/'close_1d_10y.parquet').iloc[:2060]
     market=all_prices['SPY'].pct_change().fillna(0.); prices=all_prices.drop(columns='SPY')
     returns=prices.pct_change().fillna(0.)
-    volume=pd.read_parquet(PROJECT/'data'/'processed'/'volume_1d_10y.parquet',columns=list(prices.columns)).reindex(prices.index)
+    volume=pd.read_parquet(PROJECT/'data'/'volume_1d_10y.parquet',columns=list(prices.columns)).reindex(prices.index)
     features=build_correlation_liquidity_dispersion_features(prices,volume,returns)
     cache={}; runs=[]
     def pair_target(member):
@@ -83,7 +83,7 @@ def main():
         print(f'cycle {number}/5 complete',flush=True)
     names=('total_return','sharpe','alpha','max_drawdown')
     output={'test':'Top-five shared-threshold cointegration with RBF-SVM regime vs cash','features':['correlation','liquidity','dispersion'],'classifier':'gaussian_rbf_svm_bayesian_optimized','cointegration_parameters':{'entry_z_optimized':[1.5,2.0,2.5],'exit_z_fixed':0.0,'roll_optimized':[20,32,60]},'allowed_sleeves':['cointegration','cash'],'target_horizon_bars':HORIZON,'purge_bars':HORIZON,'regime_filter':True,'execution':{'execution_delay_bars':1,'fee_per_order':FEE,'slippage_per_order':SLIPPAGE},'runs':runs,'average_held_out_metrics':{n:float(np.mean([r['held_out'][n] for r in runs])) for n in names},'held_out_pass_count':sum(r['held_out_passed'] for r in runs),'scientific_status':'Diagnostic: these historical held-out windows were viewed earlier.'}
-    path=ROOT/'outputs'/'checkpoint_pure_cointegration_top5_shared_threshold_corr_liq_disp_rbf_svm_regime_summary.json'
+    path=ROOT/'artifacts'/'checkpoint_pure_cointegration_top5_shared_threshold_corr_liq_disp_rbf_svm_regime_summary.json'
     path.write_text(json.dumps(output,indent=2,allow_nan=False),encoding='utf-8'); print(json.dumps(output,indent=2,allow_nan=False))
 
 if __name__=='__main__': main()

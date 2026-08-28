@@ -58,21 +58,27 @@ def get_time_period(args, type_='Close', freq='1d',
         raise ValueError('time_peri must satisfy 0 <= start < end')
     if args is None or len(args) == 0:
         raise ValueError('args must contain at least one asset')
-    requested = list(args)
-    projected = list(dict.fromkeys(requested))
     path = Path(__file__).parents[2]
 
+    if type(args) == str and args == 'all':
+        name = str(path) + '/data/' + type_.lower() + '_1' + 'd' + '_' + '10y' + '.parquet'
+        projected = list(pd.read_parquet(name).columns)
+        requested = projected
+    else:
+        requested = list(args)
+        projected = list(dict.fromkeys(requested))
+
     if freq == 'd' or freq == '1d':
-        name = str(path) + '/data/processed/' + type_.lower() + '_1' + 'd' + '_' + '10y' + '.parquet'
+        name = str(path) + '/data/' + type_.lower() + '_1' + 'd' + '_' + '10y' + '.parquet'
         data = pd.read_parquet(name, columns=projected).iloc[start:end][requested].dropna()
     elif freq == '1mo':
-        name = str(path) + '/data/processed/' + type_.lower() + '_' + freq + '_' + 'max' + '.parquet'
+        name = str(path) + '/data/' + type_.lower() + '_' + freq + '_' + 'max' + '.parquet'
         data = pd.read_parquet(name, columns=projected).iloc[start:end][requested].dropna()
     elif freq == '15m':
-        name = str(path) + '/data/processed/' + type_.lower() + '_' + freq + '_' + 'max' + '.parquet'
+        name = str(path) + '/data/' + type_.lower() + '_' + freq + '_' + 'max' + '.parquet'
         data = pd.read_parquet(name, columns=projected).iloc[start:end][requested].dropna()
     elif freq == 'h':
-        name = str(path) + '/data/processed/' + type_.lower() + freq + '_' + 'max' + '.parquet'
+        name = str(path) + '/data/' + type_.lower() + freq + '_' + 'max' + '.parquet'
         data = pd.read_parquet(name, columns=projected).iloc[start:end][requested].dropna()
     else:
         return pd.DataFrame()
@@ -87,7 +93,7 @@ def get_yf(per, int_, stocks=tuple(), type_='Close') -> None:
         - Applied a selection filter of having less than 1/1000 * (size of the data set) NA values
     """
     path = Path(__file__).parents[2]
-    name = str(path) + '/data/processed/' + type_.lower() + '_' + int_ + '_' + per + '.parquet'
+    name = str(path) + '/data/' + type_.lower() + '_' + int_ + '_' + per + '.parquet'
 
     if type_ in ['Close', 'Volume', 'High', 'Low']:
         data = yfinance.download(period=per, interval=int_, tickers=list(stocks) + ['SPY'])[type_]
@@ -104,14 +110,14 @@ def get_yf(per, int_, stocks=tuple(), type_='Close') -> None:
 def get_stock_universe(type_='Close', asset_exchange_or_type='SP') -> list:
     path = Path(__file__).parents[2]
 
-    name = str(path) + '/data/processed/' + type_.lower() + '_1' + 'd' + '_' + '10y' + '.parquet'
+    name = str(path) + '/data/' + type_.lower() + '_1' + 'd' + '_' + '10y' + '.parquet'
 
     return list(pd.read_parquet(name).columns)
 
 def get_info(type_):
     path = Path(__file__).parents[2]
 
-    aspects = pd.concat ([pd.read_parquet(str(path) + '/data/processed/assets_info_more_detail_05_14_26.parquet'),pd.read_parquet(str(path) + '/data/processed/assets_info_05_14_26.parquet')],axis=1).drop('SPY')
+    aspects = pd.concat ([pd.read_parquet(str(path) + '/data/assets_info_more_detail_05_14_26.parquet'),pd.read_parquet(str(path) + '/data/assets_info_05_14_26.parquet')],axis=1).drop('SPY')
 
 
     return aspects[type_]

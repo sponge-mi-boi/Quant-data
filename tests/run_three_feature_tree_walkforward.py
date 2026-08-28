@@ -7,16 +7,16 @@ from pathlib import Path
 
 import numpy as np
 
-ROOT = Path(r"path\to\root")
-PROJECT = ROOT / 'work' / 'PythonProject1_basicbacktester' / 'Published'
-sys.path[:0] = [str(PROJECT / 'src'), str(ROOT / 'work')]
+ROOT = Path (__file__).resolve().parent.parent 
+PROJECT = ROOT 
+sys.path[:0] = [str(PROJECT / 'src'/'quant_backtester'), str(ROOT / 'tests')]
 
-from src import get_time_period
-from src import (
+from src.quant_backtester import get_time_period
+from src.quant_backtester.hmm_regime import (
     build_variance_correlation_trend_features,
     build_variance_dispersion_trend_features,
 )
-from src import fit_svm_regime, predict_svm_scores
+from src.quant_backtester.svm_regime import fit_svm_regime, predict_svm_scores
 from run_logistic_regime_one_cycle import HORIZON, winner_labels
 import run_ml_allocator_comparison as pipeline
 import run_regime_one_cycle as strategy_source
@@ -137,7 +137,7 @@ def main():
               'held_out_pass_count': sum(run['held_out_passed'] for run in runs),
               'scientific_status': 'Diagnostic: these historical intervals were viewed earlier.'}
     feature_tag = 'dispersion' if FEATURE_SET == 'variance_dispersion_trend' else 'correlation'
-    path = ROOT / 'outputs' / f'checkpoint_three_feature_svm_{feature_tag}_{PROFILE}_neutral_walkforward_summary.json'
+    path = ROOT / 'artifacts' / f'checkpoint_three_feature_svm_{feature_tag}_{PROFILE}_neutral_walkforward_summary.json'
     path.write_text(json.dumps(output, indent=2, allow_nan=False), encoding='utf-8')
     print(json.dumps(output, indent=2, allow_nan=False))
 

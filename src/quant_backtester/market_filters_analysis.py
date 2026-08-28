@@ -333,7 +333,7 @@ def regime_estimator(strat_param) -> pd.DataFrame:
 
     time_period = strat_param['time_period']
     path = Path(__file__).parents[2]
-    all_assets = pd.read_parquet(path / 'data/processed/close_1d_10y.parquet').columns
+    all_assets = pd.read_parquet(path / 'data/close_1d_10y.parquet').columns
     stck_data = get_time_period(all_assets, freq=strat_param['freq'], time_peri=time_period)
     stck_data = stck_data.drop(columns='SPY', errors='ignore').pct_change()
     base_data = get_time_period(['SPY'], freq=strat_param['freq'], time_peri=time_period).pct_change()
@@ -503,16 +503,22 @@ def _pc_filter_weights(strat_param, ) -> np.ndarray:
     returns = get_time_period(assets, freq=strat_param['freq'], time_peri=time_period).pct_change()
     values = returns.to_numpy(dtype=float)
     constraints = []
+
     for end in range(roll, len(values)):
         window = values[end - roll + 1:end + 1]
         if not np.isfinite(window).all():
             continue
-        correlation = np.corrcoef(window, rowvar=False)
+        # window_= window[:,~(window == 0).all(axis=0)]
+        with np.errstate(divide="ignore", invalid="ignore"):
+            correlation = np.corrcoef(window, rowvar=False)
+
         if not np.isfinite(correlation).all():
             continue
+
         _, eigenvectors = np.linalg.eigh(correlation)
         # eigh returns eigenvectors in columns and ascending eigenvalue order.
         # Constraint rows must therefore be the final n columns transposed.
+
         constraints.append(eigenvectors[:, -n:].T)
     if not constraints:
         return np.empty((0, n, len(assets)))

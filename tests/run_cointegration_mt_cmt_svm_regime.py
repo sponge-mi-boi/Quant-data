@@ -5,12 +5,12 @@ import numpy as np
 import pandas as pd
 
 os.environ.setdefault('NUMBA_DISABLE_JIT','1')
-ROOT  = Path(r"path\to\root")
-PROJECT=ROOT/'work'/'PythonProject1_basicbacktester'/'Published'
-sys.path[:0]=[str(PROJECT/'src'),str(ROOT/'work')]
-from src import (_get_signals, _get_signals_mv_cross_asset,
+ROOT = Path (__file__).resolve().parent.parent 
+PROJECT=ROOT 
+sys.path[:0]=[str(PROJECT/'src/quant_backtester'),str(ROOT/'artifacts')]
+from src.quant_backtester .strategies import (_get_signals, _get_signals_mv_cross_asset,
                  _get_signals_momentum_tr, _get_signals_momentum_cross_asset)
-from src import fit_svm_regime,predict_svm_scores
+from src.quant_backtester. svm_regime import fit_svm_regime,predict_svm_scores
 from run_cmv_full_three_stage_five_cycles import CYCLES,FEE,SLIPPAGE,performance
 from run_cross_momentum_timeseries_momentum_rule_regime import normalize,net_returns,passed
 from run_cmv_mt_cmt_rule_regime import build_correlation_liquidity_dispersion_features
@@ -39,11 +39,11 @@ def combine(sleeves,allocation,index):
     return target
 
 def main():
-    coin_source=json.loads((ROOT/'outputs'/'checkpoint_pure_cointegration_top_5_pairs_parameter_optimized_five_cycles_summary.json').read_text())
-    best_source=json.loads((ROOT/'outputs'/'checkpoint_three_strategy_bayesian_optimized_corr_liq_disp_rbf_svm_regime_summary.json').read_text())
-    all_prices=pd.read_parquet(PROJECT/'data'/'processed'/'close_1d_10y.parquet').iloc[:2060]
+    coin_source=json.loads((ROOT/'artifacts'/'checkpoint_pure_cointegration_top_5_pairs_parameter_optimized_five_cycles_summary.json').read_text())
+    best_source=json.loads((ROOT/'artifacts'/'checkpoint_three_strategy_bayesian_optimized_corr_liq_disp_rbf_svm_regime_summary.json').read_text())
+    all_prices=pd.read_parquet(PROJECT/'data'/'close_1d_10y.parquet').iloc[:2060]
     market=all_prices['SPY'].pct_change().fillna(0.); prices=all_prices.drop(columns='SPY'); returns=prices.pct_change().fillna(0.)
-    universe=list(prices.columns); volume=pd.read_parquet(PROJECT/'data'/'processed'/'volume_1d_10y.parquet',columns=universe).reindex(prices.index)
+    universe=list(prices.columns); volume=pd.read_parquet(PROJECT/'data'/'volume_1d_10y.parquet',columns=universe).reindex(prices.index)
     features=build_correlation_liquidity_dispersion_features(prices,volume,returns); cache={}; runs=[]
     def cfg(name,p): return {'stock_list':universe,'time_period':(0,2060),'freq':'d','strat_class':{name:p},'parameters_':p}
     def pair_target(member):
@@ -88,6 +88,6 @@ def main():
         runs.append({'run':number,'cointegration_pairs':members,'other_strategy_selections':{'cross_asset_mv':cmv,'momentum_trending':mt,'cross_asset_momentum_trending':cmt},'selected_regime':selected,'average_held_out_allocations':average,'held_out':metric,'held_out_passed':passed(metric)}); print(f'cycle {number}/5 complete',flush=True)
     names=('total_return','sharpe','alpha','max_drawdown')
     output={'test':'RBF-SVM regime: cointegration confidence hurdle + CMV + MT + CMT + cash','features':['correlation','liquidity','dispersion'],'classifier':'gaussian_rbf_svm_bayesian_optimized','allowed_sleeves':[*SLEEVES,'cash'],'cointegration_confidence_hurdle_range':[.5,.9],'cointegration_parameters':{'entry_z_optimized':[1.5,2.,2.5],'exit_z_fixed':0.,'roll_optimized':[20,32,60],'pairs_per_run':5},'target_horizon_bars':HORIZON,'purge_bars':HORIZON,'execution':{'execution_delay_bars':1,'fee_per_order':FEE,'slippage_per_order':SLIPPAGE},'runs':runs,'average_held_out_metrics':{n:float(np.mean([r['held_out'][n] for r in runs])) for n in names},'held_out_pass_count':sum(r['held_out_passed'] for r in runs),'scientific_status':'Diagnostic: these historical held-out windows were viewed earlier.'}
-    path=ROOT/'outputs'/'checkpoint_cointegration_hurdle_cmv_mt_cmt_corr_liq_disp_rbf_svm_regime_summary.json'; path.write_text(json.dumps(output,indent=2,allow_nan=False),encoding='utf-8'); print(json.dumps(output,indent=2,allow_nan=False))
+    path=ROOT/'artifacts'/'checkpoint_cointegration_hurdle_cmv_mt_cmt_corr_liq_disp_rbf_svm_regime_summary.json'; path.write_text(json.dumps(output,indent=2,allow_nan=False),encoding='utf-8'); print(json.dumps(output,indent=2,allow_nan=False))
 
 if __name__=='__main__': main()

@@ -9,9 +9,9 @@ import requests
 import yfinance as yf
 
 
-ROOT = Path(r"path\to\root")
-PROJECT = ROOT / 'work' / 'PythonProject1_basicbacktester' / 'Published'
-CACHE = ROOT / 'work' / 'historical_market_cap'
+ROOT = Path (__file__).resolve().parent.parent
+PROJECT = ROOT 
+CACHE = ROOT / 'data'
 SHARES_PATH = CACHE / 'yahoo_historical_shares.parquet'
 SPLITS_PATH = CACHE / 'yahoo_splits.parquet'
 SNAPSHOTS_PATH = CACHE / 'pretraining_market_caps.parquet'
@@ -97,7 +97,7 @@ def sec_cik_by_ticker():
 def main():
     CACHE.mkdir(parents=True, exist_ok=True)
     yf.set_tz_cache_location(str(CACHE / 'yfinance_cache'))
-    prices = pd.read_parquet(PROJECT / 'data' / 'processed' / 'close_1d_10y.parquet')
+    prices = pd.read_parquet(PROJECT / 'data' / 'close_1d_10y.parquet')
     universe = list(prices.columns)
     existing = load_existing()
     collected = {c: existing[c].dropna() for c in existing.columns}

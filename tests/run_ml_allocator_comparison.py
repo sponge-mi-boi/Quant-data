@@ -6,15 +6,14 @@ import numpy as np
 import pandas as pd
 import vectorbt as v
 
-ROOT  = Path(r"path\to\root")
-PROJECT = ROOT / "work" / "PythonProject1_basicbacktester" / "Published"
-OUTPUT = ROOT / "outputs"
-sys.path.insert(0, str(PROJECT / "src"))
-sys.path.insert(0, str(ROOT / "work"))
+ROOT = Path (__file__).resolve().parent.parent; PROJECT = ROOT
+OUTPUT = ROOT / 'artifacts'
+sys.path.insert(0, str(PROJECT / "src/quant_backtester"))
+sys.path.insert(0, str(ROOT / "artifacts"))
 
-from src import get_time_period
-from src import regime_estimator
-from src import (
+from src.quant_backtester import get_time_period
+from src.quant_backtester import regime_estimator
+from src.quant_backtester .ml_allocator import (
     build_causal_features,
     fit_ridge_allocator,
     future_risk_adjusted_targets,

@@ -11,13 +11,13 @@ import pandas as pd
 
 import run_ml_allocator_comparison as pipeline
 import run_regime_one_cycle as strategy_source
-from src import get_time_period
-from src import realized_strategy_returns
+from src.quant_backtester import get_time_period
+from src.quant_backtester.ml_allocator import realized_strategy_returns
 
 
 CACHE_VERSION = 4
-ROOT = Path(r"path\to\root")
-CACHE_PATH = ROOT / "work" / "neutral_sleeves_v4.pkl"
+ROOT = Path (__file__).resolve().parent.parent
+CACHE_PATH = ROOT / "artifacts" / "neutral_sleeves_v4.pkl"
 
 
 def cache_spec(full_period, neutrality, strategy_names):

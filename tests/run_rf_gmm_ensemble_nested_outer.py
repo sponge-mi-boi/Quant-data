@@ -6,11 +6,11 @@ import numpy as np
 import pandas as pd
 
 os.environ.setdefault('NUMBA_DISABLE_JIT','1')
-ROOT = Path(r"path\to\root"); PROJECT=ROOT/'work'/'PythonProject1_basicbacktester'/'Published'
-sys.path[:0]=[str(PROJECT/'src'),str(ROOT/'work')]
-from src import get_time_period
-from src import probability_weighted_allocations
-from src import _get_signals_mv_cross_asset,_get_signals_momentum_tr,_get_signals_momentum_cross_asset
+ROOT = Path (__file__).resolve().parent.parent; PROJECT=ROOT 
+sys.path[:0]=[str(PROJECT/'src/quant_backtester'),str(ROOT/'artifacts')]
+from src.quant_backtester import get_time_period
+from src.quant_backtester.hmm_regime import probability_weighted_allocations
+from src.quant_backtester.strategies import _get_signals_mv_cross_asset,_get_signals_momentum_tr,_get_signals_momentum_cross_asset
 from run_cmv_full_three_stage_five_cycles import FEE,SLIPPAGE,performance
 from run_cross_momentum_timeseries_momentum_rule_regime import normalize,net_returns,passed
 from run_cmv_mt_cmt_rule_regime import build_correlation_liquidity_dispersion_features
@@ -28,8 +28,8 @@ def labels_for(sleeves,returns,index):
 
 def main():
     run=int(os.environ.get('NESTED_OUTER_RUN','1')); shift=260*(run-1); folds=[{k:(a+shift,b+shift) for k,(a,b) in f.items()} for f in BASE]; held_range=(760+shift,1020+shift)
-    rf=json.loads((ROOT/'outputs'/f'checkpoint_random_forest_nested_purged_outer_run_{run}_summary.json').read_text())['selected_filter']; gm=json.loads((ROOT/'outputs'/f'checkpoint_gaussian_mixture_corr_liq_disp_nested_purged_outer_run_{run}_summary.json').read_text())['selected_filter']
-    universe=pd.read_parquet(PROJECT/'data'/'processed'/'close_1d_10y.parquet').columns.tolist(); prices=get_time_period(universe,time_peri=(0,2060)); returns=prices.pct_change().fillna(0.); market=get_time_period(['SPY'],time_peri=(0,2060)).reindex(prices.index)['SPY'].pct_change().fillna(0.); volume=pd.read_parquet(PROJECT/'data'/'processed'/'volume_1d_10y.parquet',columns=universe).reindex(prices.index); features=build_correlation_liquidity_dispersion_features(prices,volume,returns)
+    rf=json.loads((ROOT/'artifacts'/f'checkpoint_random_forest_nested_purged_outer_run_{run}_summary.json').read_text())['selected_filter']; gm=json.loads((ROOT/'artifacts'/f'checkpoint_gaussian_mixture_corr_liq_disp_nested_purged_outer_run_{run}_summary.json').read_text())['selected_filter']
+    universe=pd.read_parquet(PROJECT/'data'/'close_1d_10y.parquet').columns.tolist(); prices=get_time_period(universe,time_peri=(0,2060)); returns=prices.pct_change().fillna(0.); market=get_time_period(['SPY'],time_peri=(0,2060)).reindex(prices.index)['SPY'].pct_change().fillna(0.); volume=pd.read_parquet(PROJECT/'data'/'volume_1d_10y.parquet',columns=universe).reindex(prices.index); features=build_correlation_liquidity_dispersion_features(prices,volume,returns)
     def cfg(n,p): return {'stock_list':universe,'time_period':(0,2060),'freq':'d','strat_class':{n:p},'parameters_':p}
     grids={'cross_asset_mv':[{'z_threshold':z} for z in (1.5,2.,2.5)],'momentum_trending':[{'z_threshold':z,'roll':r} for r,z in product((20,30,60),(1.5,2.,2.5))],'cross_asset_momentum_trending':[{'z_threshold':z,'roll':r} for r,z in product((20,35,60),(1.5,2.,2.5))]}; raw={n:[] for n in SLEEVES}
     for n,g in grids.items():
@@ -52,5 +52,5 @@ def main():
     selected=max(choices,key=lambda x:x['median_inner_sharpe']); final=prepared[-1]; dev=prices.index[shift:shift+760-HORIZON]; held=prices.index[slice(*held_range)]
     rfm=fit_forest_regime(features.reindex(dev),final['labels'].reindex(dev),rf['n_estimators'],rf['max_depth'],rf['min_samples_leaf']); rfa=allocations(predict_forest_regime(rfm,features.reindex(held)),rf['smoothing_half_life'],rf['rebalance_every_bars'],rf['max_sleeve_weight']); rft=combine(final['sleeves'],rfa,prices.index)
     gmm=fit_gmm(features.reindex(dev),gm['components'],gm['covariance_type']); dp=probabilities(gmm,features.reindex(dev)); hp=probabilities(gmm,features.reindex(held)); mapping=state_mapping(dp,final['net'].reindex(dev),gm['max_sleeve_weight']); gma=probability_weighted_allocations(hp,mapping,rebalance_every=gm['rebalance_every_bars'],smoothing_half_life=gm['smoothing_half_life']); gmt=combine(final['sleeves'],gma,prices.index); w=selected['random_forest_weight']; metric=performance(net_returns(rft*w+gmt*(1-w),returns).reindex(held).fillna(0.),market.reindex(held))
-    out={'test':'RF + GMM corr/liquidity/dispersion nested ensemble','outer_run':run,'features':['correlation','liquidity','dispersion'],'base_filters':{'random_forest':rf,'gaussian_mixture':gm},'selected_ensemble':selected,'held_out':metric,'held_out_passed':passed(metric),'execution':{'execution_delay_bars':1,'fee_per_order':FEE,'slippage_per_order':SLIPPAGE},'scientific_status':'Diagnostic: this historical held-out interval was viewed earlier.'}; path=ROOT/'outputs'/f'checkpoint_rf_gmm_corr_liq_disp_nested_outer_run_{run}_summary.json'; path.write_text(json.dumps(out,indent=2,allow_nan=False)); print(json.dumps(out,indent=2,allow_nan=False))
+    out={'test':'RF + GMM corr/liquidity/dispersion nested ensemble','outer_run':run,'features':['correlation','liquidity','dispersion'],'base_filters':{'random_forest':rf,'gaussian_mixture':gm},'selected_ensemble':selected,'held_out':metric,'held_out_passed':passed(metric),'execution':{'execution_delay_bars':1,'fee_per_order':FEE,'slippage_per_order':SLIPPAGE},'scientific_status':'Diagnostic: this historical held-out interval was viewed earlier.'}; path=ROOT/'artifacts'/f'checkpoint_rf_gmm_corr_liq_disp_nested_outer_run_{run}_summary.json'; path.write_text(json.dumps(out,indent=2,allow_nan=False)); print(json.dumps(out,indent=2,allow_nan=False))
 if __name__=='__main__': main()

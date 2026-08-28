@@ -9,13 +9,14 @@ import pandas as pd
 import vectorbt as v
 
 
-PROJECT = Path(r"path\to\project")
-OUTPUT = Path(r"path\to\output")
-sys.path.insert(0, str(PROJECT / "src"))
+PROJECT = Path (__file__).resolve().parent.parent
 
-from src import _port_sim, runner_multiple
-from src import get_time_period
-from src import (
+OUTPUT = PROJECT / "artifacts"
+sys.path.insert(0, str(PROJECT / "src/quant_backtester"))
+
+from src.quant_backtester import _port_sim, runner_multiple
+from src.quant_backtester import get_time_period
+from src.quant_backtester .strategies import (
     _get_signals_momentum_cross_asset,
     _get_signals_mv_cross_asset,
 )
@@ -92,7 +93,7 @@ def metric(row, period, name):
 
 def main():
     OUTPUT.mkdir(parents=True, exist_ok=True)
-    prices = pd.read_parquet(PROJECT / "data" / "processed" / "close_1d_10y.parquet")
+    prices = pd.read_parquet(PROJECT / "data/close_1d_10y.parquet")
     universe = [str(column) for column in prices.columns]
     records = []
 

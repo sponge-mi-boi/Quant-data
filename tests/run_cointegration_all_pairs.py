@@ -10,13 +10,15 @@ import pandas as pd
 from statsmodels.tsa.stattools import coint
 
 
-PROJECT = Path(r"path\to\project")
+PROJECT = Path (__file__).resolve().parent.parent
 
-OUTPUT  = Path(r"path\to\output")
-CHECKPOINT  = Path(r"path\to\checkpoint")
-sys.path.insert(0, str(PROJECT / "src"))
 
-from src import _port_sim, runner_multiple
+OUTPUT  = PROJECT / "artifacts"
+CHECKPOINT = PROJECT / "artifacts" / "checkpoint_costs_cointegration_test1_all_pair_pvalues.csv"
+
+sys.path.insert(0, str(PROJECT / "src/quant_backtester"))
+
+from src.quant_backtester import _port_sim, runner_multiple
 
 
 PERIODS = {"training": (0, 500), "validation": (500, 760), "held_out": (760, 1020)}
@@ -78,7 +80,7 @@ def screen_all_pairs(prices):
 
     workers = min(16, max(1, mp.cpu_count() - 1))
     rows = []
-    data_path = str(PROJECT / "data" / "processed" / "close_1d_10y.parquet")
+    data_path = str(PROJECT / "data/close_1d_10y.parquet")
     with mp.Pool(workers, initializer=_init_worker,
                  initargs=(data_path, PERIODS["training"][0], PERIODS["training"][1])) as pool:
         for count, result in enumerate(pool.imap_unordered(_test_pair, pairs, chunksize=100), 1):
@@ -125,7 +127,7 @@ def normalize_index(df):
 
 def main():
     OUTPUT.mkdir(parents=True, exist_ok=True)
-    prices = pd.read_parquet(PROJECT / "data" / "processed" / "close_1d_10y.parquet")
+    prices = pd.read_parquet(PROJECT / "data/close_1d_10y.parquet")
     screening = screen_all_pairs(prices)
     valid = screening.dropna(subset=["p_value"]).copy()
     valid["q_value"] = benjamini_hochberg(valid["p_value"])

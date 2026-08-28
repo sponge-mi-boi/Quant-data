@@ -4,9 +4,9 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 os.environ.setdefault('NUMBA_DISABLE_JIT','1')
-ROOT = Path(r"path\to\root"); PROJECT=ROOT/'work'/'PythonProject1_basicbacktester'/'Published'; sys.path[:0]=[str(PROJECT/'src'),str(ROOT/'work')]
-from src import get_time_period
-from src import _get_signals_mv_cross_asset,_get_signals_momentum_tr,_get_signals_momentum_cross_asset
+ROOT = Path (__file__).resolve().parent.parent; PROJECT=ROOT ; sys.path[:0]=[str(PROJECT/'src/quant_backtester'),str(ROOT/'artifacts')]
+from src.quant_backtester import get_time_period
+from src.quant_backtester.strategies import _get_signals_mv_cross_asset,_get_signals_momentum_tr,_get_signals_momentum_cross_asset
 from run_cmv_full_three_stage_five_cycles import CYCLES,FEE,SLIPPAGE,performance
 from run_cross_momentum_timeseries_momentum_rule_regime import normalize,net_returns,passed
 
@@ -17,8 +17,8 @@ SLEEVES=(('cross_asset_mv','momentum_trending') if STRATEGY_SET=='cmv_mt' else
          ((ONLY_STRATEGY,) if ONLY_STRATEGY else
           ('cross_asset_mv','momentum_trending','cross_asset_momentum_trending')))
 def main():
-    source=json.loads((ROOT/'outputs'/('checkpoint_rolling_fixed_500_260_260_three_strategy_corr_liq_disp_rbf_svm_summary.json' if ROLLING_FIXED else 'checkpoint_three_strategy_parameter_optimized_ac_vol_corr_hmm_summary.json')).read_text())
-    universe=pd.read_parquet(PROJECT/'data'/'processed'/'close_1d_10y.parquet').columns.tolist(); prices=get_time_period(universe,time_peri=(0,2060)); returns=prices.pct_change().fillna(0.); market=get_time_period(['SPY'],time_peri=(0,2060)).reindex(prices.index)['SPY'].pct_change().fillna(0.)
+    source=json.loads((ROOT/'artifacts'/('checkpoint_rolling_fixed_500_260_260_three_strategy_corr_liq_disp_rbf_svm_summary.json' if ROLLING_FIXED else 'checkpoint_three_strategy_parameter_optimized_ac_vol_corr_hmm_summary.json')).read_text())
+    universe=pd.read_parquet(PROJECT/'data'/'close_1d_10y.parquet').columns.tolist(); prices=get_time_period(universe,time_peri=(0,2060)); returns=prices.pct_change().fillna(0.); market=get_time_period(['SPY'],time_peri=(0,2060)).reindex(prices.index)['SPY'].pct_change().fillna(0.)
     cache={}; runs=[]
     def signal(name,p):
         key=(name,tuple(sorted(p.items())))
@@ -51,5 +51,5 @@ def main():
                      ('checkpoint_rolling_fixed_500_260_260_cmv_mt_parameter_optimized_no_regime_summary.json'
                       if STRATEGY_SET=='cmv_mt' else
                       'checkpoint_rolling_fixed_500_260_260_three_strategy_equal_weight_no_regime_summary.json'))
-    path=ROOT/'outputs'/output_name; path.write_text(json.dumps(output,indent=2,allow_nan=False),encoding='utf-8'); print(json.dumps(output,indent=2,allow_nan=False))
+    path=ROOT/'artifacts'/output_name; path.write_text(json.dumps(output,indent=2,allow_nan=False),encoding='utf-8'); print(json.dumps(output,indent=2,allow_nan=False))
 if __name__=='__main__': main()

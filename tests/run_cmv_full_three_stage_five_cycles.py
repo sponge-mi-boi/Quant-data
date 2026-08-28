@@ -6,15 +6,18 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import warnings
 
+warnings.filterwarnings("error", category=RuntimeWarning)
 os.environ.setdefault('NUMBA_DISABLE_JIT', '1')
 
-ROOT = Path(r"path\to\root")
-PROJECT = ROOT / 'work' / 'PythonProject1_basicbacktester' / 'Published'
-sys.path[:0] = [str(PROJECT / 'src'), str(ROOT / 'work')]
+ROOT = Path (__file__).resolve().parent.parent
+PROJECT = ROOT 
+sys.path[:0] = [str(PROJECT / 'src'/'quant_backtester'), str(ROOT / 'tests')]
 
-from src import get_time_period
-from src import (
+from src.quant_backtester import get_time_period
+
+from src.quant_backtester.strategies import (
     _get_signals_momentum_tr, _get_signals_momentum_cross_asset,
     _get_signals_mv_cross_asset,
     _project_onto_constraint_nullspace)
@@ -75,8 +78,10 @@ def constraint_cache(selected, raw, returns, market):
         market_variance, axis=0).to_numpy()
     values = returns[selected].to_numpy()
     correlations = np.full((len(returns), len(selected), len(selected)), np.nan)
+
     for absolute in range(ROLL, len(returns)):
         correlations[absolute] = np.corrcoef(values[absolute - ROLL + 1:absolute + 1], rowvar=False)
+
     return {'assets': selected, 'locations': {asset: i for i, asset in enumerate(selected)},
             'beta': beta, 'correlations': correlations,
             'raw': raw[selected].to_numpy()}
@@ -109,7 +114,7 @@ def neutral_weights(combo, cache, index, start, stop):
 
 def main():
     universe = pd.read_parquet(
-        PROJECT / 'data' / 'processed' / 'close_1d_10y.parquet').columns.tolist()
+        PROJECT / 'data' / 'close_1d_10y.parquet').columns.tolist()
     prices = get_time_period(universe, time_peri=(0, 2060))
     market_prices = get_time_period(['SPY'], time_peri=(0, 2060)).reindex(prices.index)['SPY']
     returns = prices.pct_change().fillna(0.0)
@@ -182,7 +187,7 @@ def main():
               'scientific_status': 'Diagnostic: these historical windows were viewed earlier.'}
     output['neutrality'] = ['dollar', 'rolling_beta', 'leading_pc'] if USE_NEUTRALITY else []
     suffix = 'neutral' if USE_NEUTRALITY else 'nonneutral'
-    path = ROOT / 'outputs' / f'checkpoint_{PROFILE}_{suffix}_three_stage_five_cycles_summary.json'
+    path = ROOT / 'artifacts' / f'checkpoint_{PROFILE}_{suffix}_three_stage_five_cycles_summary.json'
     path.write_text(json.dumps(output, indent=2, allow_nan=False), encoding='utf-8')
     print(json.dumps(output, indent=2, allow_nan=False))
 

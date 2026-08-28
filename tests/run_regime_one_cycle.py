@@ -7,15 +7,15 @@ import pandas as pd
 import vectorbt as v
 
 
-ROOT = Path(r"path\to\root")
-PROJECT = ROOT / "work" / "PythonProject1_basicbacktester" / "Published"
-OUTPUT = ROOT / "outputs"
-sys.path.insert(0, str(PROJECT / "src"))
+ROOT = Path (__file__).resolve().parent.parent
+PROJECT = ROOT
+OUTPUT = ROOT / 'artifacts'
+sys.path.insert(0, str(PROJECT / "src/quant_backtester"))
 
-from src import _delay_target_weights
-from src import get_time_period
-from src import regime_estimator
-from src import (
+from src.quant_backtester  .backtester_overview import _delay_target_weights
+from src.quant_backtester import get_time_period
+from src.quant_backtester import regime_estimator
+from src.quant_backtester .strategies import (
     _get_signals,
     _get_signals_momentum_cross_asset,
     _get_signals_momentum_tr,

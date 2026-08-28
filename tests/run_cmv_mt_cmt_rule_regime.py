@@ -10,14 +10,14 @@ import numpy as np
 import pandas as pd
 
 os.environ.setdefault('NUMBA_DISABLE_JIT', '1')
-ROOT = Path(r"path\to\root")
-PROJECT = ROOT/'work'/'PythonProject1_basicbacktester'/'Published'
-sys.path[:0] = [str(PROJECT/'src'), str(ROOT/'work')]
+ROOT = Path (__file__).resolve().parent.parent 
+PROJECT = ROOT
+sys.path[:0] = [str(PROJECT/'src/quant_backtester'), str(ROOT/'artifacts')]
 
-from src import get_time_period
-from src import build_variance_dispersion_trend_features
-from src import _rolling_percentile
-from src import (_get_signals_mv_cross_asset,
+from src.quant_backtester import get_time_period
+from src.quant_backtester.hmm_regime import build_variance_dispersion_trend_features
+from src.quant_backtester.market_filters_analysis import _rolling_percentile
+from src.quant_backtester.strategies import (_get_signals_mv_cross_asset,
                  _get_signals_momentum_tr, _get_signals_momentum_cross_asset)
 from run_cmv_full_three_stage_five_cycles import CYCLES, FEE, SLIPPAGE, performance
 from run_cross_momentum_timeseries_momentum_rule_regime import normalize, net_returns, passed
@@ -84,8 +84,8 @@ def main():
     files={'cross_asset_mv':'checkpoint_cross_asset_mv_nonneutral_three_stage_five_cycles_summary.json',
            'momentum_trending':'checkpoint_momentum_trending_nonneutral_three_stage_five_cycles_summary.json',
            'cross_asset_momentum_trending':'checkpoint_cross_asset_momentum_trending_nonneutral_three_stage_five_cycles_summary.json'}
-    sources={name:json.loads((ROOT/'outputs'/file).read_text()) for name,file in files.items()}
-    universe=pd.read_parquet(PROJECT/'data'/'processed'/'close_1d_10y.parquet').columns.tolist()
+    sources={name:json.loads((ROOT/'artifacts'/file).read_text()) for name,file in files.items()}
+    universe=pd.read_parquet(PROJECT/'data'/'close_1d_10y.parquet').columns.tolist()
     prices=get_time_period(universe,time_peri=(0,2060)); returns=prices.pct_change().fillna(0.0)
     market=get_time_period(['SPY'],time_peri=(0,2060)).reindex(prices.index)['SPY'].pct_change().fillna(0.0)
     def params(name,p): return {'stock_list':universe,'time_period':(0,2060),'freq':'d','strat_class':{name:p},'parameters_':p}
@@ -93,7 +93,7 @@ def main():
     mt_raw=_get_signals_momentum_tr(params('momentum_trending',{'z_threshold':1.999,'roll':30}),prices).reindex(prices.index).fillna(0.0)
     cmt_raw=_get_signals_momentum_cross_asset(params('cross_asset_momentum_trending',{'z_threshold':1.9283,'roll':35})).reindex(prices.index).fillna(0.0)
     if FEATURE_SET=='correlation_liquidity_dispersion':
-        volume=pd.read_parquet(PROJECT/'data'/'processed'/'volume_1d_10y.parquet',columns=universe).reindex(prices.index)
+        volume=pd.read_parquet(PROJECT/'data'/'volume_1d_10y.parquet',columns=universe).reindex(prices.index)
         features=build_correlation_liquidity_dispersion_features(prices,volume,returns)
     else:
         features=build_variance_dispersion_trend_features(market,returns)
@@ -118,7 +118,7 @@ def main():
     feature_names=(['correlation','liquidity','dispersion'] if FEATURE_SET=='correlation_liquidity_dispersion' else ['variance','dispersion','trend'])
     output={'test':'Rule-regime CMV + MT + CMT + cash','features':feature_names,'liquidity_measure':'cross-sectional median log dollar volume, causal EWM percentile' if FEATURE_SET=='correlation_liquidity_dispersion' else None,'classifier':None,'allowed_sleeves':['cross_asset_mv','momentum_trending','cross_asset_momentum_trending','cash'],'validation_candidates_per_run':729,'execution':{'execution_delay_bars':1,'fee_per_order':FEE,'slippage_per_order':SLIPPAGE},'runs':runs,'average_held_out_metrics':{n:float(np.mean([r['held_out'][n] for r in runs])) for n in names},'held_out_pass_count':sum(r['held_out_passed'] for r in runs),'scientific_status':'Diagnostic: these historical windows were viewed earlier.'}
     output_name=('checkpoint_cmv_mt_cmt_corr_liq_disp_rule_regime_summary.json' if FEATURE_SET=='correlation_liquidity_dispersion' else 'checkpoint_cmv_mt_cmt_rule_regime_summary.json')
-    path=ROOT/'outputs'/output_name; path.write_text(json.dumps(output,indent=2,allow_nan=False),encoding='utf-8'); print(json.dumps(output,indent=2,allow_nan=False))
+    path=ROOT/'artifacts'/output_name; path.write_text(json.dumps(output,indent=2,allow_nan=False),encoding='utf-8'); print(json.dumps(output,indent=2,allow_nan=False))
 
 
 if __name__=='__main__': main()

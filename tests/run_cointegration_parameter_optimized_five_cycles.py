@@ -5,9 +5,9 @@ import numpy as np
 import pandas as pd
 
 os.environ.setdefault('NUMBA_DISABLE_JIT','1')
-ROOT  = Path(r"path\to\root")
-PROJECT=ROOT/'work'/'PythonProject1_basicbacktester'/'Published'; sys.path[:0]=[str(PROJECT/'src'),str(ROOT/'work')]
-from src import _get_signals
+ROOT = Path (__file__).resolve().parent.parent 
+PROJECT=ROOT; sys.path[:0]=[str(PROJECT/'src/quant_backtester'),str(ROOT/'artifacts')]
+from src.quant_backtester .strategies import _get_signals
 from run_cmv_full_three_stage_five_cycles import CYCLES,FEE,SLIPPAGE,performance
 from run_cointegration_all_pairs import benjamini_hochberg
 
@@ -22,9 +22,9 @@ BETA_NEUTRAL=os.environ.get('COINTEGRATION_BETA_NEUTRAL','false').lower()=='true
 BETA_ROLL=60
 
 def main():
-    all_prices=pd.read_parquet(PROJECT/'data'/'processed'/'close_1d_10y.parquet').iloc[:2060]
+    all_prices=pd.read_parquet(PROJECT/'data'/'close_1d_10y.parquet').iloc[:2060]
     market=all_prices['SPY'].pct_change().fillna(0.); prices=all_prices.drop(columns='SPY'); returns=prices.pct_change().fillna(0.)
-    screen=pd.read_csv(ROOT/'work'/'cointegration_all_pairs_screen.csv'); screen['q_value']=benjamini_hochberg(screen.p_value.to_numpy())
+    screen=pd.read_csv(ROOT/'artifacts'/'checkpoint_costs_cointegration_test1_all_pair_pvalues.csv'); screen['q_value']=benjamini_hochberg(screen.p_value.to_numpy())
     pairs=[tuple(x) for x in screen.loc[screen.q_value<=.05,['asset_1','asset_2']].itertuples(index=False,name=None)]
     cache={}
     def series(pair,p):
@@ -107,6 +107,6 @@ def main():
               (('checkpoint_combined_top_cointegration_pairs_beta_neutral_parameter_optimized_five_cycles_summary.json'
                 if BETA_NEUTRAL else 'checkpoint_combined_top_cointegration_pairs_parameter_optimized_five_cycles_summary.json')
                if COMBINE_TOP else 'checkpoint_pure_cointegration_parameter_optimized_five_cycles_summary.json'))
-    path=ROOT/'outputs'/filename; path.write_text(json.dumps(output,indent=2,allow_nan=False),encoding='utf-8'); print(json.dumps(output,indent=2,allow_nan=False))
+    path=ROOT/'artifacts'/filename; path.write_text(json.dumps(output,indent=2,allow_nan=False),encoding='utf-8'); print(json.dumps(output,indent=2,allow_nan=False))
 
 if __name__=='__main__': main()

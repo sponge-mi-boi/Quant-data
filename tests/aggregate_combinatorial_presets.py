@@ -4,7 +4,8 @@ from pathlib import Path
 from statistics import mean
 
 ROOT=Path(__file__).resolve().parents[1]
-OUT=ROOT/'outputs'
+
+OUT=ROOT/'artifacts'
 FEATURES=('corr','liq','ac','dis','var')
 LABELS={'corr':'correlation','liq':'liquidity','ac':'autocorrelation','dis':'dispersion','var':'volatility'}
 results=[]

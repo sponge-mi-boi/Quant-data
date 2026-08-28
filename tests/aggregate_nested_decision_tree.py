@@ -5,7 +5,7 @@ from statistics import mean
 
 
 ROOT = Path(__file__).resolve().parents[1]
-OUTPUTS = ROOT / "outputs"
+OUTPUTS = ROOT / "artifacts"
 
 
 def main():

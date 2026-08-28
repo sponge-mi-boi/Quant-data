@@ -8,11 +8,11 @@ import numpy as np
 import pandas as pd
 
 
-PROJECT  = Path(r"path\to\project")
-OUTPUT = Path(r"path\to\output")
-sys.path.insert(0, str(PROJECT / "src"))
+PROJECT  = Path (__file__).resolve().parent.parent
+OUTPUT = PROJECT / 'artifacts'
+sys.path.insert(0, str(PROJECT / "src/quant_backtester"))
 
-from src import _port_sim, runner_multiple
+from src.quant_backtester import _port_sim, runner_multiple
 
 
 STRATEGY_NAME = os.environ.get("STANDALONE_STRATEGY", "momentum_trending")
@@ -69,7 +69,7 @@ def metric_value(row, period, metric):
 
 def main():
     OUTPUT.mkdir(parents=True, exist_ok=True)
-    prices = pd.read_parquet(PROJECT / "data" / "processed" / "close_1d_10y.parquet")
+    prices = pd.read_parquet(PROJECT / "data/close_1d_10y.parquet")
     universe = [str(column) for column in prices.columns]
     period_records = []
     held_rows = []

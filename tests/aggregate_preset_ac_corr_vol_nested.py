@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 from statistics import mean
 
-ROOT=Path(__file__).resolve().parents[1]; outdir=ROOT/'outputs'; runs=[]
+ROOT=Path(__file__).resolve().parents[1]; outdir=ROOT/'artifacts'; runs=[]
 slug=os.environ.get('PRESET_SUMMARY_SLUG','ac_corr_vol')
 labels={
     'ac_corr_vol':'AC/correlation/volatility',

@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 from statistics import mean
 
-ROOT=Path(__file__).resolve().parents[1]; outdir=ROOT/'outputs'; runs=[]
+ROOT=Path(__file__).resolve().parents[1]; outdir=ROOT/'artifacts'; runs=[]
 for number in range(1,6):
     source=json.loads((outdir/f'checkpoint_rf_gmm_corr_liq_disp_nested_outer_run_{number}_summary.json').read_text())
     runs.append({'run':number,**source['held_out'],'passed':source['held_out_passed'],'random_forest_weight':source['selected_ensemble']['random_forest_weight'],'gaussian_mixture_weight':source['selected_ensemble']['gaussian_mixture_weight']})

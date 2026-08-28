@@ -7,11 +7,12 @@ import numpy as np
 import pandas as pd
 
 
-PROJECT = Path(r"path\to\project")
-OUTPUT = Path(r"path\to\output")
-sys.path.insert(0, str(PROJECT / "src"))
+PROJECT = Path (__file__).resolve().parent.parent
 
-from src import _port_sim, runner_multiple
+OUTPUT = PROJECT / 'artifacts'
+sys.path.insert(0, str(PROJECT / "src/quant_backtester"))
+
+from src.quant_backtester import _port_sim, runner_multiple
 
 
 PERIODS = {
@@ -76,7 +77,7 @@ def eligible(df, period, min_trades=1):
 
 def main():
     OUTPUT.mkdir(parents=True, exist_ok=True)
-    prices = pd.read_parquet(PROJECT / "data" / "processed" / "close_1d_10y.parquet")
+    prices = pd.read_parquet(PROJECT / "data/close_1d_10y.parquet")
     universe = [str(c) for c in prices.columns]
 
     training = simulate(universe, PERIODS["training"])

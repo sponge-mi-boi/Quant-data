@@ -10,14 +10,14 @@ import numpy as np
 import pandas as pd
 
 os.environ.setdefault('NUMBA_DISABLE_JIT', '1')
-ROOT  = Path(r"path\to\root")
+ROOT = Path (__file__).resolve().parent.parent 
 
-PROJECT = ROOT / 'work' / 'PythonProject1_basicbacktester' / 'Published'
-sys.path[:0] = [str(PROJECT / 'src'), str(ROOT / 'work')]
+PROJECT = ROOT 
+sys.path[:0] = [str(PROJECT / 'src'/'quant_backtester'), str(ROOT / 'tests')]
 
-from src import get_time_period
-from src import build_variance_dispersion_trend_features
-from src import (_get_signals_momentum_cross_asset,
+from src.quant_backtester import get_time_period
+from src.quant_backtester.hmm_regime import build_variance_dispersion_trend_features
+from src.quant_backtester.strategies import (_get_signals_momentum_cross_asset,
                  _get_signals_momentum_tr,
                  _get_signals_mv_cross_asset)
 from run_cmv_full_three_stage_five_cycles import CYCLES, FEE, SLIPPAGE, performance
@@ -72,9 +72,9 @@ def main():
     primary_file = ('checkpoint_cross_asset_mv_nonneutral_three_stage_five_cycles_summary.json'
                     if PAIR_KIND == 'cmv' else
                     'checkpoint_cross_asset_momentum_trending_nonneutral_three_stage_five_cycles_summary.json')
-    cross_source = json.loads((ROOT/'outputs'/primary_file).read_text())
-    time_source = json.loads((ROOT/'outputs'/'checkpoint_momentum_trending_nonneutral_three_stage_five_cycles_summary.json').read_text())
-    universe = pd.read_parquet(PROJECT/'data'/'processed'/'close_1d_10y.parquet').columns.tolist()
+    cross_source = json.loads((ROOT/'artifacts'/primary_file).read_text())
+    time_source = json.loads((ROOT/'artifacts'/'checkpoint_momentum_trending_nonneutral_three_stage_five_cycles_summary.json').read_text())
+    universe = pd.read_parquet(PROJECT/'data'/'close_1d_10y.parquet').columns.tolist()
     prices = get_time_period(universe, time_peri=(0, 2060)); returns = prices.pct_change().fillna(0.0)
     market = get_time_period(['SPY'], time_peri=(0, 2060)).reindex(prices.index)['SPY'].pct_change().fillna(0.0)
     primary_parameters=({'z_threshold':2.0} if PAIR_KIND == 'cmv'
@@ -106,7 +106,7 @@ def main():
     output={'test':f'Rule-regime {pair_label} + time-series momentum + cash','features':['variance','dispersion','trend'],'classifier':None,'allowed_sleeves':[PRIMARY,'momentum_trending','cash'],'validation_candidates_per_run':243,'execution':{'execution_delay_bars':1,'fee_per_order':FEE,'slippage_per_order':SLIPPAGE},'runs':runs,'average_held_out_metrics':{n:float(np.mean([r['held_out'][n] for r in runs])) for n in names},'held_out_pass_count':sum(r['held_out_passed'] for r in runs),'scientific_status':'Diagnostic: these historical windows were viewed earlier.'}
     output_name=('checkpoint_cmv_timeseries_momentum_rule_regime_summary.json' if PAIR_KIND == 'cmv'
                  else 'checkpoint_cross_momentum_timeseries_momentum_rule_regime_summary.json')
-    path=ROOT/'outputs'/output_name
+    path=ROOT/'artifacts'/output_name
     path.write_text(json.dumps(output,indent=2,allow_nan=False),encoding='utf-8'); print(json.dumps(output,indent=2,allow_nan=False))
 
 

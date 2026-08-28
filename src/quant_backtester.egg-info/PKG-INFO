@@ -19,6 +19,7 @@ Requires-Dist: yfinance<1,>=0.2.54
 Requires-Dist: alpaca-py<1,>=0.35
 Requires-Dist: requests<3,>=2.32
 Requires-Dist: optuna<5,>=4
+Requires-Dist: vectorbt<1,>=0.28
 Requires-Dist: joblib<2,>=1.4
 Requires-Dist: numba<1,>=0.60
 Provides-Extra: transformer

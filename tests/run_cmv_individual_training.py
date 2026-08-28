@@ -5,12 +5,12 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-ROOT = Path(r"path\to\root")
-PROJECT = ROOT / 'work' / 'PythonProject1_basicbacktester' / 'Published'
-sys.path[:0] = [str(PROJECT / 'src'), str(ROOT / 'work')]
+ROOT = Path (__file__).resolve().parent.parent
+PROJECT = ROOT
+sys.path[:0] = [str(PROJECT / 'src'/'quant_backtester'), str(ROOT / 'tests')]
 
-from src import get_time_period
-from src import _get_signals_mv_cross_asset
+from src.quant_backtester.strategies import get_time_period
+from src.quant_backtester.strategies import _get_signals_mv_cross_asset
 
 TRAINING = (0, 500)
 FEE = .0005
@@ -19,7 +19,7 @@ SLIPPAGE = .0005
 
 def main():
     universe = pd.read_parquet(
-        PROJECT / 'data' / 'processed' / 'close_1d_10y.parquet').columns.tolist()
+        PROJECT / 'data' / 'close_1d_10y.parquet').columns.tolist()
     prices = get_time_period(universe, time_peri=TRAINING)
     parameters = {'z_threshold': 2.0}
     params = {'stock_list': universe, 'time_period': TRAINING, 'freq': 'd',
@@ -43,7 +43,7 @@ def main():
         & (results.sharpe > 0) & (results.signal_changes >= 20))
     results = results.sort_values(
         ['eligible', 'sharpe', 'total_return_percent'], ascending=False).reset_index(drop=True)
-    csv_path = ROOT / 'outputs' / 'cmv_individual_training_results.csv'
+    csv_path = ROOT / 'artifacts' / 'cmv_individual_training_results.csv'
     results.to_csv(csv_path, index=False)
     summary = {
         'test': 'Cross-sectional mean reversion on individual assets, training only',
@@ -57,7 +57,7 @@ def main():
         'full_results_csv': str(csv_path),
         'validation_run': False, 'held_out_run': False,
     }
-    json_path = ROOT / 'outputs' / 'cmv_individual_training_summary.json'
+    json_path = ROOT / 'artifacts' / 'cmv_individual_training_summary.json'
     json_path.write_text(json.dumps(summary, indent=2, allow_nan=False), encoding='utf-8')
     print(json.dumps(summary, indent=2, allow_nan=False))
 

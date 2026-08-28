@@ -31,16 +31,16 @@ if PRESET_STATE_MODE not in {'continuous','discrete8','combinatorial'}:
     )
 if PRESET_STATE_MODE=='discrete8' and PRESET_FEATURE_SET!='disp_corr_liq':
     raise ValueError('discrete8 currently requires NESTED_PRESET_FEATURE_SET=disp_corr_liq')
-ROOT = Path(r"path\to\root"); PROJECT=ROOT/'work'/'PythonProject1_basicbacktester'/'Published'
-sys.path[:0]=[str(PROJECT/'src'),str(ROOT/'work')]
-from src import get_time_period
-from src import build_hmm_features
+ROOT = Path (__file__).resolve().parent.parent; PROJECT=ROOT
+sys.path[:0]=[str(PROJECT/'src/quant_backtester'),str(ROOT/'artifacts')]
+from src.quant_backtester import get_time_period
+from src.quant_backtester.hmm_regime import build_hmm_features
 from run_cmv_mt_cmt_rule_regime import build_correlation_liquidity_dispersion_features
-from src import (_get_signals_mv_cross_asset, _get_signals_momentum_tr, _get_signals_momentum_cross_asset)
+from src.quant_backtester.strategies import (_get_signals_mv_cross_asset, _get_signals_momentum_tr, _get_signals_momentum_cross_asset)
 from run_cmv_full_three_stage_five_cycles import FEE,SLIPPAGE,performance
 from run_cross_momentum_timeseries_momentum_rule_regime import normalize,net_returns,passed
 from run_cmv_mt_cmt_bayesian_hmm_regime import select_strategy_on_validation
-from run_three_strategy_adam_disp_corr_liq import allocations,adam_spsa,decode,combine,SLEEVES
+from tests.results.run_three_strategy_adam_disp_corr_liq import allocations,adam_spsa,decode,combine,SLEEVES
 
 FOLDS=[
  {'strategy_training':(0,280),'strategy_validation':(280,400),'filter_validation':(400,520)},
@@ -74,18 +74,18 @@ def main():
     offset=260*(OUTER_RUN-1)
     folds=[{k:(a+offset,b+offset) for k,(a,b) in fold.items()} for fold in FOLDS]
     outer_held=(OUTER_HELD[0]+offset,OUTER_HELD[1]+offset)
-    universe=pd.read_parquet(PROJECT/'data'/'processed'/'close_1d_10y.parquet').columns.tolist()
+    universe=pd.read_parquet(PROJECT/'data'/'close_1d_10y.parquet').columns.tolist()
     prices=get_time_period(universe,time_peri=(0,2060)); returns=prices.pct_change().fillna(0.)
     market=get_time_period(['SPY'],time_peri=(0,2060)).reindex(prices.index)['SPY'].pct_change().fillna(0.)
     if FEATURE_COMBO:
-        volume=pd.read_parquet(PROJECT/'data'/'processed'/'volume_1d_10y.parquet',columns=universe).reindex(prices.index)
+        volume=pd.read_parquet(PROJECT/'data'/'volume_1d_10y.parquet',columns=universe).reindex(prices.index)
         cld=build_correlation_liquidity_dispersion_features(prices,volume,returns)
         hmm=build_hmm_features(market,returns)
         features=pd.concat([cld[['corr','liq','dis']],hmm[['ac','var']]],axis=1).dropna()
         feature_names=[{'corr':'correlation','liq':'liquidity','ac':'autocorrelation','dis':'dispersion','var':'volatility'}[x] for x in FEATURE_COMBO]
         output_slug='combo_'+'_'.join(FEATURE_COMBO)
     elif PRESET_FEATURE_SET=='disp_corr_liq':
-        volume=pd.read_parquet(PROJECT/'data'/'processed'/'volume_1d_10y.parquet',columns=universe).reindex(prices.index)
+        volume=pd.read_parquet(PROJECT/'data'/'volume_1d_10y.parquet',columns=universe).reindex(prices.index)
         features=build_correlation_liquidity_dispersion_features(prices,volume,returns)
         feature_names=['correlation','liquidity','dispersion']
         output_slug='corr_liq_disp'
@@ -115,7 +115,7 @@ def main():
     grids={'cross_asset_mv':[{'z_threshold':z} for z in (1.5,2.,2.5)],
            'momentum_trending':[{'z_threshold':z,'roll':r} for r,z in product((20,30,60),(1.5,2.,2.5))],
            'cross_asset_momentum_trending':[{'z_threshold':z,'roll':r} for r,z in product((20,35,60),(1.5,2.,2.5))]}
-    cache_dir=ROOT/'work'/'.cache'; cache_dir.mkdir(exist_ok=True)
+    cache_dir=ROOT/'artifacts'/'.cache'; cache_dir.mkdir(exist_ok=True)
     cache_path=cache_dir/f'nested_three_sleeves_v1_outer_{OUTER_RUN}.pkl'
     if cache_path.exists():
         with cache_path.open('rb') as handle: prepared=pickle.load(handle)
@@ -158,6 +158,6 @@ def main():
     alloc=(combinatorial_allocations(allocation_features,selected['smoothing_half_life'],selected['rebalance_every_bars'],selected['cmv_scale'],selected['mt_scale'],selected['cmt_scale'],selected['cash_scale']) if FEATURE_COMBO else allocations(allocation_features,selected['smoothing_half_life'],selected['rebalance_every_bars'],selected['cmv_scale'],selected['mt_scale'],selected['cmt_scale'],selected['cash_scale']))
     held=prices.index[slice(*outer_held)]; metric=performance(net_returns(combine(final['sleeves'],alloc,prices.index),returns).reindex(held).fillna(0.),market.reindex(held))
     output={'test':f'No-learning combinatorial preset {"/".join(feature_names)} + Adam, nested outer run {OUTER_RUN}','outer_run':OUTER_RUN,'features':feature_names,'feature_codes':list(FEATURE_COMBO) if FEATURE_COMBO else None,'state_mode':PRESET_STATE_MODE,'state_thresholds':({'autocorrelation':0.,**{name:.5 for name in feature_names if name!='autocorrelation'}} if FEATURE_COMBO else (.5 if PRESET_STATE_MODE=='discrete8' else None)),'state_definitions':state_definitions,'inner_folds':folds,'outer_held_out':list(outer_held),'purge_bars':0,'purge_note':'Preset rules have no forward-return labels, so target-overlap purging is not applicable; strategy and filter validation blocks are non-overlapping.','strategy_selection':'separate earlier validation block per fold','filter_selection':'median filter-validation Sharpe across three chronological folds','optimizer':'Adam with SPSA validation gradients','classifier':None,'learned_regime_mapping':False,'selected_filter':selected,'final_selected_strategies':final['selected_strategies'],'held_out':metric,'held_out_passed':passed(metric),'execution':{'execution_delay_bars':1,'fee_per_order':FEE,'slippage_per_order':SLIPPAGE},'scientific_status':'Diagnostic: this historical held-out interval was viewed earlier.'}
-    path=ROOT/'outputs'/f'checkpoint_preset_{output_slug}_adam_nested_outer_run_{OUTER_RUN}_summary.json'; path.write_text(json.dumps(output,indent=2,allow_nan=False),encoding='utf-8'); print(json.dumps(output,indent=2,allow_nan=False))
+    path=ROOT/'artifacts'/f'checkpoint_preset_{output_slug}_adam_nested_outer_run_{OUTER_RUN}_summary.json'; path.write_text(json.dumps(output,indent=2,allow_nan=False),encoding='utf-8'); print(json.dumps(output,indent=2,allow_nan=False))
 
 if __name__=='__main__': main()

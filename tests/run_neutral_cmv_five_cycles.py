@@ -5,12 +5,12 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-ROOT  = Path(r"path\to\root")
-PROJECT = ROOT / 'work' / 'PythonProject1_basicbacktester' / 'Published'
-sys.path[:0] = [str(PROJECT / 'src'), str(ROOT / 'work')]
+ROOT = Path (__file__).resolve().parent.parent 
+PROJECT = ROOT 
+sys.path[:0] = [str(PROJECT / 'src'/'quant_backtester'), str(ROOT / 'tests')]
 
-from src import get_time_period
-from src import _get_signals_mv_cross_asset, _weights_alloc
+from src.quant_backtester import get_time_period
+from src.quant_backtester.strategies import _get_signals_mv_cross_asset, _weights_alloc
 import run_ml_allocator_comparison as pipeline
 
 FULL_PERIOD = (0, 2060)
@@ -57,7 +57,7 @@ def average_metrics(runs, stage):
 
 def main():
     universe = pd.read_parquet(
-        PROJECT / 'data' / 'processed' / 'close_1d_10y.parquet').columns.tolist()
+        PROJECT / 'data' / 'close_1d_10y.parquet').columns.tolist()
     prices = get_time_period(universe, time_peri=FULL_PERIOD)
     index = prices.index
     raw = _get_signals_mv_cross_asset(params(universe, FULL_PERIOD)).reindex(index).fillna(0.0)
@@ -91,7 +91,7 @@ def main():
                             for stage in ('training', 'validation', 'held_out')},
         'scientific_status': 'Diagnostic: historical intervals were viewed earlier; selection is training-only within each cycle.',
     }
-    path = ROOT / 'outputs' / 'checkpoint_neutral_cmv_five_cycles_full_filter_summary.json'
+    path = ROOT / 'artifacts' / 'checkpoint_neutral_cmv_five_cycles_full_filter_summary.json'
     path.write_text(json.dumps(output, indent=2, allow_nan=False), encoding='utf-8')
     print(json.dumps(output, indent=2, allow_nan=False))
 

@@ -6,14 +6,14 @@ from pathlib import Path
 
 import numpy as np
 
-ROOT = Path(r"path\to\root")
-PROJECT = ROOT / "work" / "PythonProject1_basicbacktester" / "Published"
-sys.path[:0] = [str(PROJECT / "src"), str(ROOT / "work")]
+ROOT = Path (__file__).resolve().parent.parent 
+PROJECT = ROOT
+sys.path[:0] = [str(PROJECT / "src/quant_backtester"), str(ROOT / "artifacts")]
 
-from src import get_time_period
-from src import build_hmm_features
-from src import fit_logistic_regime, predict_regime_probabilities
-from src import fit_svm_regime, predict_svm_scores
+from src.quant_backtester import get_time_period
+from src.quant_backtester.hmm_regime import build_hmm_features
+from src.quant_backtester.logistic_regime import fit_logistic_regime, predict_regime_probabilities
+from src.quant_backtester.svm_regime import fit_svm_regime, predict_svm_scores
 from run_logistic_regime_one_cycle import HORIZON, winner_labels
 import run_ml_allocator_comparison as pipeline
 
@@ -138,7 +138,7 @@ def main():
         'results': results,
         'scientific_status': f'Both models were specified and selected before rows {HELD_OUT[0]}:{HELD_OUT[1]} were evaluated once per frozen model.',
     }
-    path = ROOT / 'outputs' / OUTPUT_NAME
+    path = ROOT / 'artifacts' / OUTPUT_NAME
     path.write_text(json.dumps(output, indent=2, allow_nan=False), encoding='utf-8')
     print(json.dumps(output, indent=2, allow_nan=False))
 

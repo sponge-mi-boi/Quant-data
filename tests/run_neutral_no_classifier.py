@@ -2,9 +2,9 @@ import json
 import sys
 from pathlib import Path
 
-ROOT  = Path(r"path\to\root")
-PROJECT = ROOT / 'work' / 'PythonProject1_basicbacktester' / 'Published'
-sys.path[:0] = [str(PROJECT / 'src'), str(ROOT / 'work')]
+ROOT = Path (__file__).resolve().parent.parent 
+PROJECT = ROOT 
+sys.path[:0] = [str(PROJECT / 'src'/'quant_backtester'), str(ROOT / 'tests')]
 
 import run_ml_allocator_comparison as pipeline
 import run_regime_one_cycle as strategy_source
@@ -34,7 +34,7 @@ def main():
         'held_out_evaluations_this_run': 1,
         'scientific_status': 'No parameters were selected on rows 2320:2572; the fixed CMV portfolio evaluated this previously untouched interval once.',
     }
-    path = ROOT / 'outputs' / 'checkpoint_neutral_no_classifier_summary.json'
+    path = ROOT / 'artifacts' / 'checkpoint_neutral_no_classifier_summary.json'
     path.write_text(json.dumps(output, indent=2, allow_nan=False), encoding='utf-8')
     print(json.dumps(output, indent=2, allow_nan=False))
 
