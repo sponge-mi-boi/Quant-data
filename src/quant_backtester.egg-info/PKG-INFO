@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: quant-backtester
-Version: 0.3.4
+Version: 0.3.5
 Summary: Bias-aware quantitative backtesting with walk-forward validation, regime allocation, neutrality, and realistic trading costs.
 Author: Varun
 License: Proprietary
