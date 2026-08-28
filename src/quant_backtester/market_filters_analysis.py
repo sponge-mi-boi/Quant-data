@@ -33,7 +33,7 @@ import pandas as pd
 import statsmodels.api as m
 from statsmodels.tsa.stattools import coint
 
-from src.quant_backtester.data_filter import get_time_period, get_info
+from quant_backtester.data_filter import get_time_period, get_info
 
 np.set_printoptions(threshold=None)
 

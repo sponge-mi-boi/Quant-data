@@ -14,9 +14,9 @@ PROJECT = Path (__file__).resolve().parent.parent
 OUTPUT = PROJECT / "artifacts"
 sys.path.insert(0, str(PROJECT / "src/quant_backtester"))
 
-from src.quant_backtester import _port_sim, runner_multiple
-from src.quant_backtester import get_time_period
-from src.quant_backtester .strategies import (
+from quant_backtester import _port_sim, runner_multiple
+from quant_backtester import get_time_period
+from quant_backtester .strategies import (
     _get_signals_momentum_cross_asset,
     _get_signals_mv_cross_asset,
 )

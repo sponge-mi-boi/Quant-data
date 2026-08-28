@@ -7,7 +7,7 @@ import pandas as pd
 os.environ.setdefault('NUMBA_DISABLE_JIT','1')
 ROOT = Path (__file__).resolve().parent.parent 
 PROJECT=ROOT; sys.path[:0]=[str(PROJECT/'src/quant_backtester'),str(ROOT/'artifacts')]
-from src.quant_backtester .strategies import _get_signals
+from quant_backtester .strategies import _get_signals
 from run_cmv_full_three_stage_five_cycles import CYCLES,FEE,SLIPPAGE,performance
 from run_cointegration_all_pairs import benjamini_hochberg
 

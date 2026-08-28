@@ -13,9 +13,9 @@ ROOT = Path (__file__).resolve().parent.parent.parent
 PROJECT = ROOT
 sys.path[:0] = [str(PROJECT/'src/quant_backtester'), str(ROOT/'artifacts')]
 
-from src.quant_backtester import get_time_period
-from src.quant_backtester.hmm_regime import build_hmm_features
-from src.quant_backtester.strategies import (_get_signals_mv, _get_signals_mv_cross_asset,
+from quant_backtester import get_time_period
+from quant_backtester.hmm_regime import build_hmm_features
+from quant_backtester.strategies import (_get_signals_mv, _get_signals_mv_cross_asset,
                  _get_signals_momentum_tr, _get_signals_momentum_cross_asset)
 from tests.run_cmv_full_three_stage_five_cycles import CYCLES, FEE, SLIPPAGE, performance
 from tests.run_cross_momentum_timeseries_momentum_rule_regime import normalize, net_returns, passed

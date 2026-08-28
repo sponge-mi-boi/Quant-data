@@ -11,9 +11,9 @@ OUTPUT = ROOT / 'artifacts'
 sys.path.insert(0, str(PROJECT / "src/quant_backtester"))
 sys.path.insert(0, str(ROOT / "artifacts"))
 
-from src.quant_backtester import get_time_period
-from src.quant_backtester import regime_estimator
-from src.quant_backtester .ml_allocator import (
+from quant_backtester import get_time_period
+from quant_backtester import regime_estimator
+from quant_backtester .ml_allocator import (
     build_causal_features,
     fit_ridge_allocator,
     future_risk_adjusted_targets,

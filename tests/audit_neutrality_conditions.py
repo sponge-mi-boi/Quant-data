@@ -9,8 +9,8 @@ ROOT = Path (__file__).resolve().parents[1]
 PROJECT = ROOT
 sys.path[:0] = [str(PROJECT / "src/quant_backtester"), str(ROOT / "artifacts")]
 
-from src.quant_backtester.market_filters_analysis import _beta_filter_weights, _pc_filter_weights
-from src.quant_backtester.strategies import (
+from quant_backtester.market_filters_analysis import _beta_filter_weights, _pc_filter_weights
+from quant_backtester.strategies import (
     _get_signals_momentum_cross_asset, _get_signals_mv_cross_asset, _weights_alloc)
 from run_regime_one_cycle import SLEEVES
 

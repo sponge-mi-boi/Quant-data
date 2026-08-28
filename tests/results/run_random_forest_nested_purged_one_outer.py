@@ -32,8 +32,8 @@ if STRATEGY_SET not in {'three','time_series_momentum'}:
 if NEUTRALITY_MODE!='none':
     os.environ['NEUTRALITY_MODE']=NEUTRALITY_MODE
 
-from src.quant_backtester import get_time_period
-from src.quant_backtester.strategies import (_get_signals_mv_cross_asset,
+from quant_backtester import get_time_period
+from quant_backtester.strategies import (_get_signals_mv_cross_asset,
                  _get_signals_momentum_tr, _get_signals_momentum_cross_asset)
 from tests.run_cmv_full_three_stage_five_cycles import FEE,SLIPPAGE,performance
 from tests.run_cross_momentum_timeseries_momentum_rule_regime import normalize,net_returns,passed
@@ -42,14 +42,14 @@ from tests.run_cmv_mt_cmt_bayesian_hmm_regime import select_strategy_on_validati
 from tests.run_cmv_mt_cmt_logistic_regime import (SLEEVES,HORIZON,fit_forest_regime,
     predict_forest_regime,allocations,combine,bayesian_optimize,decode_forest,decode_tree,
     decode_elastic,decode_svm,decode_nn,fit_nn_regime,predict_nn_regime)
-from src.quant_backtester.decision_tree_regime import (fit_decision_tree_regime,
+from quant_backtester.decision_tree_regime import (fit_decision_tree_regime,
                  predict_decision_tree_probabilities)
-from src.quant_backtester .elastic_logistic_regime import (fit_elastic_logistic_regime,
+from quant_backtester .elastic_logistic_regime import (fit_elastic_logistic_regime,
                  predict_elastic_probabilities)
-from src.quant_backtester.svm_regime import fit_svm_regime,predict_svm_scores
+from quant_backtester.svm_regime import fit_svm_regime,predict_svm_scores
 if MODEL_KIND=='transformer':
     from tests.transformer_regime import fit_transformer,predict_transformer
-from src.quant_backtester.hmm_regime import build_hmm_features
+from quant_backtester.hmm_regime import build_hmm_features
 from run_three_strategy_adam_disp_corr_liq import neutrality_cache,neutralize,neutrality_residuals
 
 if STRATEGY_SET=='time_series_momentum':

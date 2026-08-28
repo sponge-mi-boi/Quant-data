@@ -10,8 +10,8 @@ ROOT = Path (__file__).resolve().parent.parent
 PROJECT=ROOT 
 sys.path[:0]=[str(PROJECT/'src/quant_backtester'),str(ROOT/'artifacts')]
 
-from src.quant_backtester.strategies import _get_signals
-from src.quant_backtester.svm_regime import fit_svm_regime,predict_svm_scores
+from quant_backtester.strategies import _get_signals
+from quant_backtester.svm_regime import fit_svm_regime,predict_svm_scores
 from run_cmv_full_three_stage_five_cycles import CYCLES,FEE,SLIPPAGE,performance
 from run_cmv_mt_cmt_rule_regime import build_correlation_liquidity_dispersion_features
 from run_cmv_mt_cmt_logistic_regime import bayesian_optimize,decode_svm

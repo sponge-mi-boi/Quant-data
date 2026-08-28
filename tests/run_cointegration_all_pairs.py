@@ -18,7 +18,7 @@ CHECKPOINT = PROJECT / "artifacts" / "checkpoint_costs_cointegration_test1_all_p
 
 sys.path.insert(0, str(PROJECT / "src/quant_backtester"))
 
-from src.quant_backtester import _port_sim, runner_multiple
+from quant_backtester import _port_sim, runner_multiple
 
 
 PERIODS = {"training": (0, 500), "validation": (500, 760), "held_out": (760, 1020)}

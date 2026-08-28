@@ -9,8 +9,8 @@ ROOT = Path (__file__).resolve().parent.parent
 PROJECT = ROOT
 sys.path[:0] = [str(PROJECT / 'src'/'quant_backtester'), str(ROOT / 'tests')]
 
-from src.quant_backtester.strategies import get_time_period
-from src.quant_backtester.strategies import _get_signals_mv_cross_asset
+from quant_backtester.strategies import get_time_period
+from quant_backtester.strategies import _get_signals_mv_cross_asset
 
 TRAINING = (0, 500)
 FEE = .0005

@@ -61,7 +61,7 @@ macOS / Linux (bash)
 
 ### Entry point to execute backtester
 
-`python -m src.run`
+`python -m run`
 
 ## Results
 

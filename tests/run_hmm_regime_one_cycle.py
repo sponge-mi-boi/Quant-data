@@ -6,8 +6,8 @@ ROOT = Path (__file__).resolve().parent.parent
 PROJECT = ROOT
 sys.path[:0] = [str(PROJECT / "src/quant_backtester"), str(ROOT / "artifacts")]
 
-from src.quant_backtester import get_time_period
-from src.quant_backtester.hmm_regime import (
+from quant_backtester import get_time_period
+from quant_backtester.hmm_regime import (
     build_hmm_features, filtered_state_probabilities, fit_gaussian_hmm,
     probability_weighted_allocations, state_sleeve_weights)
 from run_ml_allocator_comparison import (

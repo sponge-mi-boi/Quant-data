@@ -12,10 +12,10 @@ PROJECT = ROOT
 OUTPUT = ROOT / 'artifacts'
 sys.path.insert(0, str(PROJECT / "src/quant_backtester"))
 
-from src.quant_backtester  .backtester_overview import _delay_target_weights
-from src.quant_backtester import get_time_period
-from src.quant_backtester import regime_estimator
-from src.quant_backtester .strategies import (
+from quant_backtester  .backtester_overview import _delay_target_weights
+from quant_backtester import get_time_period
+from quant_backtester import regime_estimator
+from quant_backtester .strategies import (
     _get_signals,
     _get_signals_momentum_cross_asset,
     _get_signals_momentum_tr,

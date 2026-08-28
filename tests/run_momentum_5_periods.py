@@ -12,7 +12,7 @@ PROJECT  = Path (__file__).resolve().parent.parent
 OUTPUT = PROJECT / 'artifacts'
 sys.path.insert(0, str(PROJECT / "src/quant_backtester"))
 
-from src.quant_backtester import _port_sim, runner_multiple
+from quant_backtester import _port_sim, runner_multiple
 
 
 STRATEGY_NAME = os.environ.get("STANDALONE_STRATEGY", "momentum_trending")

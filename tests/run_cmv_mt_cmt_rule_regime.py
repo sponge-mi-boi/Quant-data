@@ -14,10 +14,10 @@ ROOT = Path (__file__).resolve().parent.parent
 PROJECT = ROOT
 sys.path[:0] = [str(PROJECT/'src/quant_backtester'), str(ROOT/'artifacts')]
 
-from src.quant_backtester import get_time_period
-from src.quant_backtester.hmm_regime import build_variance_dispersion_trend_features
-from src.quant_backtester.market_filters_analysis import _rolling_percentile
-from src.quant_backtester.strategies import (_get_signals_mv_cross_asset,
+from quant_backtester import get_time_period
+from quant_backtester.hmm_regime import build_variance_dispersion_trend_features
+from quant_backtester.market_filters_analysis import _rolling_percentile
+from quant_backtester.strategies import (_get_signals_mv_cross_asset,
                  _get_signals_momentum_tr, _get_signals_momentum_cross_asset)
 from run_cmv_full_three_stage_five_cycles import CYCLES, FEE, SLIPPAGE, performance
 from run_cross_momentum_timeseries_momentum_rule_regime import normalize, net_returns, passed

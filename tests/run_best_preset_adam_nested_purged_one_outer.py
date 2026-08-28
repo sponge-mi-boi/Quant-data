@@ -33,10 +33,10 @@ if PRESET_STATE_MODE=='discrete8' and PRESET_FEATURE_SET!='disp_corr_liq':
     raise ValueError('discrete8 currently requires NESTED_PRESET_FEATURE_SET=disp_corr_liq')
 ROOT = Path (__file__).resolve().parent.parent; PROJECT=ROOT
 sys.path[:0]=[str(PROJECT/'src/quant_backtester'),str(ROOT/'artifacts')]
-from src.quant_backtester import get_time_period
-from src.quant_backtester.hmm_regime import build_hmm_features
+from quant_backtester import get_time_period
+from quant_backtester.hmm_regime import build_hmm_features
 from run_cmv_mt_cmt_rule_regime import build_correlation_liquidity_dispersion_features
-from src.quant_backtester.strategies import (_get_signals_mv_cross_asset, _get_signals_momentum_tr, _get_signals_momentum_cross_asset)
+from quant_backtester.strategies import (_get_signals_mv_cross_asset, _get_signals_momentum_tr, _get_signals_momentum_cross_asset)
 from run_cmv_full_three_stage_five_cycles import FEE,SLIPPAGE,performance
 from run_cross_momentum_timeseries_momentum_rule_regime import normalize,net_returns,passed
 from run_cmv_mt_cmt_bayesian_hmm_regime import select_strategy_on_validation
